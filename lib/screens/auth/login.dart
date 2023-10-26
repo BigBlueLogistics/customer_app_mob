@@ -10,17 +10,20 @@ class LoginView extends StatelessWidget {
   }
 
   render(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              headerContainer(context),
-              formContainer(context),
-            ],
+    return GestureDetector(
+      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        body: SafeArea(
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                headerContainer(context),
+                formContainer(context),
+              ],
+            ),
           ),
         ),
       ),
@@ -32,13 +35,12 @@ class LoginView extends StatelessWidget {
       width: double.infinity,
       height: 140,
       alignment: const AlignmentDirectional(-1.0, 0),
-      // color: Colors.red,
       child: Padding(
         padding: const EdgeInsetsDirectional.fromSTEB(30, 0, 0, 0),
         child: Text(
           'BigBlue',
           style: TextStyle(
-              fontSize: 32,
+              fontSize: 35,
               color: Theme.of(context).primaryColor,
               fontWeight: FontWeight.w600),
         ),
@@ -85,12 +87,12 @@ class LoginView extends StatelessWidget {
                   labelText: 'Email',
                   labelStyle: const TextStyle(color: Colors.black87),
                   enabledBorder: OutlineInputBorder(
-                    borderSide:
-                        const BorderSide(color: Colors.grey, width: 1.6),
+                    borderSide: const BorderSide(color: Colors.grey),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   focusedBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(color: Colors.grey, width: 2),
+                    borderSide:
+                        const BorderSide(color: Colors.grey, width: 1.5),
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
@@ -107,12 +109,15 @@ class LoginView extends StatelessWidget {
                   labelText: 'Password',
                   labelStyle: const TextStyle(color: Colors.black87),
                   enabledBorder: OutlineInputBorder(
-                    borderSide:
-                        const BorderSide(color: Colors.grey, width: 1.6),
+                    borderSide: const BorderSide(
+                      color: Colors.grey,
+                      width: 1,
+                    ),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   focusedBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(color: Colors.grey, width: 2),
+                    borderSide:
+                        const BorderSide(color: Colors.grey, width: 1.5),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   suffixIcon: const Icon(
