@@ -1,0 +1,7 @@
+{
+  "recommendations": [
+    "cardinal90.multi-cursor-case-preserve",
+    "dart-code.flutter",
+    "felixangelov.bloc"
+  ]
+}

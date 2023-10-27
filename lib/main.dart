@@ -15,7 +15,8 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           fontFamily: 'Poppins',
           primaryColor: const Color.fromRGBO(26, 115, 232, 1),
+          useMaterial3: true,
         ),
-        home: const LoginView());
+        home: const LoginScreen());
   }
 }
