@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import '../../extensions/validation.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -9,19 +10,21 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final TextEditingController emailTextEditingCtrl = TextEditingController();
-  final TextEditingController passwordTextEditingCtrl = TextEditingController();
-  bool canSubmit = false;
-  bool isShowPassword = false;
+  final formKey = GlobalKey<FormState>();
+  final TextEditingController _emailTextEditingCtrl = TextEditingController();
+  final TextEditingController _passwordTextEditingCtrl =
+      TextEditingController();
+  final bool _canSubmit = true;
+  bool _isShowPassword = false;
 
   @override
   void initState() {
     super.initState();
-    // emailTextEditingCtrl.addListener(() {
-    //   canSubmit = emailTextEditingCtrl.text.isNotEmpty;
+    // _emailTextEditingCtrl.addListener(() {
+    //   _canSubmit = _emailTextEditingCtrl.text.isNotEmpty;
     // });
-    // passwordTextEditingCtrl.addListener(() {
-    //   canSubmit = emailTextEditingCtrl.text.isNotEmpty;
+    // _passwordTextEditingCtrl.addListener(() {
+    //   _canSubmit = _emailTextEditingCtrl.text.isNotEmpty;
     // });
   }
 
@@ -29,8 +32,8 @@ class _LoginScreenState extends State<LoginScreen> {
   void dispose() {
     super.dispose();
 
-    // emailTextEditingCtrl.dispose();
-    // passwordTextEditingCtrl.dispose();
+    _emailTextEditingCtrl.dispose();
+    _passwordTextEditingCtrl.dispose();
   }
 
   @override
@@ -69,8 +72,8 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Text(
           'BigBlue',
           style: TextStyle(
-              fontSize: 35,
               color: Theme.of(context).primaryColor,
+              fontSize: Theme.of(context).textTheme.displaySmall?.fontSize,
               fontWeight: FontWeight.w600),
         ),
       ),
@@ -89,9 +92,8 @@ class _LoginScreenState extends State<LoginScreen> {
             'Welcome Back',
             style: TextStyle(fontSize: 30, fontWeight: FontWeight.w500),
           ),
-          const Text(
-            'Let\'s get started by filling out the form below.',
-          ),
+          Text('Let\'s get started by filling out the form below.',
+              style: Theme.of(context).textTheme.bodySmall),
           signInForm(context),
           signUp(context),
           forgotPass()
@@ -114,57 +116,76 @@ class _LoginScreenState extends State<LoginScreen> {
       borderRadius: BorderRadius.circular(12),
     );
 
+    final errorFieldFocusedBorder = OutlineInputBorder(
+      borderSide: const BorderSide(color: Colors.red, width: 1.5),
+      borderRadius: BorderRadius.circular(12),
+    );
+
     return Padding(
       padding: const EdgeInsetsDirectional.only(top: 20, bottom: 10),
       child: Form(
+        key: formKey,
         child: Column(
           children: [
             Padding(
               padding: const EdgeInsetsDirectional.only(bottom: 16),
               child: TextFormField(
-                controller: emailTextEditingCtrl,
-                keyboardType: TextInputType.emailAddress,
-                style: const TextStyle(height: 1),
-                decoration: InputDecoration(
-                  labelText: 'Email',
-                  labelStyle: const TextStyle(color: Colors.black87),
-                  enabledBorder: textFieldEnabledBorder,
-                  focusedBorder: textFieldFocusedBorder,
-                ),
-              ),
+                  controller: _emailTextEditingCtrl,
+                  keyboardType: TextInputType.emailAddress,
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  style: const TextStyle(height: 1),
+                  decoration: InputDecoration(
+                    labelText: 'Email',
+                    labelStyle: const TextStyle(color: Colors.black87),
+                    enabledBorder: textFieldEnabledBorder,
+                    focusedBorder: textFieldFocusedBorder,
+                    errorBorder: errorFieldFocusedBorder,
+                    focusedErrorBorder: errorFieldFocusedBorder,
+                  ),
+                  validator: (value) {
+                    return !value!.isValidEmail ? 'Enter a valid email' : null;
+                  }),
             ),
             Padding(
               padding: const EdgeInsetsDirectional.only(bottom: 16),
               child: TextFormField(
-                controller: passwordTextEditingCtrl,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                controller: _passwordTextEditingCtrl,
                 autocorrect: false,
                 enableSuggestions: false,
-                obscureText: isShowPassword ? false : true,
+                obscureText: _isShowPassword ? false : true,
                 style: const TextStyle(height: 1),
                 decoration: InputDecoration(
                   labelText: 'Password',
                   labelStyle: const TextStyle(color: Colors.black87),
                   enabledBorder: textFieldEnabledBorder,
                   focusedBorder: textFieldFocusedBorder,
+                  errorBorder: errorFieldFocusedBorder,
+                  focusedErrorBorder: errorFieldFocusedBorder,
                   suffixIcon: IconButton(
-                    icon: Icon(isShowPassword
+                    icon: Icon(_isShowPassword
                         ? Icons.visibility
                         : Icons.visibility_off),
                     onPressed: () {
                       setState(() {
-                        isShowPassword = !isShowPassword;
+                        _isShowPassword = !_isShowPassword;
                       });
                     },
                   ),
                 ),
+                validator: (value) =>
+                    value!.isEmpty ? 'Enter a valid password' : null,
               ),
             ),
             TextButton(
-              onPressed: canSubmit
+              onPressed: _canSubmit
                   ? () {
                       if (kDebugMode) {
                         print(
-                            'Login clicked ${emailTextEditingCtrl.text} ${passwordTextEditingCtrl.text}');
+                            'Login clicked ${_emailTextEditingCtrl.text} ${_passwordTextEditingCtrl.text}');
+                      }
+                      if (formKey.currentState!.validate()) {
+                        // TODO: process data
                       }
                     }
                   : null,
@@ -199,7 +220,10 @@ class _LoginScreenState extends State<LoginScreen> {
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const Text('Don\'t have an account?'),
+        Text(
+          'Don\'t have an account?',
+          style: Theme.of(context).textTheme.bodySmall,
+        ),
         TextButton(
           onPressed: () {
             if (kDebugMode) {
@@ -208,7 +232,9 @@ class _LoginScreenState extends State<LoginScreen> {
           },
           child: Text(
             'Sign Up Here',
-            style: TextStyle(color: Theme.of(context).primaryColor),
+            style: TextStyle(
+                color: Theme.of(context).primaryColor,
+                fontSize: Theme.of(context).textTheme.bodySmall?.fontSize),
           ),
         )
       ],
@@ -227,7 +253,9 @@ class _LoginScreenState extends State<LoginScreen> {
           },
           child: const Text(
             'Forgot Password?',
-            style: TextStyle(color: Colors.black54, fontSize: 15),
+            style: TextStyle(
+              color: Colors.black54,
+            ),
           ),
         ),
       ),
