@@ -1,6 +1,8 @@
+import 'package:customer_app_mob/core/presentation/bloc/auth/auth_bloc.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import '../../extensions/validation.dart';
+import 'package:customer_app_mob/extensions/validation.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -11,20 +13,19 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final formKey = GlobalKey<FormState>();
-  final TextEditingController _emailTextEditingCtrl = TextEditingController();
-  final TextEditingController _passwordTextEditingCtrl =
-      TextEditingController();
+  final TextEditingController _emailText = TextEditingController();
+  final TextEditingController _passwordText = TextEditingController();
   final bool _canSubmit = true;
   bool _isShowPassword = false;
 
   @override
   void initState() {
     super.initState();
-    // _emailTextEditingCtrl.addListener(() {
-    //   _canSubmit = _emailTextEditingCtrl.text.isNotEmpty;
+    // _emailText.addListener(() {
+    //   _canSubmit = _emailText.text.isNotEmpty;
     // });
-    // _passwordTextEditingCtrl.addListener(() {
-    //   _canSubmit = _emailTextEditingCtrl.text.isNotEmpty;
+    // _passwordText.addListener(() {
+    //   _canSubmit = _emailText.text.isNotEmpty;
     // });
   }
 
@@ -32,8 +33,8 @@ class _LoginScreenState extends State<LoginScreen> {
   void dispose() {
     super.dispose();
 
-    _emailTextEditingCtrl.dispose();
-    _passwordTextEditingCtrl.dispose();
+    _emailText.dispose();
+    _passwordText.dispose();
   }
 
   @override
@@ -45,7 +46,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).colorScheme.background,
         body: SafeArea(
           child: SingleChildScrollView(
             child: Column(
@@ -72,7 +73,7 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Text(
           'BigBlue',
           style: TextStyle(
-              color: Theme.of(context).primaryColor,
+              color: Theme.of(context).colorScheme.primary,
               fontSize: Theme.of(context).textTheme.displaySmall?.fontSize,
               fontWeight: FontWeight.w600),
         ),
@@ -96,7 +97,7 @@ class _LoginScreenState extends State<LoginScreen> {
               style: Theme.of(context).textTheme.bodySmall),
           signInForm(context),
           signUp(context),
-          forgotPass()
+          forgotPass(context)
         ],
       ),
     );
@@ -130,7 +131,7 @@ class _LoginScreenState extends State<LoginScreen> {
             Padding(
               padding: const EdgeInsetsDirectional.only(bottom: 16),
               child: TextFormField(
-                  controller: _emailTextEditingCtrl,
+                  controller: _emailText,
                   keyboardType: TextInputType.emailAddress,
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   style: const TextStyle(height: 1),
@@ -143,14 +144,16 @@ class _LoginScreenState extends State<LoginScreen> {
                     focusedErrorBorder: errorFieldFocusedBorder,
                   ),
                   validator: (value) {
-                    return !value!.isValidEmail ? 'Enter a valid email' : null;
+                    return value != null && !value.isValidEmail
+                        ? 'Enter a valid email'
+                        : null;
                   }),
             ),
             Padding(
               padding: const EdgeInsetsDirectional.only(bottom: 16),
               child: TextFormField(
                 autovalidateMode: AutovalidateMode.onUserInteraction,
-                controller: _passwordTextEditingCtrl,
+                controller: _passwordText,
                 autocorrect: false,
                 enableSuggestions: false,
                 obscureText: _isShowPassword ? false : true,
@@ -182,10 +185,15 @@ class _LoginScreenState extends State<LoginScreen> {
                   ? () {
                       if (kDebugMode) {
                         print(
-                            'Login clicked ${_emailTextEditingCtrl.text} ${_passwordTextEditingCtrl.text}');
+                            'Login clicked ${_emailText.text} ${_passwordText.text}');
                       }
                       if (formKey.currentState!.validate()) {
-                        // TODO: process data
+                        BlocProvider.of<AuthBloc>(context).add(
+                          AuthSignIn(
+                            email: _emailText.text,
+                            password: _passwordText.text,
+                          ),
+                        );
                       }
                     }
                   : null,
@@ -207,7 +215,16 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
               ),
-              child: const Text('Sign In'),
+              child: BlocBuilder<AuthBloc, AuthState>(
+                builder: (context, state) {
+                  if (state is AuthLoadingState) {
+                    return const CircularProgressIndicator(
+                      color: Colors.white54,
+                    );
+                  }
+                  return Text('Sign In'.toUpperCase());
+                },
+              ),
             )
           ],
         ),
@@ -231,7 +248,7 @@ class _LoginScreenState extends State<LoginScreen> {
             }
           },
           child: Text(
-            'Sign Up Here',
+            'Sign up',
             style: TextStyle(
                 color: Theme.of(context).primaryColor,
                 fontSize: Theme.of(context).textTheme.bodySmall?.fontSize),
@@ -241,7 +258,7 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  forgotPass() {
+  forgotPass(BuildContext context) {
     return Center(
       child: Padding(
         padding: const EdgeInsetsDirectional.only(top: 32),
@@ -251,10 +268,10 @@ class _LoginScreenState extends State<LoginScreen> {
               print('Navigate to screen forgot');
             }
           },
-          child: const Text(
-            'Forgot Password?',
+          child: Text(
+            'Forgot your password?',
             style: TextStyle(
-              color: Colors.black54,
+              color: Theme.of(context).colorScheme.primary,
             ),
           ),
         ),
