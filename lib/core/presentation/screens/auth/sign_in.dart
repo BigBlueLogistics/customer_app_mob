@@ -1,32 +1,38 @@
-import 'package:customer_app_mob/core/presentation/bloc/auth/auth_bloc.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:customer_app_mob/extensions/validation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+import 'package:customer_app_mob/config/routes/app_routes.dart';
+import 'package:customer_app_mob/core/presentation/bloc/auth/auth_bloc.dart';
+import 'package:customer_app_mob/extensions/validation.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class SignInScreen extends StatefulWidget {
+  const SignInScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<SignInScreen> createState() => _SignInScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _SignInScreenState extends State<SignInScreen> {
   final formKey = GlobalKey<FormState>();
   final TextEditingController _emailText = TextEditingController();
   final TextEditingController _passwordText = TextEditingController();
-  final bool _canSubmit = true;
   bool _isShowPassword = false;
+  bool _hasEmail = false;
+  bool _hasPassword = false;
 
   @override
   void initState() {
     super.initState();
-    // _emailText.addListener(() {
-    //   _canSubmit = _emailText.text.isNotEmpty;
-    // });
-    // _passwordText.addListener(() {
-    //   _canSubmit = _emailText.text.isNotEmpty;
-    // });
+    _emailText.addListener(() {
+      bool res = _emailText.text.isNotEmpty;
+
+      setState(() => _hasEmail = res);
+    });
+    _passwordText.addListener(() {
+      bool res = _passwordText.text.isNotEmpty;
+
+      setState(() => _hasPassword = res);
+    });
   }
 
   @override
@@ -42,7 +48,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return render(context);
   }
 
-  render(BuildContext context) {
+  Widget render(BuildContext context) {
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
@@ -63,7 +69,7 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  headerContainer(BuildContext context) {
+  Widget headerContainer(BuildContext context) {
     return Container(
       width: double.infinity,
       height: 140,
@@ -81,7 +87,7 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  formContainer(BuildContext context) {
+  Widget formContainer(BuildContext context) {
     return Container(
       alignment: Alignment.center,
       padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
@@ -103,7 +109,7 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  signInForm(BuildContext context) {
+  Widget signInForm(BuildContext context) {
     final textFieldEnabledBorder = OutlineInputBorder(
       borderSide: const BorderSide(
         color: Colors.grey,
@@ -131,9 +137,9 @@ class _LoginScreenState extends State<LoginScreen> {
             Padding(
               padding: const EdgeInsetsDirectional.only(bottom: 16),
               child: TextFormField(
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
                   controller: _emailText,
                   keyboardType: TextInputType.emailAddress,
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
                   style: const TextStyle(height: 1),
                   decoration: InputDecoration(
                     labelText: 'Email',
@@ -176,30 +182,29 @@ class _LoginScreenState extends State<LoginScreen> {
                     },
                   ),
                 ),
-                validator: (value) =>
-                    value!.isEmpty ? 'Enter a valid password' : null,
+                validator: (value) => value != null && value.isEmpty
+                    ? 'Enter a valid password'
+                    : null,
               ),
             ),
             TextButton(
-              onPressed: _canSubmit
-                  ? () {
-                      if (kDebugMode) {
-                        print(
-                            'Login clicked ${_emailText.text} ${_passwordText.text}');
-                      }
-                      if (formKey.currentState!.validate()) {
-                        BlocProvider.of<AuthBloc>(context).add(
-                          AuthSignIn(
-                            email: _emailText.text,
-                            password: _passwordText.text,
-                          ),
-                        );
-                      }
-                    }
-                  : null,
+              onPressed:
+                  _hasEmail && _hasPassword && formKey.currentState!.validate()
+                      ? () {
+                          BlocProvider.of<AuthBloc>(context).add(
+                            AuthSignIn(
+                              email: _emailText.text,
+                              password: _passwordText.text,
+                            ),
+                          );
+                        }
+                      : null,
               style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all<Color>(
-                    Theme.of(context).primaryColor),
+                backgroundColor: MaterialStateProperty.all<Color>(_hasEmail &&
+                        _hasPassword &&
+                        formKey.currentState!.validate()
+                    ? Theme.of(context).primaryColor
+                    : Theme.of(context).primaryColorLight),
                 fixedSize: const MaterialStatePropertyAll(
                   Size(double.maxFinite, 50),
                 ),
@@ -232,7 +237,7 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  signUp(BuildContext context) {
+  Widget signUp(BuildContext context) {
     return Row(
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.center,
@@ -243,9 +248,7 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
         TextButton(
           onPressed: () {
-            if (kDebugMode) {
-              print('Navigate to screen Sign up');
-            }
+            context.push(AppRoutes.signUpPathScreen);
           },
           child: Text(
             'Sign up',
@@ -258,18 +261,16 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  forgotPass(BuildContext context) {
+  Widget forgotPass(BuildContext context) {
     return Center(
       child: Padding(
         padding: const EdgeInsetsDirectional.only(top: 32),
         child: TextButton(
           onPressed: () {
-            if (kDebugMode) {
-              print('Navigate to screen forgot');
-            }
+            context.push(AppRoutes.forgotPathScreen);
           },
           child: Text(
-            'Forgot your password?',
+            'Forgot your password!?',
             style: TextStyle(
               color: Theme.of(context).colorScheme.primary,
             ),
