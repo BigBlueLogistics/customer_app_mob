@@ -18,4 +18,9 @@ abstract class AuthApi {
     @Query('email') String email,
     @Query('password') String password,
   );
+
+  @GET('/auth/reset-password')
+  Future<HttpResponse<UserModel>> resetPassword(
+    @Query('email') String email,
+  );
 }

@@ -20,3 +20,12 @@ class AuthSignIn extends AuthEvent {
 class AuthSignOut extends AuthEvent {
   const AuthSignOut();
 }
+
+class ResetPassword extends AuthEvent {
+  final String email;
+
+  const ResetPassword({required this.email});
+
+  @override
+  List<Object> get props => [email];
+}

@@ -17,6 +17,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   AuthBloc(this._authUseCase) : super(const AuthState()) {
     on<AuthSignIn>(_authSigIn);
+    on<ResetPassword>(_resetPassword);
   }
 
   FutureOr<void> _authSigIn(AuthSignIn event, Emitter<AuthState> emit) async {
@@ -39,5 +40,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       }
       emit(AuthFailedState(error: authData.error as DioException));
     }
+  }
+
+  FutureOr<void> _resetPassword(ResetPassword event, emit) {
+    emit(AuthLoadingState());
   }
 }

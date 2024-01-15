@@ -31,4 +31,25 @@ class AuthRepositoryImpl implements AuthRepository {
       return DataFailed(e);
     }
   }
+
+  @override
+  Future<DataState<UserModel>> resetPassword(String email) async {
+    try {
+      final resp = await authApi.resetPassword(email);
+
+      if (resp.response.statusCode == HttpStatus.ok) {
+        return DataSuccess(resp.data);
+      }
+
+      return DataFailed(
+        DioException(
+          requestOptions: resp.response.requestOptions,
+          response: resp.response,
+          message: resp.response.statusMessage,
+        ),
+      );
+    } on DioException catch (e) {
+      return DataFailed(e);
+    }
+  }
 }

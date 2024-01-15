@@ -72,15 +72,15 @@ class _SignInScreenState extends State<SignInScreen> {
   Widget headerContainer(BuildContext context) {
     return Container(
       width: double.infinity,
-      height: 140,
-      alignment: const AlignmentDirectional(-1.0, 0),
+      height: 100,
+      alignment: const AlignmentDirectional(1.0, 0),
       child: Padding(
-        padding: const EdgeInsetsDirectional.fromSTEB(30, 0, 0, 0),
+        padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 30, 0),
         child: Text(
           'BigBlue',
           style: TextStyle(
               color: Theme.of(context).colorScheme.primary,
-              fontSize: Theme.of(context).textTheme.displaySmall?.fontSize,
+              fontSize: 25,
               fontWeight: FontWeight.w600),
         ),
       ),
@@ -96,8 +96,9 @@ class _SignInScreenState extends State<SignInScreen> {
         mainAxisSize: MainAxisSize.max,
         children: [
           const Text(
-            'Welcome Back',
-            style: TextStyle(fontSize: 30, fontWeight: FontWeight.w500),
+            'Hi! \nWelcome',
+            style: TextStyle(
+                fontSize: 45, fontWeight: FontWeight.w600, height: 1.2),
           ),
           Text('Let\'s get started by filling out the form below.',
               style: Theme.of(context).textTheme.bodySmall),
@@ -270,7 +271,7 @@ class _SignInScreenState extends State<SignInScreen> {
             context.push(AppRoutes.forgotPathScreen);
           },
           child: Text(
-            'Forgot your password!?',
+            'Forgot your password?',
             style: TextStyle(
               color: Theme.of(context).colorScheme.primary,
             ),

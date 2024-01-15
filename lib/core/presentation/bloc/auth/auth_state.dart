@@ -29,3 +29,13 @@ class AuthFailedState extends AuthState {
   @override
   List<Object> get props => [error];
 }
+
+class ResetPasswordState extends AuthState {
+  final AuthStatus status;
+  final String message;
+
+  const ResetPasswordState({required this.status, required this.message});
+
+  @override
+  List<Object> get props => [status, message];
+}
