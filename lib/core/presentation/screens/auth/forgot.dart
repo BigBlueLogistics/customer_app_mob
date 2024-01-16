@@ -1,5 +1,7 @@
+import 'package:customer_app_mob/core/presentation/widgets/atoms/md_text_input/md_text_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:customer_app_mob/core/presentation/widgets/atoms/md_button/md_filled.dart';
 import 'package:customer_app_mob/core/presentation/bloc/auth/auth_bloc.dart';
 import 'package:customer_app_mob/extensions/validation.dart';
 
@@ -88,10 +90,10 @@ class _ForgotScreenState extends State<ForgotScreen> {
           const Text(
             'Reset! \nPassword',
             style: TextStyle(
-                fontSize: 45, fontWeight: FontWeight.w600, height: 1.2),
+                fontSize: 50, fontWeight: FontWeight.w600, height: 1.2),
           ),
           Text('You will receive an e-mail in maximum 60 seconds.',
-              style: Theme.of(context).textTheme.bodySmall),
+              style: Theme.of(context).textTheme.bodyMedium),
           forgotForm(context),
         ],
       ),
@@ -99,23 +101,7 @@ class _ForgotScreenState extends State<ForgotScreen> {
   }
 
   Widget forgotForm(BuildContext context) {
-    final textFieldEnabledBorder = OutlineInputBorder(
-      borderSide: const BorderSide(
-        color: Colors.grey,
-        width: 1,
-      ),
-      borderRadius: BorderRadius.circular(12),
-    );
-
-    final textFieldFocusedBorder = OutlineInputBorder(
-      borderSide: const BorderSide(color: Colors.grey, width: 1.5),
-      borderRadius: BorderRadius.circular(12),
-    );
-
-    final errorFieldFocusedBorder = OutlineInputBorder(
-      borderSide: const BorderSide(color: Colors.red, width: 1.5),
-      borderRadius: BorderRadius.circular(12),
-    );
+    final isLoading = context.watch<AuthBloc>().state is AuthLoadingState;
 
     return Padding(
       padding: const EdgeInsetsDirectional.only(top: 20, bottom: 10),
@@ -123,67 +109,33 @@ class _ForgotScreenState extends State<ForgotScreen> {
         key: formKey,
         child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsetsDirectional.only(bottom: 16),
-              child: TextFormField(
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  controller: _emailText,
-                  keyboardType: TextInputType.emailAddress,
-                  style: const TextStyle(height: 1),
-                  decoration: InputDecoration(
-                    labelText: 'Email',
-                    labelStyle: const TextStyle(color: Colors.black87),
-                    enabledBorder: textFieldEnabledBorder,
-                    focusedBorder: textFieldFocusedBorder,
-                    errorBorder: errorFieldFocusedBorder,
-                    focusedErrorBorder: errorFieldFocusedBorder,
-                  ),
-                  validator: (value) {
-                    return value != null && !value.isValidEmail
-                        ? 'Enter a valid email'
-                        : null;
-                  }),
-            ),
-            TextButton(
-              onPressed: _hasEmail && formKey.currentState!.validate()
-                  ? () {
-                      BlocProvider.of<AuthBloc>(context).add(
-                        ResetPassword(
-                          email: _emailText.text,
-                        ),
-                      );
-                    }
-                  : null,
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all<Color>(
-                    _hasEmail && formKey.currentState!.validate()
-                        ? Theme.of(context).primaryColor
-                        : Theme.of(context).primaryColorLight),
-                fixedSize: const MaterialStatePropertyAll(
-                  Size(double.maxFinite, 50),
-                ),
-                textStyle: const MaterialStatePropertyAll(
-                  TextStyle(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                foregroundColor: const MaterialStatePropertyAll(Colors.white),
-                shape: MaterialStatePropertyAll(
-                  RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-              ),
-              child: BlocBuilder<AuthBloc, AuthState>(
-                builder: (context, state) {
-                  if (state is AuthLoadingState) {
-                    return const CircularProgressIndicator(
-                      color: Colors.white54,
-                    );
-                  }
-                  return Text('Reset'.toUpperCase());
+            Container(
+              margin: const EdgeInsetsDirectional.only(bottom: 16),
+              child: MDTextFormField(
+                textController: _emailText,
+                labelText: 'Email',
+                keyboardType: TextInputType.emailAddress,
+                validator: (value) {
+                  return value != null && !value.isValidEmail
+                      ? 'Enter a valid email'
+                      : null;
                 },
               ),
+            ),
+            MDFilledButton(
+              onPressed: () {
+                BlocProvider.of<AuthBloc>(context).add(
+                  ResetPassword(
+                    email: _emailText.text,
+                  ),
+                );
+              },
+              text: 'RESET',
+              loading: isLoading,
+              disabled:
+                  !isLoading && _hasEmail && formKey.currentState!.validate()
+                      ? false
+                      : true,
             )
           ],
         ),

@@ -20,9 +20,10 @@ class AppRouter {
     ),
     GoRoute(
       path: AppRoutes.signUpPathScreen,
-      pageBuilder: (context, state) {
-        return const MaterialPage(child: SignUpScreen());
-      },
+      builder: (context, state) => BlocProvider<AuthBloc>(
+        create: (context) => AuthBloc(getIt()),
+        child: const SignUpScreen(),
+      ),
     ),
     GoRoute(
       path: AppRoutes.forgotPathScreen,

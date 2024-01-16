@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:customer_app_mob/config/routes/app_routes.dart';
+import 'package:customer_app_mob/core/presentation/widgets/atoms/md_text_input/md_text_form.dart';
+import 'package:customer_app_mob/core/presentation/widgets/atoms/md_button/md_filled.dart';
 import 'package:customer_app_mob/core/presentation/bloc/auth/auth_bloc.dart';
 import 'package:customer_app_mob/extensions/validation.dart';
 
@@ -98,10 +100,10 @@ class _SignInScreenState extends State<SignInScreen> {
           const Text(
             'Hi! \nWelcome',
             style: TextStyle(
-                fontSize: 45, fontWeight: FontWeight.w600, height: 1.2),
+                fontSize: 50, fontWeight: FontWeight.w600, height: 1.2),
           ),
           Text('Let\'s get started by filling out the form below.',
-              style: Theme.of(context).textTheme.bodySmall),
+              style: Theme.of(context).textTheme.bodyMedium),
           signInForm(context),
           signUp(context),
           forgotPass(context)
@@ -111,23 +113,7 @@ class _SignInScreenState extends State<SignInScreen> {
   }
 
   Widget signInForm(BuildContext context) {
-    final textFieldEnabledBorder = OutlineInputBorder(
-      borderSide: const BorderSide(
-        color: Colors.grey,
-        width: 1,
-      ),
-      borderRadius: BorderRadius.circular(12),
-    );
-
-    final textFieldFocusedBorder = OutlineInputBorder(
-      borderSide: const BorderSide(color: Colors.grey, width: 1.5),
-      borderRadius: BorderRadius.circular(12),
-    );
-
-    final errorFieldFocusedBorder = OutlineInputBorder(
-      borderSide: const BorderSide(color: Colors.red, width: 1.5),
-      borderRadius: BorderRadius.circular(12),
-    );
+    final isLoading = context.watch<AuthBloc>().state is AuthLoadingState;
 
     return Padding(
       padding: const EdgeInsetsDirectional.only(top: 20, bottom: 10),
@@ -135,103 +121,62 @@ class _SignInScreenState extends State<SignInScreen> {
         key: formKey,
         child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsetsDirectional.only(bottom: 16),
-              child: TextFormField(
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  controller: _emailText,
-                  keyboardType: TextInputType.emailAddress,
-                  style: const TextStyle(height: 1),
-                  decoration: InputDecoration(
-                    labelText: 'Email',
-                    labelStyle: const TextStyle(color: Colors.black87),
-                    enabledBorder: textFieldEnabledBorder,
-                    focusedBorder: textFieldFocusedBorder,
-                    errorBorder: errorFieldFocusedBorder,
-                    focusedErrorBorder: errorFieldFocusedBorder,
-                  ),
-                  validator: (value) {
-                    return value != null && !value.isValidEmail
-                        ? 'Enter a valid email'
-                        : null;
-                  }),
-            ),
-            Padding(
-              padding: const EdgeInsetsDirectional.only(bottom: 16),
-              child: TextFormField(
-                autovalidateMode: AutovalidateMode.onUserInteraction,
-                controller: _passwordText,
-                autocorrect: false,
-                enableSuggestions: false,
-                obscureText: _isShowPassword ? false : true,
-                style: const TextStyle(height: 1),
-                decoration: InputDecoration(
-                  labelText: 'Password',
-                  labelStyle: const TextStyle(color: Colors.black87),
-                  enabledBorder: textFieldEnabledBorder,
-                  focusedBorder: textFieldFocusedBorder,
-                  errorBorder: errorFieldFocusedBorder,
-                  focusedErrorBorder: errorFieldFocusedBorder,
-                  suffixIcon: IconButton(
-                    icon: Icon(_isShowPassword
-                        ? Icons.visibility
-                        : Icons.visibility_off),
-                    onPressed: () {
-                      setState(() {
-                        _isShowPassword = !_isShowPassword;
-                      });
-                    },
-                  ),
-                ),
-                validator: (value) => value != null && value.isEmpty
-                    ? 'Enter a valid password'
-                    : null,
-              ),
-            ),
-            TextButton(
-              onPressed:
-                  _hasEmail && _hasPassword && formKey.currentState!.validate()
-                      ? () {
-                          BlocProvider.of<AuthBloc>(context).add(
-                            AuthSignIn(
-                              email: _emailText.text,
-                              password: _passwordText.text,
-                            ),
-                          );
-                        }
-                      : null,
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all<Color>(_hasEmail &&
-                        _hasPassword &&
-                        formKey.currentState!.validate()
-                    ? Theme.of(context).primaryColor
-                    : Theme.of(context).primaryColorLight),
-                fixedSize: const MaterialStatePropertyAll(
-                  Size(double.maxFinite, 50),
-                ),
-                textStyle: const MaterialStatePropertyAll(
-                  TextStyle(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                foregroundColor: const MaterialStatePropertyAll(Colors.white),
-                shape: MaterialStatePropertyAll(
-                  RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-              ),
-              child: BlocBuilder<AuthBloc, AuthState>(
-                builder: (context, state) {
-                  if (state is AuthLoadingState) {
-                    return const CircularProgressIndicator(
-                      color: Colors.white54,
-                    );
-                  }
-                  return Text('Sign In'.toUpperCase());
+            Container(
+              margin: const EdgeInsetsDirectional.only(bottom: 16),
+              child: MDTextFormField(
+                textController: _emailText,
+                labelText: 'Email',
+                keyboardType: TextInputType.emailAddress,
+                validator: (value) {
+                  return value != null && !value.isValidEmail
+                      ? 'Enter a valid email'
+                      : null;
                 },
               ),
-            )
+            ),
+            Container(
+              margin: const EdgeInsetsDirectional.only(bottom: 16),
+              child: MDTextFormField(
+                textController: _passwordText,
+                labelText: 'Password',
+                autocorrect: false,
+                enableSuggestions: false,
+                obscureText: !_isShowPassword,
+                suffixIcon: IconButton(
+                  icon: Icon(_isShowPassword
+                      ? Icons.visibility
+                      : Icons.visibility_off),
+                  onPressed: () {
+                    setState(() {
+                      _isShowPassword = !_isShowPassword;
+                    });
+                  },
+                ),
+                validator: (value) {
+                  return value != null && value.isEmpty
+                      ? 'Enter a valid password'
+                      : null;
+                },
+              ),
+            ),
+            MDFilledButton(
+              onPressed: () {
+                BlocProvider.of<AuthBloc>(context).add(
+                  AuthSignIn(
+                    email: _emailText.text,
+                    password: _passwordText.text,
+                  ),
+                );
+              },
+              text: 'SIGN IN',
+              loading: isLoading,
+              disabled: !isLoading &&
+                      _hasEmail &&
+                      _hasPassword &&
+                      formKey.currentState!.validate()
+                  ? false
+                  : true,
+            ),
           ],
         ),
       ),

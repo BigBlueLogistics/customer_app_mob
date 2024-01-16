@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:customer_app_mob/core/data/models/user.dart';
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:customer_app_mob/core/domain/entities/user.dart';
@@ -42,7 +43,16 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
-  FutureOr<void> _resetPassword(ResetPassword event, emit) {
+  FutureOr<void> _resetPassword(ResetPassword event, emit) async {
     emit(AuthLoadingState());
+    debugPrint('Reset password AuthLoadingState');
+
+    await Future.delayed(const Duration(seconds: 3), () {
+      debugPrint('Reset password AuthSuccessState');
+      emit(
+        const AuthSuccessState(
+            auth: AuthStatus.authentiated, user: UserModel.empty),
+      );
+    });
   }
 }
