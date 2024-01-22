@@ -216,8 +216,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          'Have an account?',
-          style: Theme.of(context).textTheme.bodySmall,
+          'Already have an account?',
+          style: Theme.of(context).textTheme.bodyMedium,
         ),
         TextButton(
           onPressed: () {
@@ -227,7 +227,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             'Sign in',
             style: TextStyle(
                 color: Theme.of(context).primaryColor,
-                fontSize: Theme.of(context).textTheme.bodySmall?.fontSize),
+                fontSize: Theme.of(context).textTheme.bodyMedium?.fontSize),
           ),
         )
       ],

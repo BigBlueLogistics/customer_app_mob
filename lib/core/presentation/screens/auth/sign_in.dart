@@ -190,7 +190,7 @@ class _SignInScreenState extends State<SignInScreen> {
       children: [
         Text(
           'Don\'t have an account?',
-          style: Theme.of(context).textTheme.bodySmall,
+          style: Theme.of(context).textTheme.bodyMedium,
         ),
         TextButton(
           onPressed: () {
@@ -200,7 +200,7 @@ class _SignInScreenState extends State<SignInScreen> {
             'Sign up',
             style: TextStyle(
                 color: Theme.of(context).primaryColor,
-                fontSize: Theme.of(context).textTheme.bodySmall?.fontSize),
+                fontSize: Theme.of(context).textTheme.bodyMedium?.fontSize),
           ),
         )
       ],
