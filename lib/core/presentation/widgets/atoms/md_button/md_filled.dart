@@ -12,7 +12,7 @@ class MDFilledButton extends StatelessWidget {
   const MDFilledButton(
       {super.key,
       required this.onPressed,
-      this.text = '',
+      this.text = 'button',
       this.autoResize = true,
       this.horizontalAlignment = MainAxisAlignment.center,
       this.disabled = false,
