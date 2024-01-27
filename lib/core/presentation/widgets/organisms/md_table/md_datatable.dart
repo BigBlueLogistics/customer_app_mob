@@ -2,6 +2,21 @@ import 'package:flutter/material.dart';
 
 /// A reusable widget [PaginatedDataTable].
 
+extension DataRowExtension on DataRow {
+  Widget toContainer({
+    required Border border,
+    BorderRadiusGeometry? borderRadius,
+  }) {
+    return Container(
+      decoration: BoxDecoration(
+        border: border,
+        borderRadius: borderRadius,
+      ),
+      child: this as Widget,
+    );
+  }
+}
+
 class _DataSource extends DataTableSource {
   late List<Map<String, dynamic>> data;
 
@@ -42,25 +57,26 @@ class _DataSource extends DataTableSource {
 }
 
 class MDDataTableColumns {
-  final String title;
-  final String accessorKey;
-
   const MDDataTableColumns({required this.title, required this.accessorKey});
+
+  final String title;
+
+  final String accessorKey;
 }
 
 class MDDataTable extends StatelessWidget {
-  final List<MDDataTableColumns> columns;
-
-  final List<Map<String, dynamic>> dataSource;
-
-  final int rowsPerPage;
-
   const MDDataTable({
     super.key,
     required this.columns,
     required this.dataSource,
     this.rowsPerPage = 10,
   });
+
+  final List<MDDataTableColumns> columns;
+
+  final List<Map<String, dynamic>> dataSource;
+
+  final int rowsPerPage;
 
   List<DataColumn> generateColumn() {
     return columns
@@ -81,6 +97,7 @@ class MDDataTable extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PaginatedDataTable(
+      headingRowHeight: 35,
       rowsPerPage: rowsPerPage,
       columns: generateColumn(),
       source: generateData(),

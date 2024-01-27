@@ -1,6 +1,6 @@
-import 'package:customer_app_mob/core/presentation/widgets/atoms/md_text_input/md_text_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:customer_app_mob/core/presentation/widgets/atoms/md_text_input/md_text_form.dart';
 import 'package:customer_app_mob/core/presentation/widgets/atoms/md_button/md_filled.dart';
 import 'package:customer_app_mob/core/presentation/bloc/auth/auth_bloc.dart';
 import 'package:customer_app_mob/extensions/validation.dart';
@@ -41,12 +41,12 @@ class _ForgotScreenState extends State<ForgotScreen> {
   }
 
   Widget render(BuildContext context) {
-    return GestureDetector(
-      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-      child: Scaffold(
-        backgroundColor: Theme.of(context).colorScheme.background,
-        body: SafeArea(
-          child: SingleChildScrollView(
+    return SafeArea(
+      child: GestureDetector(
+        onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+        child: Scaffold(
+          backgroundColor: Theme.of(context).colorScheme.background,
+          body: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.center,

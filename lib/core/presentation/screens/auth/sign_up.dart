@@ -55,12 +55,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   Widget render(BuildContext context) {
-    return GestureDetector(
-      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-      child: Scaffold(
-        backgroundColor: Theme.of(context).colorScheme.background,
-        body: SafeArea(
-          child: SingleChildScrollView(
+    return SafeArea(
+      child: GestureDetector(
+        onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+        child: Scaffold(
+          backgroundColor: Theme.of(context).colorScheme.background,
+          body: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.center,

@@ -9,37 +9,39 @@ import 'package:customer_app_mob/core/presentation/screens/auth/sign_up.dart';
 import 'package:customer_app_mob/core/presentation/screens/auth/forgot.dart';
 
 class AppRouter {
-  static final GoRouter _router =
-      GoRouter(initialLocation: AppRoutes.inventoryScreen, routes: [
-    GoRoute(
-      path: AppRoutes.signInPathScreen,
-      builder: (context, state) => BlocProvider<AuthBloc>(
-        create: (context) => AuthBloc(getIt()),
-        child: const SignInScreen(),
+  static final GoRouter _router = GoRouter(
+    initialLocation: AppRoutes.inventoryScreen,
+    routes: [
+      GoRoute(
+        path: AppRoutes.signInPathScreen,
+        builder: (context, state) => BlocProvider<AuthBloc>(
+          create: (context) => AuthBloc(getIt()),
+          child: const SignInScreen(),
+        ),
       ),
-    ),
-    GoRoute(
-      path: AppRoutes.signUpPathScreen,
-      builder: (context, state) => BlocProvider<AuthBloc>(
-        create: (context) => AuthBloc(getIt()),
-        child: const SignUpScreen(),
+      GoRoute(
+        path: AppRoutes.signUpPathScreen,
+        builder: (context, state) => BlocProvider<AuthBloc>(
+          create: (context) => AuthBloc(getIt()),
+          child: const SignUpScreen(),
+        ),
       ),
-    ),
-    GoRoute(
-      path: AppRoutes.forgotPathScreen,
-      builder: (context, state) => BlocProvider<AuthBloc>(
-        create: (context) => AuthBloc(getIt()),
-        child: const ForgotScreen(),
+      GoRoute(
+        path: AppRoutes.forgotPathScreen,
+        builder: (context, state) => BlocProvider<AuthBloc>(
+          create: (context) => AuthBloc(getIt()),
+          child: const ForgotScreen(),
+        ),
       ),
-    ),
-    GoRoute(
-      path: AppRoutes.inventoryScreen,
-      builder: (context, state) => BlocProvider<AuthBloc>(
-        create: (context) => AuthBloc(getIt()),
-        child: const InventoryApp(),
-      ),
-    )
-  ]);
+      GoRoute(
+        path: AppRoutes.inventoryScreen,
+        builder: (context, state) => BlocProvider<AuthBloc>(
+          create: (context) => AuthBloc(getIt()),
+          child: const Inventory(),
+        ),
+      )
+    ],
+  );
 
   static GoRouter get router => _router;
 }

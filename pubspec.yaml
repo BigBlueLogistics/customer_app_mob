@@ -106,7 +106,6 @@ flutter:
           weight: 300
         - asset: fonts/Roboto-LightItalic.ttf
           style: italic
-          weight: 300
   #   - family: Trajan Pro
   #     fonts:
   #       - asset: fonts/TrajanPro.ttf

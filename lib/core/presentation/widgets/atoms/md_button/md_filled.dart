@@ -1,14 +1,6 @@
 import 'package:flutter/material.dart';
 
 class MDFilledButton extends StatelessWidget {
-  final GestureTapCallback onPressed;
-  final MainAxisAlignment horizontalAlignment;
-  final double height;
-  final String text;
-  final bool autoResize;
-  final bool disabled;
-  final bool loading;
-
   const MDFilledButton(
       {super.key,
       required this.onPressed,
@@ -18,6 +10,14 @@ class MDFilledButton extends StatelessWidget {
       this.disabled = false,
       this.loading = false,
       this.height = 50});
+
+  final GestureTapCallback onPressed;
+  final MainAxisAlignment horizontalAlignment;
+  final double height;
+  final String text;
+  final bool autoResize;
+  final bool disabled;
+  final bool loading;
 
   @override
   Widget build(BuildContext context) {
