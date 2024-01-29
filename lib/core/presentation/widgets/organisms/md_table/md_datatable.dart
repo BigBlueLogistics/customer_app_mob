@@ -2,21 +2,6 @@ import 'package:flutter/material.dart';
 
 /// A reusable widget [PaginatedDataTable].
 
-extension DataRowExtension on DataRow {
-  Widget toContainer({
-    required Border border,
-    BorderRadiusGeometry? borderRadius,
-  }) {
-    return Container(
-      decoration: BoxDecoration(
-        border: border,
-        borderRadius: borderRadius,
-      ),
-      child: this as Widget,
-    );
-  }
-}
-
 class _DataSource extends DataTableSource {
   late List<Map<String, dynamic>> data;
 
