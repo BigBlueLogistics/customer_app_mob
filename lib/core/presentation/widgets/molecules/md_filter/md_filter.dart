@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:customer_app_mob/core/presentation/widgets/atoms/md_text_input/md_text_form.dart';
 
-class MDSearchMore extends StatelessWidget {
-  const MDSearchMore({super.key, required this.searchText});
+class MDFilter extends StatelessWidget {
+  const MDFilter({super.key, required this.searchText});
 
   final TextEditingController searchText;
 
