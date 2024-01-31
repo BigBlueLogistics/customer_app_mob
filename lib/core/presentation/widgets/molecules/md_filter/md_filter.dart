@@ -1,44 +1,76 @@
 import 'package:flutter/material.dart';
-import 'package:customer_app_mob/core/presentation/widgets/atoms/md_text_input/md_text_form.dart';
 
 class MDFilter extends StatelessWidget {
-  const MDFilter({super.key, required this.searchText});
+  const MDFilter(
+      {super.key, this.onSelectCustomer, this.onFilter, this.menuList});
 
-  final TextEditingController searchText;
+  final VoidCallback? onSelectCustomer;
+
+  final VoidCallback? onFilter;
+
+  final List<MenuItemButton>? menuList;
 
   @override
   Widget build(BuildContext context) {
-    return MDTextFormField(
-      textController: searchText,
-      hintText: 'Search',
-      contentPadding: const EdgeInsetsDirectional.only(top: 15, start: 10),
-      suffixIcon: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(
-              Icons.search_outlined,
-              color: Colors.black87,
-            ),
-          ),
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(
-              Icons.filter_list_outlined,
-              color: Colors.black87,
-            ),
-          ),
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(
-              Icons.more_vert_outlined,
-              color: Colors.black87,
-            ),
-          ),
-        ],
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 1.0),
+      decoration: const BoxDecoration(
+        border: BorderDirectional(bottom: BorderSide(color: Colors.grey)),
       ),
+      child: Row(children: [
+        Expanded(
+          flex: 2,
+          child: TextButton(
+            onPressed: onSelectCustomer,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Select customer',
+                  style: TextStyle(color: Theme.of(context).hintColor),
+                ),
+                const Icon(
+                  Icons.arrow_drop_down,
+                  color: Colors.black87,
+                ),
+              ],
+            ),
+          ),
+        ),
+        IconButton(
+          onPressed: onFilter,
+          icon: const Icon(
+            Icons.filter_list_outlined,
+            size: 22.0,
+            color: Colors.black87,
+          ),
+        ),
+        MenuAnchor(
+          builder:
+              (BuildContext context, MenuController controller, Widget? child) {
+            return IconButton(
+              onPressed: () {
+                if (controller.isOpen) {
+                  controller.close();
+                } else {
+                  controller.open();
+                }
+              },
+              icon: const Icon(Icons.more_vert),
+              tooltip: 'Show menu',
+            );
+          },
+          menuChildren: menuList ??
+              List<MenuItemButton>.generate(
+                1,
+                (index) => const MenuItemButton(
+                    child: Text(
+                  'No menu',
+                  textDirection: TextDirection.rtl,
+                )),
+              ),
+        ),
+      ]),
     );
   }
 }

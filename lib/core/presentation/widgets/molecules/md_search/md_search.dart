@@ -15,15 +15,16 @@ class MDSearch extends StatelessWidget {
           const EdgeInsets.symmetric(vertical: 1.0, horizontal: 10.0),
       hintText: 'Search...',
       suffixIcon: IconButton.filled(
-        iconSize: 20.0,
-        style: ButtonStyle(
-          shape: MaterialStateProperty.all(
-            const RoundedRectangleBorder(
+        style: const ButtonStyle(
+          padding: MaterialStatePropertyAll(
+              EdgeInsets.symmetric(vertical: 6.0, horizontal: 6.0)),
+          shape: MaterialStatePropertyAll(
+            RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(5.0)),
             ),
           ),
-          backgroundColor:
-              MaterialStatePropertyAll(Theme.of(context).primaryColor),
+          maximumSize: MaterialStatePropertyAll(Size(40.0, 40.0)),
+          minimumSize: MaterialStatePropertyAll(Size(30.0, 30.0)),
         ),
         icon: const Icon(
           Icons.search_outlined,
