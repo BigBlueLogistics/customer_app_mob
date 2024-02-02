@@ -1,14 +1,14 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:bloc/bloc.dart';
-import 'package:customer_app_mob/core/data/models/user.dart';
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
+import 'package:customer_app_mob/core/data/models/user.dart';
 import 'package:customer_app_mob/core/domain/entities/user.dart';
 import 'package:customer_app_mob/core/domain/usecases/auth.dart';
 import 'package:customer_app_mob/core/shared/enums/auth_status.dart';
 import 'package:customer_app_mob/core/utils/data_state.dart';
-import 'package:flutter/foundation.dart';
 
 part 'auth_event.dart';
 part 'auth_state.dart';
@@ -28,6 +28,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         params: SignInParams(email: event.email, password: event.password));
 
     if (authData is DataSuccess && authData.resp != null) {
+      if (kDebugMode) {
+        print('AuthSuccessState');
+        print(authData);
+      }
       emit(
         AuthSuccessState(
             auth: AuthStatus.authentiated, user: authData.resp as UserEntity),
@@ -37,7 +41,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     if (authData is DataFailed) {
       if (kDebugMode) {
         print('AuthFailedState error');
-        print(authData);
+        print(authData.error!.response);
       }
       emit(AuthFailedState(error: authData.error as DioException));
     }

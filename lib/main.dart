@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:customer_app_mob/config/routes/app_router.dart';
-
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:customer_app_mob/app.dart';
+import 'package:customer_app_mob/core/presentation/bloc/auth/auth_bloc.dart';
 import 'package:customer_app_mob/core/dependencies.dart';
-import 'package:customer_app_mob/config/theme/light_theme.dart';
-import 'package:customer_app_mob/config/theme/dark_theme.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,13 +15,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      debugShowCheckedModeBanner: false,
-      theme: lightMode,
-      darkTheme: darkMode,
-      routeInformationProvider: AppRouter.router.routeInformationProvider,
-      routeInformationParser: AppRouter.router.routeInformationParser,
-      routerDelegate: AppRouter.router.routerDelegate,
+    return BlocProvider(
+      create: (BuildContext context) => AuthBloc(getIt()),
+      child: const AppView(),
     );
   }
 }

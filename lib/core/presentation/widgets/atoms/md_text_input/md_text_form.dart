@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:customer_app_mob/core/shared/enums/text_border_type.dart';
 
 class MDTextFormField extends StatelessWidget {
@@ -20,7 +19,10 @@ class MDTextFormField extends StatelessWidget {
     this.filled,
     this.filledColor,
     this.borderColor = Colors.grey,
-  });
+  }) : assert(
+            borderType != TextFormBorderType.filled ||
+                (filled != null && filledColor != null),
+            'borderType == filled, then it requires filled and filledColor');
 
   final TextEditingController textController;
   final bool autocorrect;
