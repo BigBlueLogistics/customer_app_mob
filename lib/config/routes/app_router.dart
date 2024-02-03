@@ -1,3 +1,4 @@
+import 'package:customer_app_mob/core/presentation/screens/error.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -26,7 +27,7 @@ class AppRouter {
       ),
       GoRoute(
         path: AppRoutes.inventoryScreen,
-        builder: (context, state) => const Inventory(),
+        builder: (context, state) => const InventoryScreen(),
       )
     ],
     redirect: (context, state) {
@@ -48,10 +49,8 @@ class AppRouter {
       // No need to redirect at all
       return null;
     },
-    errorPageBuilder: (context, state) => const MaterialPage(
-      child: Scaffold(
-        body: Center(child: Text('Error page')),
-      ),
+    errorPageBuilder: (context, state) => MaterialPage(
+      child: ErrorScreen(state.error as Exception),
     ),
   );
 

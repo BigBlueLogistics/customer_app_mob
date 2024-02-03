@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:customer_app_mob/core/utils/shared_prefs.dart';
 import 'package:flutter/foundation.dart';
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
@@ -23,7 +24,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   FutureOr<void> _authSigIn(AuthSignIn event, Emitter<AuthState> emit) async {
     emit(AuthLoadingState());
-
+    debugPrint('signin loading 1');
     final authData = await _authUseCase(
         params: SignInParams(email: event.email, password: event.password));
 
@@ -32,6 +33,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         print('AuthSuccessState');
         print(authData);
       }
+
+      // Cache api token
+      final String token = authData.resp!.data!.containsKey('token')
+          ? authData.resp!.data!['token']
+          : '';
+      SharedPrefs.setApiToken(token);
+
       emit(
         AuthSuccessState(
             auth: AuthStatus.authentiated, user: authData.resp as UserEntity),
