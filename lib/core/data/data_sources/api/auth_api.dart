@@ -5,7 +5,7 @@ import 'package:customer_app_mob/config/constants/url.dart';
 
 part 'auth_api.g.dart';
 
-@RestApi(baseUrl: apiBaseUrl)
+@RestApi(baseUrl: apiBaseUrlDevAndroid)
 @Headers(<String, dynamic>{
   'Content-Type': 'application/json',
   'Accept': 'application/json',

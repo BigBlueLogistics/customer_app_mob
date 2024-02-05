@@ -1,40 +1,50 @@
 part of 'auth_bloc.dart';
 
 class AuthState extends Equatable {
-  const AuthState();
+  const AuthState({
+    required this.status,
+    this.auth = AuthStatus.unauthenticated,
+    this.user = UserModel.empty,
+  });
 
-  @override
-  List<Object> get props => [];
-}
-
-class AuthLoadingState extends AuthState {}
-
-class AuthSuccessState extends AuthState {
+  final LoadingStatus status;
   final AuthStatus auth;
-  final UserEntity user;
-
-  const AuthSuccessState({required this.auth, required this.user});
+  final UserModel user;
 
   @override
-  List<Object> get props => [auth, user];
+  List<Object> get props => [status];
+
+  Map<String, dynamic> toJson() {
+    return {'status': status.index, 'auth': auth.index, 'user': user};
+  }
+
+  factory AuthState.fromJson(Map<String, dynamic> json) {
+    return AuthState(
+      status: LoadingStatus.values[json['status']],
+      auth: AuthStatus.values[json['auth']],
+      user: UserModel.fromJson(
+        json['user'],
+      ),
+    );
+  }
 }
 
-class AuthFailedState extends AuthState {
+class AuthStateFailed extends AuthState {
   final DioException error;
 
-  const AuthFailedState({
+  const AuthStateFailed({
+    required super.status,
     required this.error,
   });
 
   @override
-  List<Object> get props => [error];
+  List<Object> get props => [status, error];
 }
 
 class ResetPasswordState extends AuthState {
-  final AuthStatus status;
   final String message;
 
-  const ResetPasswordState({required this.status, required this.message});
+  const ResetPasswordState({required super.status, required this.message});
 
   @override
   List<Object> get props => [status, message];

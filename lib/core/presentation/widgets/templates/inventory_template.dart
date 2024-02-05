@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:customer_app_mob/core/presentation/bloc/auth/auth_bloc.dart';
 import 'package:customer_app_mob/core/presentation/widgets/molecules/md_search/md_search.dart';
 import 'package:customer_app_mob/core/presentation/widgets/molecules/md_filter/md_filter.dart';
 import 'package:customer_app_mob/core/presentation/widgets/organisms/md_scaffold/md_scaffold.dart';
@@ -42,6 +44,8 @@ class InventoryTemplate extends StatelessWidget {
   }
 
   MDFilter Filter(BuildContext context, double mediaWidth) {
+    final authState = context.watch<AuthBloc>().state;
+
     return MDFilter(
       onSelectCustomer: () {
         assert(debugCheckHasMediaQuery(context));
@@ -53,8 +57,8 @@ class InventoryTemplate extends StatelessWidget {
               return SizedBox(
                 height: 200,
                 width: mediaWidth,
-                child: const Center(
-                  child: Text('Customer list'),
+                child: Center(
+                  child: Text(authState.auth.name.toString()),
                 ),
               );
             });

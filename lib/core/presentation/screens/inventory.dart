@@ -1,8 +1,6 @@
 import 'dart:math';
-
-import 'package:customer_app_mob/core/presentation/widgets/templates/inventory_template.dart';
-import 'package:customer_app_mob/core/utils/shared_prefs.dart';
 import 'package:flutter/material.dart';
+import 'package:customer_app_mob/core/presentation/widgets/templates/inventory_template.dart';
 
 class InventoryScreen extends StatefulWidget {
   const InventoryScreen({super.key});
@@ -20,8 +18,6 @@ class _InventoryScreenState extends State<InventoryScreen> {
   void initState() {
     super.initState();
 
-    debugPrint('init state Inventory');
-    debugPrint(SharedPrefs.getApiToken());
     generateData();
   }
 

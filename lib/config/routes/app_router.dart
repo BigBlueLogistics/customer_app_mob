@@ -1,4 +1,7 @@
 import 'package:customer_app_mob/core/presentation/screens/error.dart';
+import 'package:customer_app_mob/core/shared/enums/auth_status.dart';
+import 'package:customer_app_mob/core/shared/enums/loading_status.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -31,10 +34,33 @@ class AppRouter {
       )
     ],
     redirect: (context, state) {
-      final signedIn =
-          BlocProvider.of<AuthBloc>(context).state is AuthSuccessState;
+      final authState = BlocProvider.of<AuthBloc>(context).state;
+      final signedIn = authState.auth.name == AuthStatus.authenticated.name;
       final signingIn =
           state.matchedLocation.contains(AppRoutes.signInPathScreen);
+
+      debugPrint('init redirect route');
+      // final statez = BlocProvider.of<AuthBloc>(context).state;
+
+      // final signedMsg = statez is AuthSuccessState
+      //     ? statez.toJson().toString()
+      //     : 'empty authzz';
+
+      // showDialog(
+      //     context: context,
+      //     builder: (context) {
+      //       return AlertDialog(
+      //         title: Text('Hydrate'),
+      //         content: Column(
+      //           children: [
+      //             Text(
+      //               signedIn.toString(),
+      //             ),
+      //             Text(signedMsg)
+      //           ],
+      //         ),
+      //       );
+      //     });
 
       // Go to /sign-in if user is not authenticated
       if (!signedIn && signingIn) {

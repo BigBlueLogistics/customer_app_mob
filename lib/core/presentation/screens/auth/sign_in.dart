@@ -1,3 +1,4 @@
+import 'package:customer_app_mob/core/shared/enums/loading_status.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -113,7 +114,8 @@ class _SignInScreenState extends State<SignInScreen> {
   }
 
   Widget signInForm(BuildContext context) {
-    final isLoading = context.watch<AuthBloc>().state is AuthLoadingState;
+    final isLoading =
+        context.watch<AuthBloc>().state.status == LoadingStatus.loading;
 
     return Padding(
       padding: const EdgeInsetsDirectional.only(top: 20, bottom: 10),
@@ -161,12 +163,10 @@ class _SignInScreenState extends State<SignInScreen> {
             ),
             MDFilledButton(
               onPressed: () {
-                BlocProvider.of<AuthBloc>(context).add(
-                  AuthSignIn(
-                    email: _emailText.text,
-                    password: _passwordText.text,
-                  ),
-                );
+                context.read<AuthBloc>().add(AuthSignIn(
+                      email: _emailText.text,
+                      password: _passwordText.text,
+                    ));
               },
               text: 'SIGN IN',
               loading: isLoading,

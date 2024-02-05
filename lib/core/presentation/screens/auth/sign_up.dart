@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:customer_app_mob/core/shared/enums/loading_status.dart';
 import 'package:customer_app_mob/config/routes/app_routes.dart';
 import 'package:customer_app_mob/core/presentation/widgets/atoms/md_text_input/md_text_form.dart';
 import 'package:customer_app_mob/core/presentation/widgets/atoms/md_button/md_filled.dart';
@@ -116,7 +117,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   Widget signUpForm(BuildContext context) {
-    final isLoading = context.watch<AuthBloc>().state is AuthLoadingState;
+    final isLoading =
+        context.watch<AuthBloc>().state.status == LoadingStatus.loading;
 
     return Padding(
       padding: const EdgeInsetsDirectional.only(top: 20, bottom: 10),
