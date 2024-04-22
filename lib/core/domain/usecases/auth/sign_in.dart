@@ -10,10 +10,10 @@ class SignInParams {
   const SignInParams({required this.email, required this.password});
 }
 
-class AuthUseCase implements UseCases<DataState<UserEntity>, SignInParams> {
+class SignInUseCase implements UseCases<DataState<UserEntity>, SignInParams> {
   final AuthRepositoryImpl _authRepository;
 
-  AuthUseCase(this._authRepository);
+  SignInUseCase(this._authRepository);
 
   @override
   Future<DataState<UserEntity>> call({SignInParams? params}) {

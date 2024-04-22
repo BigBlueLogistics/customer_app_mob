@@ -4,10 +4,8 @@ import 'package:flutter/foundation.dart';
 import 'package:equatable/equatable.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:customer_app_mob/core/shared/enums/loading_status.dart';
-import 'package:customer_app_mob/core/utils/shared_prefs.dart';
 import 'package:customer_app_mob/core/data/models/user.dart';
-import 'package:customer_app_mob/core/domain/entities/user.dart';
-import 'package:customer_app_mob/core/domain/usecases/auth.dart';
+import 'package:customer_app_mob/core/domain/usecases/auth/sign_in.dart';
 import 'package:customer_app_mob/core/shared/enums/auth_status.dart';
 import 'package:customer_app_mob/core/utils/data_state.dart';
 
@@ -15,9 +13,9 @@ part 'auth_event.dart';
 part 'auth_state.dart';
 
 class AuthBloc extends HydratedBloc<AuthEvent, AuthState> {
-  final AuthUseCase _authUseCase;
+  final SignInUseCase _signInUseCase;
 
-  AuthBloc(this._authUseCase)
+  AuthBloc(this._signInUseCase)
       : super(const AuthState(status: LoadingStatus.idle)) {
     on<AuthSignIn>(_authSigIn);
     on<ResetPassword>(_resetPassword);
@@ -27,7 +25,7 @@ class AuthBloc extends HydratedBloc<AuthEvent, AuthState> {
     emit(const AuthState(status: LoadingStatus.loading));
 
     debugPrint('signin loading 1');
-    final authData = await _authUseCase(
+    final authData = await _signInUseCase(
         params: SignInParams(email: event.email, password: event.password));
 
     if (authData is DataSuccess && authData.resp != null) {
@@ -36,11 +34,11 @@ class AuthBloc extends HydratedBloc<AuthEvent, AuthState> {
         print(authData.resp);
       }
 
-      // Cache api token
+      // Todo: cache api token
+      // ignore: unused_local_variable
       final String token = authData.resp!.data!.containsKey('token')
           ? authData.resp!.data!['token']
           : '';
-      SharedPrefs.setApiToken(token);
 
       emit(
         AuthState(

@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:dio/dio.dart';
-import 'package:customer_app_mob/core/data/data_sources/api/auth_api.dart';
+import 'package:customer_app_mob/core/data/data_sources/api/auth/auth_api.dart';
 import 'package:customer_app_mob/core/data/models/user.dart';
 import 'package:customer_app_mob/core/domain/repository/auth_repository.dart';
 import 'package:customer_app_mob/core/utils/data_state.dart';

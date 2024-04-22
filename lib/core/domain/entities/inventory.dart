@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 
-class UserEntity extends Equatable {
-  const UserEntity({this.status, this.data, this.message});
+class Inventory extends Equatable {
+  const Inventory({this.status, this.data, this.message});
 
   final String? status;
   final String? message;
