@@ -1,3 +1,3 @@
-abstract class UseCases<Type, Params> {
-  Future<Type> call({Params params});
+abstract class UseCases<Response, Params> {
+  Future<Response> call(Params params);
 }

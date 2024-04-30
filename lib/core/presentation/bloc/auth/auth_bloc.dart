@@ -5,9 +5,10 @@ import 'package:equatable/equatable.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:customer_app_mob/core/shared/enums/loading_status.dart';
 import 'package:customer_app_mob/core/data/models/user.dart';
-import 'package:customer_app_mob/core/domain/usecases/auth/sign_in.dart';
+import 'package:customer_app_mob/core/usecases/auth/sign_in.dart';
 import 'package:customer_app_mob/core/shared/enums/auth_status.dart';
 import 'package:customer_app_mob/core/utils/data_state.dart';
+import 'package:customer_app_mob/core/utils/shared_prefs.dart';
 
 part 'auth_event.dart';
 part 'auth_state.dart';
@@ -26,7 +27,7 @@ class AuthBloc extends HydratedBloc<AuthEvent, AuthState> {
 
     debugPrint('signin loading 1');
     final authData = await _signInUseCase(
-        params: SignInParams(email: event.email, password: event.password));
+        SignInParams(email: event.email, password: event.password));
 
     if (authData is DataSuccess && authData.resp != null) {
       if (kDebugMode) {
@@ -34,11 +35,11 @@ class AuthBloc extends HydratedBloc<AuthEvent, AuthState> {
         print(authData.resp);
       }
 
-      // Todo: cache api token
-      // ignore: unused_local_variable
+      // Cache API token
       final String token = authData.resp!.data!.containsKey('token')
           ? authData.resp!.data!['token']
           : '';
+      SharedPrefs.setApiToken(token);
 
       emit(
         AuthState(

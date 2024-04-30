@@ -12,7 +12,8 @@ class AuthRepositoryImpl implements AuthRepository {
   const AuthRepositoryImpl(this.authApi);
 
   @override
-  Future<DataState<UserModel>> signIn(String email, String password) async {
+  Future<DataState<UserModel>> signIn(
+      {required String email, required String password}) async {
     try {
       final resp = await authApi.signIn(email, password);
 

@@ -1,6 +1,7 @@
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:customer_app_mob/core/presentation/widgets/templates/inventory_template.dart';
+import 'package:customer_app_mob/core/usecases/inventory/get_inventory.dart';
+import 'package:customer_app_mob/core/dependencies.dart';
 
 class InventoryScreen extends StatefulWidget {
   const InventoryScreen({super.key});
@@ -28,23 +29,14 @@ class _InventoryScreenState extends State<InventoryScreen> {
     searchText.dispose();
   }
 
-  void generateData() {
-    debugPrint('generating datazz');
+  void generateData() async {
+    final data = await getIt<InventoryUseCase>()
+        .call(InventoryParams(customerCode: 'FGRETAIL', warehouse: 'BB05'));
 
-    Future.delayed(const Duration(seconds: 3), () {
-      debugPrint('generated datazz');
-      setState(() {
-        sortedData = List.generate(
-          100000,
-          (index) => {
-            'id': index,
-            'title': 'item $index',
-            'price': Random().nextInt(100000),
-            'title1': 'item $index',
-            'title2': 'item $index',
-          },
-        );
-      });
+    final resp = data.resp!.data!;
+
+    setState(() {
+      sortedData = resp;
     });
   }
 

@@ -1,6 +1,6 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
-/// [SharedPrefs] uses single-ton pattern
+/// [SharedPrefs] uses singleton pattern
 /// to reuse the [SharedPreferences] instances
 class SharedPrefs {
   static SharedPreferences? _sharedPrefs;

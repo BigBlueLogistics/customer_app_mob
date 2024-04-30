@@ -1,11 +1,13 @@
 import 'package:customer_app_mob/core/domain/entities/inventory.dart';
 
-class InventoryModel extends Inventory {
+class InventoryModel extends InventoryEntity {
   const InventoryModel({super.data, super.message, super.status});
 
   factory InventoryModel.fromJson(Map<String, dynamic> json) {
     return InventoryModel(
-        data: json['data'], message: json['message'], status: json['status']);
+        data: List<Map<String, dynamic>>.from(json['data']).toList(),
+        message: json['message'],
+        status: json['status']);
   }
 
   Map<String, dynamic> toJson() {

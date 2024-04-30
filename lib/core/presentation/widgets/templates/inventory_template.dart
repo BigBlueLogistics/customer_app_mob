@@ -129,12 +129,19 @@ class InventoryTemplate extends StatelessWidget {
           rowsPerPage: 5,
           dataSource: data,
           columns: const <MDDataTableColumns>[
-            MDDataTableColumns(title: 'WAREHOUSE', accessorKey: 'id'),
-            MDDataTableColumns(title: 'MATERIAL CODE', accessorKey: 'title'),
-            MDDataTableColumns(title: 'DESCRIPTION', accessorKey: 'price'),
-            MDDataTableColumns(title: 'FIXED WEIGHT', accessorKey: 'title1'),
+            MDDataTableColumns(title: 'WAREHOUSE', accessorKey: 'warehouse'),
             MDDataTableColumns(
-                title: 'AVAILABLE STOCKS', accessorKey: 'title2'),
+                title: 'MATERIAL CODE', accessorKey: 'materialCode'),
+            MDDataTableColumns(
+                title: 'DESCRIPTION', accessorKey: 'description'),
+            MDDataTableColumns(title: 'FIXED WEIGHT', accessorKey: 'fixedWt'),
+            MDDataTableColumns(
+                title: 'AVAILABLE STOCKS', accessorKey: 'availableQty'),
+            MDDataTableColumns(
+                title: 'ALLOCATED STOCKS', accessorKey: 'allocatedQty'),
+            MDDataTableColumns(
+                title: 'RESTRICTED STOCKS', accessorKey: 'restrictedQty'),
+            MDDataTableColumns(title: 'TOTAL STOCKS', accessorKey: 'totalQty'),
           ],
         ),
       ]),
