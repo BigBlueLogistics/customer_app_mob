@@ -11,15 +11,15 @@ class InventoryScreen extends StatefulWidget {
 }
 
 class _InventoryScreenState extends State<InventoryScreen> {
-  late TextEditingController searchText = TextEditingController();
-  late List<Map<String, dynamic>> sortedData = [];
-  late int selectedBarIndex = 1;
+  final TextEditingController searchText = TextEditingController();
+  List<Map<String, dynamic>> _inventortyFilterData = [];
+  List<Map<String, dynamic>> _inventortyCacheData = [];
+  String _selectedCustomer = '';
+  int selectedBarIndex = 1;
 
   @override
   void initState() {
     super.initState();
-
-    generateData();
   }
 
   @override
@@ -29,23 +29,59 @@ class _InventoryScreenState extends State<InventoryScreen> {
     searchText.dispose();
   }
 
-  void generateData() async {
-    final data = await getIt<InventoryUseCase>()
-        .call(InventoryParams(customerCode: 'FGRETAIL', warehouse: 'BB05'));
+  void generateData(String customerCode, String warehouse) async {
+    if (customerCode.isNotEmpty && warehouse.isNotEmpty) {
+      final data = await getIt<InventoryUseCase>().call(
+          InventoryParams(customerCode: customerCode, warehouse: warehouse));
 
-    final resp = data.resp!.data!;
+      final resp = data.resp!.data!;
 
+      setState(() {
+        _inventortyCacheData = resp;
+        _inventortyFilterData = resp;
+      });
+    }
+  }
+
+  void onSearch(String searchValue) {
+    if (_inventortyCacheData.isNotEmpty) {
+      final filterData = _inventortyCacheData.where((elem) {
+        return elem['materialCode']
+            .toString()
+            .toLowerCase()
+            .contains(searchValue.toLowerCase());
+      }).toList();
+
+      setState(() {
+        _inventortyFilterData = filterData;
+      });
+    }
+  }
+
+  void onClear() {
+    searchText.clear();
     setState(() {
-      sortedData = resp;
+      _inventortyFilterData = _inventortyCacheData;
+    });
+  }
+
+  void onTapCustomer(String customerCode) {
+    setState(() {
+      _selectedCustomer = customerCode;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return InventoryTemplate(
-      data: sortedData,
+      data: _inventortyFilterData,
       searchText: searchText,
       selectedBarIndex: selectedBarIndex,
+      selectedCustomer: _selectedCustomer,
+      generateData: generateData,
+      onTapCustomer: onTapCustomer,
+      onSearch: onSearch,
+      onClear: onClear,
     );
   }
 }

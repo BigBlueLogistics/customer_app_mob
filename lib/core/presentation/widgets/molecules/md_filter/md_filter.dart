@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 
 class MDFilter extends StatelessWidget {
-  const MDFilter(
-      {super.key, this.onSelectCustomer, this.onFilter, this.menuList});
+  const MDFilter({
+    super.key,
+    this.onSelectCustomer,
+    this.selectedCustomer,
+    this.onFilter,
+    this.menuList,
+  });
 
   final VoidCallback? onSelectCustomer;
-
+  final String? selectedCustomer;
   final VoidCallback? onFilter;
-
   final List<MenuItemButton>? menuList;
 
   @override
@@ -26,7 +30,9 @@ class MDFilter extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Select customer',
+                  selectedCustomer != null && selectedCustomer!.isNotEmpty
+                      ? selectedCustomer.toString()
+                      : 'Select customer',
                   style: TextStyle(color: Theme.of(context).hintColor),
                 ),
                 const Icon(

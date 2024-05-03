@@ -3,18 +3,27 @@ import 'package:customer_app_mob/core/shared/enums/text_border_type.dart';
 import 'package:customer_app_mob/core/presentation/widgets/atoms/md_text_input/md_text_form.dart';
 
 class MDSearch extends StatelessWidget {
-  const MDSearch({super.key, required this.searchText});
+  const MDSearch(
+      {super.key,
+      required this.textController,
+      this.onClear,
+      this.onInputChanged});
 
-  final TextEditingController searchText;
+  final TextEditingController textController;
+
+  final VoidCallback? onClear;
+
+  final ValueChanged<String>? onInputChanged;
 
   @override
   Widget build(BuildContext context) {
     return MDTextFormField(
-      textController: searchText,
+      textController: textController,
+      onChanged: onInputChanged,
       contentPadding:
           const EdgeInsets.symmetric(vertical: 1.0, horizontal: 10.0),
       hintText: 'Search...',
-      suffixIcon: IconButton.filled(
+      suffixIcon: IconButton(
         style: const ButtonStyle(
           padding: MaterialStatePropertyAll(
               EdgeInsets.symmetric(vertical: 6.0, horizontal: 6.0)),
@@ -26,11 +35,11 @@ class MDSearch extends StatelessWidget {
           maximumSize: MaterialStatePropertyAll(Size(40.0, 40.0)),
           minimumSize: MaterialStatePropertyAll(Size(30.0, 30.0)),
         ),
-        icon: const Icon(
-          Icons.search_outlined,
-          color: Colors.white,
+        icon: Icon(
+          textController.text.isNotEmpty ? Icons.clear : Icons.search_outlined,
+          color: Colors.black54,
         ),
-        onPressed: () {},
+        onPressed: textController.text.isNotEmpty ? onClear : null,
       ),
       borderType: TextFormBorderType.filled,
       borderColor: Theme.of(context).primaryColor,

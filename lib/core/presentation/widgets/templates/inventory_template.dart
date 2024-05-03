@@ -6,19 +6,41 @@ import 'package:customer_app_mob/core/presentation/widgets/molecules/md_filter/m
 import 'package:customer_app_mob/core/presentation/widgets/organisms/md_scaffold/md_scaffold.dart';
 import 'package:customer_app_mob/core/presentation/widgets/organisms/md_table/md_datatable.dart';
 
-class InventoryTemplate extends StatelessWidget {
+class InventoryTemplate extends StatefulWidget {
   const InventoryTemplate({
     super.key,
     required this.data,
     required this.searchText,
+    required this.onTapCustomer,
+    required this.selectedCustomer,
+    required this.onSearch,
+    required this.onClear,
+    required this.generateData,
     this.selectedBarIndex = 0,
   });
 
   final List<Map<String, dynamic>> data;
-
   final TextEditingController searchText;
-
+  final ValueChanged<String> onTapCustomer;
+  final String selectedCustomer;
+  final ValueChanged<String> onSearch;
+  final VoidCallback onClear;
+  final void Function(String customerCode, String warehouse) generateData;
   final int selectedBarIndex;
+
+  @override
+  State<InventoryTemplate> createState() => _InventoryTemplateState();
+}
+
+class _InventoryTemplateState extends State<InventoryTemplate> {
+  @override
+  void didUpdateWidget(covariant InventoryTemplate oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (oldWidget.selectedCustomer != widget.selectedCustomer) {
+      widget.generateData(widget.selectedCustomer, 'BB05');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +49,7 @@ class InventoryTemplate extends StatelessWidget {
 
     return MDScaffold(
       appBarTitle: 'Inventory',
-      selectedBarIndex: selectedBarIndex,
+      selectedBarIndex: widget.selectedBarIndex,
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Column(
@@ -45,21 +67,30 @@ class InventoryTemplate extends StatelessWidget {
 
   MDFilter Filter(BuildContext context, double mediaWidth) {
     final authState = context.watch<AuthBloc>().state;
+    final customerList =
+        List<String>.from(authState.user.data!['user']['companies']).toList();
 
     return MDFilter(
+      selectedCustomer: widget.selectedCustomer,
       onSelectCustomer: () {
         assert(debugCheckHasMediaQuery(context));
 
         showModalBottomSheet<void>(
             showDragHandle: true,
             context: context,
+            isDismissible: true,
             builder: (BuildContext context) {
-              return SizedBox(
-                height: 200,
-                width: mediaWidth,
-                child: Center(
-                  child: Text(authState.auth.name.toString()),
-                ),
+              return ListView.builder(
+                itemCount: customerList.length,
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    title: Center(child: Text(customerList[index])),
+                    onTap: () => widget.onTapCustomer(customerList[index]),
+                    enabled: widget.selectedCustomer == customerList[index]
+                        ? false
+                        : true,
+                  );
+                },
               );
             });
       },
@@ -97,7 +128,11 @@ class InventoryTemplate extends StatelessWidget {
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Padding(
           padding: EdgeInsets.only(top: mediaHeight * 0.05, bottom: 12.0),
-          child: MDSearch(searchText: searchText),
+          child: MDSearch(
+            textController: widget.searchText,
+            onInputChanged: widget.onSearch,
+            onClear: widget.onClear,
+          ),
         ),
         Padding(
           padding: const EdgeInsets.only(left: 5.0, right: 5.0, bottom: 5.0),
@@ -119,7 +154,8 @@ class InventoryTemplate extends StatelessWidget {
                   padding: EdgeInsets.zero,
                   iconSize: 20.0,
                   icon: const Icon(Icons.refresh_rounded),
-                  onPressed: () {},
+                  onPressed: () =>
+                      widget.generateData(widget.selectedCustomer, 'BB05'),
                 ),
               )
             ],
@@ -127,7 +163,7 @@ class InventoryTemplate extends StatelessWidget {
         ),
         MDDataTable(
           rowsPerPage: 5,
-          dataSource: data,
+          dataSource: widget.data,
           columns: const <MDDataTableColumns>[
             MDDataTableColumns(title: 'WAREHOUSE', accessorKey: 'warehouse'),
             MDDataTableColumns(

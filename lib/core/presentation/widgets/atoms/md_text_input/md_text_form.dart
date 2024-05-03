@@ -19,6 +19,7 @@ class MDTextFormField extends StatelessWidget {
     this.filled,
     this.filledColor,
     this.borderColor = Colors.grey,
+    this.onChanged,
   }) : assert(
             borderType != TextFormBorderType.filled ||
                 (filled != null && filledColor != null),
@@ -28,6 +29,7 @@ class MDTextFormField extends StatelessWidget {
   final bool autocorrect;
   final bool enableSuggestions;
   final bool obscureText;
+  final Color borderColor;
   final String? labelText;
   final String? hintText;
   final TextInputType? keyboardType;
@@ -38,7 +40,7 @@ class MDTextFormField extends StatelessWidget {
   final TextFormBorderType? borderType;
   final bool? filled;
   final Color? filledColor;
-  final Color borderColor;
+  final ValueChanged<String>? onChanged;
 
   InputBorder? enableBorder() {
     if (borderType case TextFormBorderType.outline) {
@@ -107,6 +109,7 @@ class MDTextFormField extends StatelessWidget {
       enableSuggestions: enableSuggestions,
       obscureText: obscureText,
       style: style,
+      onChanged: onChanged,
       decoration: InputDecoration(
         prefixIconConstraints: const BoxConstraints(),
         suffixIconConstraints: const BoxConstraints(),
