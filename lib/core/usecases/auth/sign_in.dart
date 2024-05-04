@@ -16,8 +16,8 @@ class SignInUseCase implements UseCases<DataState<UserEntity>, SignInParams> {
   SignInUseCase(this._authRepository);
 
   @override
-  Future<DataState<UserEntity>> call(SignInParams params) {
+  Future<DataState<UserEntity>> call(SignInParams? params) {
     return _authRepository.signIn(
-        email: params.email, password: params.password);
+        email: params!.email, password: params.password);
   }
 }

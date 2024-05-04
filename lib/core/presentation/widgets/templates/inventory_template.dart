@@ -10,9 +10,12 @@ class InventoryTemplate extends StatefulWidget {
   const InventoryTemplate({
     super.key,
     required this.data,
+    required this.warehouseList,
     required this.searchText,
     required this.onTapCustomer,
+    required this.onTapWarehouse,
     required this.selectedCustomer,
+    required this.selectedWarehouse,
     required this.onSearch,
     required this.onClear,
     required this.generateData,
@@ -20,9 +23,12 @@ class InventoryTemplate extends StatefulWidget {
   });
 
   final List<Map<String, dynamic>> data;
+  final List<String> warehouseList;
   final TextEditingController searchText;
   final ValueChanged<String> onTapCustomer;
+  final ValueChanged<String> onTapWarehouse;
   final String selectedCustomer;
+  final String selectedWarehouse;
   final ValueChanged<String> onSearch;
   final VoidCallback onClear;
   final void Function(String customerCode, String warehouse) generateData;
@@ -33,6 +39,8 @@ class InventoryTemplate extends StatefulWidget {
 }
 
 class _InventoryTemplateState extends State<InventoryTemplate> {
+  final GlobalKey widgetKey = GlobalKey();
+
   @override
   void didUpdateWidget(covariant InventoryTemplate oldWidget) {
     super.didUpdateWidget(oldWidget);
@@ -44,8 +52,7 @@ class _InventoryTemplateState extends State<InventoryTemplate> {
 
   @override
   Widget build(BuildContext context) {
-    final mediaHeight = MediaQuery.of(context).size.height;
-    final mediaWidth = MediaQuery.of(context).size.width;
+    final mediaSize = MediaQuery.of(context).size;
 
     return MDScaffold(
       appBarTitle: 'Inventory',
@@ -57,15 +64,15 @@ class _InventoryTemplateState extends State<InventoryTemplate> {
           mainAxisSize: MainAxisSize.max,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Filter(context, mediaWidth),
-            TableInventory(context, mediaWidth, mediaHeight),
+            Filter(context, mediaSize),
+            TableInventory(context, mediaSize),
           ],
         ),
       ),
     );
   }
 
-  MDFilter Filter(BuildContext context, double mediaWidth) {
+  MDFilter Filter(BuildContext context, Size mediaSize) {
     final authState = context.watch<AuthBloc>().state;
     final customerList =
         List<String>.from(authState.user.data!['user']['companies']).toList();
@@ -80,30 +87,55 @@ class _InventoryTemplateState extends State<InventoryTemplate> {
             context: context,
             isDismissible: true,
             builder: (BuildContext context) {
-              return ListView.builder(
-                itemCount: customerList.length,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    title: Center(child: Text(customerList[index])),
-                    onTap: () => widget.onTapCustomer(customerList[index]),
-                    enabled: widget.selectedCustomer == customerList[index]
-                        ? false
-                        : true,
-                  );
-                },
+              return SizedBox(
+                height: mediaSize.height * 0.30,
+                child: ListView.builder(
+                  itemCount: customerList.length,
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      title: Text(customerList[index]),
+                      onTap: () => widget.onTapCustomer(customerList[index]),
+                      enabled: widget.selectedCustomer == customerList[index]
+                          ? false
+                          : true,
+                      leading: widget.selectedCustomer == customerList[index]
+                          ? const Icon(
+                              Icons.check,
+                            )
+                          : null,
+                    );
+                  },
+                ),
               );
             });
       },
       onFilter: () {
         showModalBottomSheet<void>(
+            isDismissible: true,
             showDragHandle: true,
             context: context,
             builder: (BuildContext context) {
               return SizedBox(
-                height: 200,
-                width: mediaWidth,
-                child: const Center(
-                  child: Text('Filter'),
+                height: mediaSize.height * 0.30,
+                child: ListView.builder(
+                  itemCount: widget.warehouseList.length,
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      title: Text(widget.warehouseList[index]),
+                      onTap: () =>
+                          widget.onTapWarehouse(widget.warehouseList[index]),
+                      enabled: widget.selectedWarehouse ==
+                              widget.warehouseList[index]
+                          ? false
+                          : true,
+                      leading: widget.selectedWarehouse ==
+                              widget.warehouseList[index]
+                          ? const Icon(
+                              Icons.check,
+                            )
+                          : null,
+                    );
+                  },
                 ),
               );
             });
@@ -121,13 +153,12 @@ class _InventoryTemplateState extends State<InventoryTemplate> {
     );
   }
 
-  Padding TableInventory(
-      BuildContext context, double mediaWidth, double mediaHeight) {
+  Padding TableInventory(BuildContext context, Size mediaSize) {
     return Padding(
       padding: const EdgeInsetsDirectional.symmetric(horizontal: 10),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Padding(
-          padding: EdgeInsets.only(top: mediaHeight * 0.05, bottom: 12.0),
+          padding: EdgeInsets.only(top: mediaSize.height * 0.05, bottom: 12.0),
           child: MDSearch(
             textController: widget.searchText,
             onInputChanged: widget.onSearch,

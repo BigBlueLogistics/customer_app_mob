@@ -1,3 +1,6 @@
+import 'package:customer_app_mob/core/data/data_sources/api/warehouse/warehouse_api.dart';
+import 'package:customer_app_mob/core/data/repository/warehouse_repository.dart';
+import 'package:customer_app_mob/core/usecases/warehouse/get_warehouse.dart';
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
@@ -52,29 +55,20 @@ Future<void> initializeDependencies() async {
   getIt.registerSingleton<Dio>(dio);
 
   // API
-  getIt.registerSingleton<AuthApi>(
-    AuthApi(getIt()),
-  );
-  getIt.registerSingleton<InventoryApi>(
-    InventoryApi(getIt()),
-  );
+  getIt.registerSingleton<AuthApi>(AuthApi(getIt()));
+  getIt.registerSingleton<InventoryApi>(InventoryApi(getIt()));
+  getIt.registerSingleton<WarehouseApi>(WarehouseApi(getIt()));
 
   // Repositories
-  getIt.registerSingleton<AuthRepositoryImpl>(
-    AuthRepositoryImpl(getIt()),
-  );
-  getIt.registerSingleton<InventoryImpl>(
-    InventoryImpl(getIt()),
-  );
+  getIt.registerSingleton<AuthRepositoryImpl>(AuthRepositoryImpl(getIt()));
+  getIt.registerSingleton<InventoryImpl>(InventoryImpl(getIt()));
+  getIt.registerSingleton<WarehouseImpl>(WarehouseImpl(getIt()));
 
   // Use cases
-  getIt.registerSingleton<SignInUseCase>(
-    SignInUseCase(getIt()),
-  );
+  getIt.registerSingleton<SignInUseCase>(SignInUseCase(getIt()));
   getIt.registerSingleton<InventoryUseCase>(InventoryUseCase(getIt()));
+  getIt.registerSingleton<WarehouseUseCase>(WarehouseUseCase(getIt()));
 
   // Bloc
-  getIt.registerFactory<AuthBloc>(
-    () => AuthBloc(getIt()),
-  );
+  getIt.registerFactory<AuthBloc>(() => AuthBloc(getIt()));
 }

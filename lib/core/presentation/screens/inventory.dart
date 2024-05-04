@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:customer_app_mob/core/utils/data_state.dart';
+import 'package:customer_app_mob/core/usecases/warehouse/get_warehouse.dart';
 import 'package:customer_app_mob/core/presentation/widgets/templates/inventory_template.dart';
 import 'package:customer_app_mob/core/usecases/inventory/get_inventory.dart';
 import 'package:customer_app_mob/core/dependencies.dart';
@@ -14,12 +16,17 @@ class _InventoryScreenState extends State<InventoryScreen> {
   final TextEditingController searchText = TextEditingController();
   List<Map<String, dynamic>> _inventortyFilterData = [];
   List<Map<String, dynamic>> _inventortyCacheData = [];
+  List<String> _warehouseList = [];
+
   String _selectedCustomer = '';
+  String _selectedWarehouse = '';
   int selectedBarIndex = 1;
 
   @override
   void initState() {
     super.initState();
+
+    getWarehouseList();
   }
 
   @override
@@ -34,11 +41,23 @@ class _InventoryScreenState extends State<InventoryScreen> {
       final data = await getIt<InventoryUseCase>().call(
           InventoryParams(customerCode: customerCode, warehouse: warehouse));
 
-      final resp = data.resp!.data!;
+      if (data is DataSuccess) {
+        final resp = data.resp!.data!;
 
+        setState(() {
+          _inventortyCacheData = resp;
+          _inventortyFilterData = resp;
+        });
+      }
+    }
+  }
+
+  void getWarehouseList() async {
+    final warehouse = await getIt<WarehouseUseCase>().call(null);
+
+    if (warehouse is DataSuccess) {
       setState(() {
-        _inventortyCacheData = resp;
-        _inventortyFilterData = resp;
+        _warehouseList = warehouse.resp!.toList();
       });
     }
   }
@@ -71,6 +90,12 @@ class _InventoryScreenState extends State<InventoryScreen> {
     });
   }
 
+  void onTapWarehouse(String warehouse) {
+    setState(() {
+      _selectedWarehouse = warehouse;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return InventoryTemplate(
@@ -78,8 +103,11 @@ class _InventoryScreenState extends State<InventoryScreen> {
       searchText: searchText,
       selectedBarIndex: selectedBarIndex,
       selectedCustomer: _selectedCustomer,
+      selectedWarehouse: _selectedWarehouse,
+      warehouseList: _warehouseList,
       generateData: generateData,
       onTapCustomer: onTapCustomer,
+      onTapWarehouse: onTapWarehouse,
       onSearch: onSearch,
       onClear: onClear,
     );

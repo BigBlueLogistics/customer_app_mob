@@ -1,3 +1,3 @@
 abstract class UseCases<Response, Params> {
-  Future<Response> call(Params params);
+  Future<Response> call(Params? params);
 }

@@ -19,6 +19,6 @@ class InventoryUseCase
   @override
   Future<DataState<InventoryEntity>> call(params) {
     return _inventoryRepository.inventory(
-        customerCode: params.customerCode, warehouse: params.warehouse);
+        customerCode: params!.customerCode, warehouse: params.warehouse);
   }
 }
