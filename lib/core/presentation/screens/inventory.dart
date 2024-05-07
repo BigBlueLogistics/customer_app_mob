@@ -18,8 +18,6 @@ class _InventoryScreenState extends State<InventoryScreen> {
   List<Map<String, dynamic>> _inventortyCacheData = [];
   List<String> _warehouseList = [];
 
-  String _selectedCustomer = '';
-  String _selectedWarehouse = '';
   int selectedBarIndex = 1;
 
   @override
@@ -36,7 +34,8 @@ class _InventoryScreenState extends State<InventoryScreen> {
     searchText.dispose();
   }
 
-  void generateData(String customerCode, String warehouse) async {
+  void generateData(
+      {required String customerCode, required String warehouse}) async {
     if (customerCode.isNotEmpty && warehouse.isNotEmpty) {
       final data = await getIt<InventoryUseCase>().call(
           InventoryParams(customerCode: customerCode, warehouse: warehouse));
@@ -77,22 +76,11 @@ class _InventoryScreenState extends State<InventoryScreen> {
     }
   }
 
-  void onClear() {
+  void onClearData() {
     searchText.clear();
     setState(() {
-      _inventortyFilterData = _inventortyCacheData;
-    });
-  }
-
-  void onTapCustomer(String customerCode) {
-    setState(() {
-      _selectedCustomer = customerCode;
-    });
-  }
-
-  void onTapWarehouse(String warehouse) {
-    setState(() {
-      _selectedWarehouse = warehouse;
+      _inventortyFilterData = [];
+      _inventortyCacheData = [];
     });
   }
 
@@ -102,14 +90,10 @@ class _InventoryScreenState extends State<InventoryScreen> {
       data: _inventortyFilterData,
       searchText: searchText,
       selectedBarIndex: selectedBarIndex,
-      selectedCustomer: _selectedCustomer,
-      selectedWarehouse: _selectedWarehouse,
       warehouseList: _warehouseList,
       generateData: generateData,
-      onTapCustomer: onTapCustomer,
-      onTapWarehouse: onTapWarehouse,
       onSearch: onSearch,
-      onClear: onClear,
+      onClearData: onClearData,
     );
   }
 }

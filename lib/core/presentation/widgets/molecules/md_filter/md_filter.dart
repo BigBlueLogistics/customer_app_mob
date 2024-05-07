@@ -3,13 +3,11 @@ import 'package:flutter/material.dart';
 class MDFilter extends StatelessWidget {
   const MDFilter({
     super.key,
-    this.onSelectCustomer,
     this.selectedCustomer,
     this.onFilter,
     this.menuList,
   });
 
-  final VoidCallback? onSelectCustomer;
   final String? selectedCustomer;
   final VoidCallback? onFilter;
   final List<MenuItemButton>? menuList;
@@ -17,36 +15,26 @@ class MDFilter extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 1.0),
+      padding: const EdgeInsets.symmetric(
+        vertical: 1.0,
+      ),
       decoration: const BoxDecoration(
         border: BorderDirectional(bottom: BorderSide(color: Colors.grey)),
       ),
       child: Row(children: [
         Expanded(
-          flex: 2,
-          child: TextButton(
-            onPressed: onSelectCustomer,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  selectedCustomer != null && selectedCustomer!.isNotEmpty
-                      ? selectedCustomer.toString()
-                      : 'Select customer',
-                  style: TextStyle(color: Theme.of(context).hintColor),
-                ),
-                const Icon(
-                  Icons.arrow_drop_down,
-                  color: Colors.black87,
-                ),
-              ],
-            ),
+          flex: 1,
+          child: Text(
+            selectedCustomer != null && selectedCustomer!.isNotEmpty
+                ? selectedCustomer.toString()
+                : 'Select customer',
+            style: TextStyle(color: Theme.of(context).hintColor),
           ),
         ),
         IconButton(
           onPressed: onFilter,
           icon: const Icon(
-            Icons.filter_list_outlined,
+            Icons.filter_alt_rounded,
             size: 22.0,
             color: Colors.black87,
           ),

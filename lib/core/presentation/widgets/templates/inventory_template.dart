@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:customer_app_mob/core/presentation/widgets/templates/widgets/modal_filter_content.dart';
 import 'package:customer_app_mob/core/presentation/bloc/auth/auth_bloc.dart';
 import 'package:customer_app_mob/core/presentation/widgets/molecules/md_search/md_search.dart';
 import 'package:customer_app_mob/core/presentation/widgets/molecules/md_filter/md_filter.dart';
@@ -12,12 +13,8 @@ class InventoryTemplate extends StatefulWidget {
     required this.data,
     required this.warehouseList,
     required this.searchText,
-    required this.onTapCustomer,
-    required this.onTapWarehouse,
-    required this.selectedCustomer,
-    required this.selectedWarehouse,
     required this.onSearch,
-    required this.onClear,
+    required this.onClearData,
     required this.generateData,
     this.selectedBarIndex = 0,
   });
@@ -25,13 +22,10 @@ class InventoryTemplate extends StatefulWidget {
   final List<Map<String, dynamic>> data;
   final List<String> warehouseList;
   final TextEditingController searchText;
-  final ValueChanged<String> onTapCustomer;
-  final ValueChanged<String> onTapWarehouse;
-  final String selectedCustomer;
-  final String selectedWarehouse;
   final ValueChanged<String> onSearch;
-  final VoidCallback onClear;
-  final void Function(String customerCode, String warehouse) generateData;
+  final VoidCallback onClearData;
+  final void Function({required String customerCode, required String warehouse})
+      generateData;
   final int selectedBarIndex;
 
   @override
@@ -40,14 +34,27 @@ class InventoryTemplate extends StatefulWidget {
 
 class _InventoryTemplateState extends State<InventoryTemplate> {
   final GlobalKey widgetKey = GlobalKey();
+  String _selectedCustomer = '';
+  String _selectedWarehouse = '';
 
-  @override
-  void didUpdateWidget(covariant InventoryTemplate oldWidget) {
-    super.didUpdateWidget(oldWidget);
+  void onSelectCustomer(String customerCode, StateSetter setState) {
+    setState(() {
+      _selectedCustomer = customerCode;
+    });
+  }
 
-    if (oldWidget.selectedCustomer != widget.selectedCustomer) {
-      widget.generateData(widget.selectedCustomer, 'BB05');
-    }
+  void onSelectWarehouse(String warehouse, StateSetter setState) {
+    setState(() {
+      _selectedWarehouse = warehouse;
+    });
+  }
+
+  void onClearFilter() {
+    setState(() {
+      _selectedCustomer = '';
+      _selectedWarehouse = '';
+    });
+    widget.onClearData();
   }
 
   @override
@@ -78,65 +85,27 @@ class _InventoryTemplateState extends State<InventoryTemplate> {
         List<String>.from(authState.user.data!['user']['companies']).toList();
 
     return MDFilter(
-      selectedCustomer: widget.selectedCustomer,
-      onSelectCustomer: () {
-        assert(debugCheckHasMediaQuery(context));
-
-        showModalBottomSheet<void>(
-            showDragHandle: true,
-            context: context,
-            isDismissible: true,
-            builder: (BuildContext context) {
-              return SizedBox(
-                height: mediaSize.height * 0.30,
-                child: ListView.builder(
-                  itemCount: customerList.length,
-                  itemBuilder: (context, index) {
-                    return ListTile(
-                      title: Text(customerList[index]),
-                      onTap: () => widget.onTapCustomer(customerList[index]),
-                      enabled: widget.selectedCustomer == customerList[index]
-                          ? false
-                          : true,
-                      leading: widget.selectedCustomer == customerList[index]
-                          ? const Icon(
-                              Icons.check,
-                            )
-                          : null,
-                    );
-                  },
-                ),
-              );
-            });
-      },
+      selectedCustomer: _selectedCustomer,
       onFilter: () {
         showModalBottomSheet<void>(
             isDismissible: true,
             showDragHandle: true,
             context: context,
             builder: (BuildContext context) {
-              return SizedBox(
-                height: mediaSize.height * 0.30,
-                child: ListView.builder(
-                  itemCount: widget.warehouseList.length,
-                  itemBuilder: (context, index) {
-                    return ListTile(
-                      title: Text(widget.warehouseList[index]),
-                      onTap: () =>
-                          widget.onTapWarehouse(widget.warehouseList[index]),
-                      enabled: widget.selectedWarehouse ==
-                              widget.warehouseList[index]
-                          ? false
-                          : true,
-                      leading: widget.selectedWarehouse ==
-                              widget.warehouseList[index]
-                          ? const Icon(
-                              Icons.check,
-                            )
-                          : null,
-                    );
-                  },
-                ),
+              return StatefulBuilder(
+                builder: (context, setState) {
+                  return ModalFilterContent(
+                      customerList: customerList,
+                      warehouseList: widget.warehouseList,
+                      selectedCustomer: _selectedCustomer,
+                      selectedWarehouse: _selectedWarehouse,
+                      generateData: widget.generateData,
+                      onSelectCustomer: (String customer) =>
+                          onSelectCustomer(customer, setState),
+                      onSelectWarehouse: (String warehouse) =>
+                          onSelectWarehouse(warehouse, setState),
+                      onClearFilter: onClearFilter);
+                },
               );
             });
       },
@@ -162,7 +131,7 @@ class _InventoryTemplateState extends State<InventoryTemplate> {
           child: MDSearch(
             textController: widget.searchText,
             onInputChanged: widget.onSearch,
-            onClear: widget.onClear,
+            onClear: widget.onClearData,
           ),
         ),
         Padding(
@@ -185,8 +154,9 @@ class _InventoryTemplateState extends State<InventoryTemplate> {
                   padding: EdgeInsets.zero,
                   iconSize: 20.0,
                   icon: const Icon(Icons.refresh_rounded),
-                  onPressed: () =>
-                      widget.generateData(widget.selectedCustomer, 'BB05'),
+                  onPressed: () => widget.generateData(
+                      customerCode: _selectedCustomer,
+                      warehouse: _selectedWarehouse),
                 ),
               )
             ],

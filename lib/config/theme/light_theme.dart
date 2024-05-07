@@ -26,4 +26,18 @@ ThemeData lightMode = ThemeData(
     surfaceTintColor: Colors.white,
   ),
   dividerTheme: const DividerThemeData(color: Colors.black12, thickness: 1),
+  segmentedButtonTheme: SegmentedButtonThemeData(
+    style: SegmentedButton.styleFrom(
+      backgroundColor: Colors.grey[200],
+      foregroundColor: Colors.blue[400],
+      selectedForegroundColor: Colors.white,
+      selectedBackgroundColor: Colors.blue[400],
+      side: const BorderSide(
+        color: Colors.black12,
+      ),
+      minimumSize: Size.zero,
+      padding: const EdgeInsets.all(5.0),
+      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+    ),
+  ),
 );

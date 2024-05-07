@@ -1,4 +1,3 @@
-import 'package:customer_app_mob/core/data/models/warehouse.dart';
 import 'package:customer_app_mob/core/data/repository/warehouse_repository.dart';
 import 'package:customer_app_mob/core/utils/data_state.dart';
 import 'package:customer_app_mob/core/utils/use_cases.dart';
