@@ -1,13 +1,13 @@
-import 'package:customer_app_mob/core/data/data_sources/api/warehouse/warehouse_api.dart';
-import 'package:customer_app_mob/core/data/repository/warehouse_repository.dart';
-import 'package:customer_app_mob/core/usecases/warehouse/get_warehouse.dart';
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
+import 'package:customer_app_mob/config/dio/auth_interceptor.dart';
+import 'package:customer_app_mob/core/data/data_sources/api/warehouse/warehouse_api.dart';
+import 'package:customer_app_mob/core/data/repository/warehouse_repository.dart';
+import 'package:customer_app_mob/core/usecases/warehouse/get_warehouse.dart';
 import 'package:customer_app_mob/core/data/data_sources/api/inventory/inventory_api.dart';
 import 'package:customer_app_mob/core/data/repository/inventory_repository.dart';
 import 'package:customer_app_mob/core/usecases/inventory/get_inventory.dart';
-import 'package:customer_app_mob/core/utils/shared_prefs.dart';
 import 'package:customer_app_mob/config/constants/url.dart';
 import 'package:customer_app_mob/core/data/data_sources/api/auth/auth_api.dart';
 import 'package:customer_app_mob/core/data/repository/auth_repository.dart';
@@ -28,18 +28,7 @@ Future<void> initializeDependencies() async {
     )
     // Dio log http request
     ..interceptors.addAll([
-      InterceptorsWrapper(
-        onRequest: (options, handler) {
-          final token = SharedPrefs.getApiToken();
-
-          // Add header Authorization token
-          if (token != null) {
-            options.headers.addAll({'Authorization': 'Bearer $token'});
-          }
-
-          return handler.next(options);
-        },
-      ),
+      AuthInterceptor(),
       PrettyDioLogger(
         request: true,
         error: true,
