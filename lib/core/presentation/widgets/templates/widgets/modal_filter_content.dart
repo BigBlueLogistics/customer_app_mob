@@ -9,7 +9,7 @@ class ModalFilterContent extends StatefulWidget {
       required this.onSelectWarehouse,
       required this.selectedCustomer,
       required this.selectedWarehouse,
-      required this.generateData,
+      required this.onFilterData,
       required this.onClearFilter});
 
   final List<String> customerList;
@@ -18,8 +18,7 @@ class ModalFilterContent extends StatefulWidget {
   final ValueChanged<String> onSelectWarehouse;
   final String selectedCustomer;
   final String selectedWarehouse;
-  final void Function({required String customerCode, required String warehouse})
-      generateData;
+  final VoidCallback onFilterData;
   final VoidCallback onClearFilter;
 
   @override
@@ -30,6 +29,12 @@ class _ModalFilterContentState extends State<ModalFilterContent> {
   @override
   Widget build(BuildContext context) {
     final mediaSize = MediaQuery.of(context).size;
+    const buttonBorderShape = RoundedRectangleBorder(
+      borderRadius: BorderRadius.all(Radius.circular(5.0)),
+    );
+
+    final segmentButtonStyles =
+        SegmentedButton.styleFrom(shape: buttonBorderShape);
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10.0),
@@ -40,24 +45,13 @@ class _ModalFilterContentState extends State<ModalFilterContent> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
-              'Customer:  ',
+              'Customer:',
               textAlign: TextAlign.center,
             ),
-            SegmentedButton(
-              showSelectedIcon: false,
-              segments: widget.customerList
-                  .map(
-                    (e) => ButtonSegment(
-                      value: e,
-                      label: Text(e),
-                    ),
-                  )
-                  .toList(),
-              selected: <String>{widget.selectedCustomer},
-              onSelectionChanged: (Set<String> newSelection) {
-                widget.onSelectCustomer(newSelection.first);
-              },
-            ),
+            widget.customerList.isNotEmpty
+                ? CustomerSegmentedButton(
+                    segmentButtonStyles: segmentButtonStyles, widget: widget)
+                : const Text('---'),
             const SizedBox(
               width: 0,
               height: 10,
@@ -66,51 +60,138 @@ class _ModalFilterContentState extends State<ModalFilterContent> {
               'Warehouse:',
               textAlign: TextAlign.center,
             ),
-            SegmentedButton(
-              showSelectedIcon: false,
-              segments: widget.warehouseList
-                  .map(
-                    (e) => ButtonSegment(
-                      value: e,
-                      label: Text(e),
-                    ),
-                  )
-                  .toList(),
-              selected: <String>{widget.selectedWarehouse},
-              onSelectionChanged: (Set<String> newSelection) {
-                widget.onSelectWarehouse(newSelection.first);
-              },
-            ),
+            widget.warehouseList.isNotEmpty
+                ? WarehouseSegmentedButton(
+                    segmentButtonStyles: segmentButtonStyles, widget: widget)
+                : const Text('---'),
             const SizedBox(
               width: 0,
               height: 15,
             ),
-            FilledButton(
-              onPressed: () => widget.generateData(
-                  customerCode: widget.selectedCustomer,
-                  warehouse: widget.selectedWarehouse),
-              style: FilledButton.styleFrom(
-                minimumSize: Size(mediaSize.width, 35),
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                ),
-              ),
-              child: const Text('Filter'),
-            ),
-            SizedBox(
-              width: mediaSize.width,
-              child: InkWell(
-                onTap: widget.onClearFilter,
-                enableFeedback: false,
-                child: const Text(
-                  'Clear filter',
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            )
+            FilterButton(
+                widget: widget,
+                mediaSize: mediaSize,
+                buttonBorderShape: buttonBorderShape),
+            ClearButton(widget: widget, mediaSize: mediaSize)
           ],
         ),
       ),
+    );
+  }
+}
+
+class ClearButton extends StatelessWidget {
+  const ClearButton({
+    super.key,
+    required this.mediaSize,
+    required this.widget,
+  });
+
+  final Size mediaSize;
+  final ModalFilterContent widget;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: mediaSize.width,
+      child: InkWell(
+        onTap: widget.customerList.isNotEmpty && widget.warehouseList.isNotEmpty
+            ? widget.onClearFilter
+            : null,
+        enableFeedback: false,
+        child: const Text(
+          'Clear filter',
+          textAlign: TextAlign.center,
+        ),
+      ),
+    );
+  }
+}
+
+class FilterButton extends StatelessWidget {
+  const FilterButton({
+    super.key,
+    required this.widget,
+    required this.mediaSize,
+    required this.buttonBorderShape,
+  });
+
+  final ModalFilterContent widget;
+  final Size mediaSize;
+  final RoundedRectangleBorder buttonBorderShape;
+
+  @override
+  Widget build(BuildContext context) {
+    return FilledButton(
+      onPressed:
+          widget.customerList.isNotEmpty && widget.warehouseList.isNotEmpty
+              ? widget.onFilterData
+              : null,
+      style: FilledButton.styleFrom(
+          minimumSize: Size(mediaSize.width, 35), shape: buttonBorderShape),
+      child: const Text('Filter'),
+    );
+  }
+}
+
+class WarehouseSegmentedButton extends StatelessWidget {
+  const WarehouseSegmentedButton({
+    super.key,
+    required this.segmentButtonStyles,
+    required this.widget,
+  });
+
+  final ButtonStyle segmentButtonStyles;
+  final ModalFilterContent widget;
+
+  @override
+  Widget build(BuildContext context) {
+    return SegmentedButton(
+      showSelectedIcon: false,
+      style: segmentButtonStyles,
+      segments: widget.warehouseList
+          .map(
+            (e) => ButtonSegment(
+              value: e,
+              label: Text(e),
+            ),
+          )
+          .toList(),
+      selected: <String>{widget.selectedWarehouse},
+      onSelectionChanged: (Set<String> newSelection) {
+        widget.onSelectWarehouse(newSelection.first);
+      },
+    );
+  }
+}
+
+class CustomerSegmentedButton extends StatelessWidget {
+  const CustomerSegmentedButton({
+    super.key,
+    required this.segmentButtonStyles,
+    required this.widget,
+  });
+
+  final ButtonStyle segmentButtonStyles;
+  final ModalFilterContent widget;
+
+  @override
+  Widget build(BuildContext context) {
+    return SegmentedButton(
+      style: segmentButtonStyles,
+      showSelectedIcon: false,
+      segments: widget.customerList
+          .map(
+            (e) => ButtonSegment(
+              value: e,
+              label: Text(e),
+            ),
+          )
+          .toList(),
+      selected: <String>{widget.selectedCustomer},
+      onSelectionChanged: (Set<String> newSelection) {
+        widget.onSelectCustomer(newSelection.first);
+      },
     );
   }
 }

@@ -81,7 +81,24 @@ class MDDataTable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (dataSource.isEmpty) {
+      return SizedBox(
+        height: 300,
+        child: Card(
+          shape: const BeveledRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.elliptical(3, 3))),
+          child: Center(
+            child: Text(
+              'No data available.',
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
+          ),
+        ),
+      );
+    }
+
     return PaginatedDataTable(
+      showEmptyRows: false,
       headingRowHeight: 35,
       rowsPerPage: rowsPerPage,
       columns: generateColumn(),

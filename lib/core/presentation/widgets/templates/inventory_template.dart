@@ -5,7 +5,7 @@ import 'package:customer_app_mob/core/presentation/bloc/auth/auth_bloc.dart';
 import 'package:customer_app_mob/core/presentation/widgets/molecules/md_search/md_search.dart';
 import 'package:customer_app_mob/core/presentation/widgets/molecules/md_filter/md_filter.dart';
 import 'package:customer_app_mob/core/presentation/widgets/organisms/md_scaffold/md_scaffold.dart';
-import 'package:customer_app_mob/core/presentation/widgets/organisms/md_table/md_datatable.dart';
+import 'package:customer_app_mob/core/presentation/widgets/organisms/md_datatable/md_datatable.dart';
 
 class InventoryTemplate extends StatefulWidget {
   const InventoryTemplate({
@@ -33,7 +33,6 @@ class InventoryTemplate extends StatefulWidget {
 }
 
 class _InventoryTemplateState extends State<InventoryTemplate> {
-  final GlobalKey widgetKey = GlobalKey();
   String _selectedCustomer = '';
   String _selectedWarehouse = '';
 
@@ -49,12 +48,18 @@ class _InventoryTemplateState extends State<InventoryTemplate> {
     });
   }
 
-  void onClearFilter() {
+  void onClearFilter(StateSetter setState) {
     setState(() {
       _selectedCustomer = '';
       _selectedWarehouse = '';
     });
     widget.onClearData();
+  }
+
+  void onFilterData() {
+    Navigator.of(context).pop();
+    widget.generateData(
+        customerCode: _selectedCustomer, warehouse: _selectedWarehouse);
   }
 
   @override
@@ -95,16 +100,17 @@ class _InventoryTemplateState extends State<InventoryTemplate> {
               return StatefulBuilder(
                 builder: (context, setState) {
                   return ModalFilterContent(
-                      customerList: customerList,
-                      warehouseList: widget.warehouseList,
-                      selectedCustomer: _selectedCustomer,
-                      selectedWarehouse: _selectedWarehouse,
-                      generateData: widget.generateData,
-                      onSelectCustomer: (String customer) =>
-                          onSelectCustomer(customer, setState),
-                      onSelectWarehouse: (String warehouse) =>
-                          onSelectWarehouse(warehouse, setState),
-                      onClearFilter: onClearFilter);
+                    customerList: customerList,
+                    warehouseList: widget.warehouseList,
+                    selectedCustomer: _selectedCustomer,
+                    selectedWarehouse: _selectedWarehouse,
+                    onFilterData: onFilterData,
+                    onSelectCustomer: (String customer) =>
+                        onSelectCustomer(customer, setState),
+                    onSelectWarehouse: (String warehouse) =>
+                        onSelectWarehouse(warehouse, setState),
+                    onClearFilter: () => onClearFilter(setState),
+                  );
                 },
               );
             });
