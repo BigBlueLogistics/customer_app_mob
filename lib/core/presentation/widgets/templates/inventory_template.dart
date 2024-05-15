@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:customer_app_mob/core/utils/download/file_progress.dart';
 import 'package:customer_app_mob/core/presentation/widgets/templates/widgets/modal_filter_content.dart';
 import 'package:customer_app_mob/core/presentation/bloc/auth/auth_bloc.dart';
 import 'package:customer_app_mob/core/presentation/widgets/molecules/md_search/md_search.dart';
 import 'package:customer_app_mob/core/presentation/widgets/molecules/md_filter/md_filter.dart';
 import 'package:customer_app_mob/core/presentation/widgets/organisms/md_scaffold/md_scaffold.dart';
 import 'package:customer_app_mob/core/presentation/widgets/organisms/md_datatable/md_datatable.dart';
+import 'package:customer_app_mob/core/utils/log.dart';
 
 class InventoryTemplate extends StatefulWidget {
   const InventoryTemplate({
@@ -62,26 +65,44 @@ class _InventoryTemplateState extends State<InventoryTemplate> {
         customerCode: _selectedCustomer, warehouse: _selectedWarehouse);
   }
 
-  @override
-  Widget build(BuildContext context) {
-    final mediaSize = MediaQuery.of(context).size;
+  Future<bool> permissionRequest() async {
+    PermissionStatus result;
+    result = await Permission.manageExternalStorage.request();
+    if (result.isGranted) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 
-    return MDScaffold(
-      appBarTitle: 'Inventory',
-      selectedBarIndex: widget.selectedBarIndex,
-      body: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          mainAxisSize: MainAxisSize.max,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Filter(context, mediaSize),
-            TableInventory(context, mediaSize),
-          ],
-        ),
-      ),
-    );
+  void downloadFile(String format) async {
+    if (_selectedCustomer.isEmpty || _selectedWarehouse.isEmpty) {
+      return;
+    }
+
+    bool result = await permissionRequest();
+    if (!result) {
+      log('No permission to read and write.');
+    }
+
+    if (!mounted) {
+      return;
+    }
+    showDialog(
+        context: context,
+        builder: (dialogcontext) {
+          String filename =
+              'INVENTORY-$_selectedCustomer-$_selectedWarehouse.$format';
+          final queryParameters = {
+            'customer_code': _selectedCustomer,
+            'warehouse': _selectedCustomer
+          };
+
+          return DownloadProgressDialog(
+              filename: filename,
+              url: '/inventory/export-excel',
+              queryParameters: queryParameters);
+        });
   }
 
   MDFilter Filter(BuildContext context, Size mediaSize) {
@@ -117,11 +138,11 @@ class _InventoryTemplateState extends State<InventoryTemplate> {
       },
       menuList: [
         MenuItemButton(
-          onPressed: () {},
+          onPressed: () => downloadFile('xlsx'),
           child: const Text('Export excel'),
         ),
         MenuItemButton(
-          onPressed: () {},
+          onPressed: () => downloadFile('csv'),
           child: const Text('Export csv'),
         ),
       ],
@@ -188,6 +209,28 @@ class _InventoryTemplateState extends State<InventoryTemplate> {
           ],
         ),
       ]),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final mediaSize = MediaQuery.of(context).size;
+
+    return MDScaffold(
+      appBarTitle: 'Inventory',
+      selectedBarIndex: widget.selectedBarIndex,
+      body: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisSize: MainAxisSize.max,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Filter(context, mediaSize),
+            TableInventory(context, mediaSize),
+          ],
+        ),
+      ),
     );
   }
 }

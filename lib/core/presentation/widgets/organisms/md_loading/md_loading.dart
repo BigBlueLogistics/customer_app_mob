@@ -16,18 +16,20 @@ class MDLoadingFullScreen extends StatelessWidget {
       return const SizedBox();
     }
 
-    return Stack(
+    return const Stack(
       alignment: Alignment.center,
       children: [
-        BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 4.0, sigmaY: 4.0),
-          child: const Opacity(
-            opacity: 0.8,
-            child: ModalBarrier(dismissible: false, color: Colors.transparent),
-          ),
+        Opacity(
+          opacity: 0.8,
+          child: ModalBarrier(dismissible: false, color: Colors.black54),
         ),
-        const Center(
-          child: CircularProgressIndicator(),
+        Center(
+          child: Card(
+              shape: CircleBorder(),
+              child: Padding(
+                padding: EdgeInsets.all(5.0),
+                child: CircularProgressIndicator(),
+              )),
         )
       ],
     );
