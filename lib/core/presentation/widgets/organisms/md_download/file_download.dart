@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:open_filex/open_filex.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:customer_app_mob/core/utils/log.dart';
@@ -18,9 +17,10 @@ class FileDownload {
   String url;
   Map<String, dynamic>? queryParameters;
 
-  void startDownloading(BuildContext context, final Function okCallback) async {
+  void startDownloading(BuildContext context, Function okCallback,
+      Function? completeCallback) async {
     String path = await getFilePath(filename);
-    dio.options = BaseOptions(baseUrl: AppConstant.apiUrlDevAndroid);
+    dio.options = BaseOptions(baseUrl: AppConstant.apiUrl);
     dio.interceptors.addAll([
       AuthInterceptor(),
       PrettyDioLogger(
@@ -39,15 +39,15 @@ class FileDownload {
         url,
         path,
         queryParameters: queryParameters,
-        onReceiveProgress: (recivedBytes, totalBytes) {
-          okCallback(recivedBytes, totalBytes);
+        onReceiveProgress: (receivedBytes, totalBytes) {
+          okCallback(receivedBytes, totalBytes);
         },
         deleteOnError: true,
       ).then((_) {
         isSuccess = true;
 
-        // Open file after download.
-        openFile(path);
+        // A callback when download complete.
+        completeCallback!(path);
       });
     } catch (e) {
       log('Exception$e');
@@ -56,18 +56,6 @@ class FileDownload {
     if (context.mounted && isSuccess) {
       Navigator.pop(context);
     }
-  }
-
-  Future<OpenResult?> openFile(String filePath) async {
-    if (filePath.isNotEmpty) {
-      final res = await OpenFilex.open(filePath);
-      // ResultType
-      final type = res.type.name;
-      final msg = res.message;
-      log('Open file: $msg $type');
-      return res;
-    }
-    return null;
   }
 
   Future<String> getFilePath(String filename) async {

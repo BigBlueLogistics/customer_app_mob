@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:customer_app_mob/core/utils/download/file_progress.dart';
 import 'package:customer_app_mob/core/presentation/widgets/templates/widgets/modal_filter_content.dart';
 import 'package:customer_app_mob/core/presentation/bloc/auth/auth_bloc.dart';
 import 'package:customer_app_mob/core/presentation/widgets/molecules/md_search/md_search.dart';
 import 'package:customer_app_mob/core/presentation/widgets/molecules/md_filter/md_filter.dart';
 import 'package:customer_app_mob/core/presentation/widgets/organisms/md_scaffold/md_scaffold.dart';
 import 'package:customer_app_mob/core/presentation/widgets/organisms/md_datatable/md_datatable.dart';
+import 'package:customer_app_mob/core/presentation/widgets/organisms/md_download/md_download_progress.dart';
 import 'package:customer_app_mob/core/utils/log.dart';
 
 class InventoryTemplate extends StatefulWidget {
@@ -95,10 +95,11 @@ class _InventoryTemplateState extends State<InventoryTemplate> {
               'INVENTORY-$_selectedCustomer-$_selectedWarehouse.$format';
           final queryParameters = {
             'customer_code': _selectedCustomer,
-            'warehouse': _selectedCustomer
+            'warehouse': _selectedWarehouse,
+            'format': format
           };
 
-          return DownloadProgressDialog(
+          return MDDownloadProgress(
               filename: filename,
               url: '/inventory/export-excel',
               queryParameters: queryParameters);
