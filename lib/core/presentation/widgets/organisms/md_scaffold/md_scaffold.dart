@@ -1,21 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:customer_app_mob/core/presentation/widgets/organisms/md_scaffold/md_bottom_navigation.dart';
 
 class MDScaffold extends StatelessWidget {
   const MDScaffold({
     super.key,
-    this.body,
+    this.child,
     this.appBarTitle = '',
-    this.selectedBarIndex = 0,
     this.showFloatingActionButton = false,
     this.floatingActionButtonLoc = FloatingActionButtonLocation.endFloat,
   });
 
-  final Widget? body;
+  final Widget? child;
 
   final String appBarTitle;
-
-  final int selectedBarIndex;
 
   final bool showFloatingActionButton;
 
@@ -64,12 +60,10 @@ class MDScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBar(context),
+      appBar: appBarTitle.isNotEmpty ? appBar(context) : null,
       floatingActionButtonLocation: floatingActionButtonLoc,
       floatingActionButton: floatingActionButton(context),
-      bottomNavigationBar:
-          MDBottomNavigationBar(selectedBarIndex: selectedBarIndex),
-      body: body,
+      body: child != null ? SafeArea(child: child as Widget) : null,
     );
   }
 }

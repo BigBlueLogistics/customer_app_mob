@@ -23,7 +23,6 @@ class _InventoryScreenState extends State<InventoryScreen> {
   List<String> _warehouseList = [];
   LoadingStatus _warehouseStatus = LoadingStatus.idle;
   LoadingStatus _inventoryStatus = LoadingStatus.idle;
-  int selectedBarIndex = 1;
 
   @override
   void initState() {
@@ -110,7 +109,6 @@ class _InventoryScreenState extends State<InventoryScreen> {
         InventoryTemplate(
           data: _inventoryFilterData,
           searchText: searchText,
-          selectedBarIndex: selectedBarIndex,
           warehouseList: _warehouseList,
           generateData: generateData,
           onSearch: onSearch,

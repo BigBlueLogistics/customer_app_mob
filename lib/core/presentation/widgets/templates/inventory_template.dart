@@ -19,7 +19,6 @@ class InventoryTemplate extends StatefulWidget {
     required this.onSearch,
     required this.onClearData,
     required this.generateData,
-    this.selectedBarIndex = 0,
   });
 
   final List<Map<String, dynamic>> data;
@@ -29,7 +28,6 @@ class InventoryTemplate extends StatefulWidget {
   final VoidCallback onClearData;
   final void Function({required String customerCode, required String warehouse})
       generateData;
-  final int selectedBarIndex;
 
   @override
   State<InventoryTemplate> createState() => _InventoryTemplateState();
@@ -219,8 +217,7 @@ class _InventoryTemplateState extends State<InventoryTemplate> {
 
     return MDScaffold(
       appBarTitle: 'Inventory',
-      selectedBarIndex: widget.selectedBarIndex,
-      body: SingleChildScrollView(
+      child: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,

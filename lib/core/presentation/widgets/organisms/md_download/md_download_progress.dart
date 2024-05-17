@@ -19,7 +19,6 @@ class MDDownloadProgress extends StatefulWidget {
 
 class _MDDownloadProgressState extends State<MDDownloadProgress> {
   double progress = 0.0;
-  bool openFileError = false;
 
   @override
   void initState() {

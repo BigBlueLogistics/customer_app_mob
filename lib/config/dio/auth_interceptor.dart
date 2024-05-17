@@ -19,7 +19,7 @@ class AuthInterceptor extends Interceptor {
 
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) async {
-    if (err.response!.statusCode == 401) {
+    if (err.response?.statusCode == 401) {
       await HydratedBloc.storage.clear();
 
       AppRouter.router.go(AppRoutes.signInPathScreen);

@@ -20,8 +20,8 @@ Future<void> initializeDependencies() async {
   final dio = Dio()
     ..options = BaseOptions(
       contentType: 'application/json',
-      connectTimeout: const Duration(seconds: 5),
-      baseUrl: AppConstant.apiUrlDevAndroid,
+      connectTimeout: const Duration(minutes: 1),
+      baseUrl: AppConstant.apiUrl,
       headers: {
         'Accept': 'application/json',
       },
