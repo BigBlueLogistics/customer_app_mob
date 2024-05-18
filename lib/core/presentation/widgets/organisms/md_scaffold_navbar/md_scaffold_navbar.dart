@@ -1,3 +1,5 @@
+import 'package:customer_app_mob/config/routes/app_routes.dart';
+import 'package:customer_app_mob/core/utils/log.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -6,17 +8,16 @@ import 'package:go_router/go_router.dart';
 class MDScaffoldNavbar extends StatelessWidget {
   /// Constructs an [MDScaffoldNavbar].
   const MDScaffoldNavbar({
-    required this.navigationShell,
+    required this.child,
     Key? key,
   }) : super(key: key ?? const ValueKey<String>('MDScaffoldNavbar'));
 
-  /// The navigation shell and container for the branch Navigators.
-  final StatefulNavigationShell navigationShell;
+  final Widget child;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: navigationShell,
+      body: child,
       bottomNavigationBar: BottomNavigationBar(
         selectedItemColor: Theme.of(context).primaryColor,
         unselectedItemColor: Colors.black54,
@@ -25,10 +26,6 @@ class MDScaffoldNavbar extends StatelessWidget {
             const TextStyle(fontSize: 13.0, fontWeight: FontWeight.w500),
         unselectedLabelStyle:
             const TextStyle(fontSize: 13.0, fontWeight: FontWeight.w500),
-        // Here, the items of BottomNavigationBar are hard coded. In a real
-        // world scenario, the items would most likely be generated from the
-        // branches of the shell route, which can be fetched using
-        // `navigationShell.route.branches`.
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
               icon: Icon(Icons.home_rounded), label: 'Home'),
@@ -39,25 +36,41 @@ class MDScaffoldNavbar extends StatelessWidget {
           BottomNavigationBarItem(
               icon: Icon(Icons.person_2_rounded), label: 'Profile'),
         ],
-        currentIndex: navigationShell.currentIndex,
-        onTap: (int index) => _onTap(context, index),
+        currentIndex: _onTapCurrentIndex(context),
+        onTap: (int index) => _onTap(index, context),
       ),
     );
   }
 
   /// Navigate to the current location of the branch at the provided index when
   /// tapping an item in the BottomNavigationBar.
-  void _onTap(BuildContext context, int index) {
-    // When navigating to a new branch, it's recommended to use the goBranch
-    // method, as doing so makes sure the last navigation state of the
-    // Navigator for the branch is restored.
-    navigationShell.goBranch(
-      index,
-      // A common pattern when using bottom navigation bars is to support
-      // navigating to the initial location when tapping the item that is
-      // already active. This example demonstrates how to support this behavior,
-      // using the initialLocation parameter of goBranch.
-      initialLocation: index == navigationShell.currentIndex,
-    );
+  void _onTap(int index, BuildContext context) {
+    log(GoRouterState.of(context).uri.path);
+    switch (index) {
+      case 0:
+        GoRouter.of(context).go('/${AppRoutes.homeScreen}');
+        break;
+      case 1:
+        GoRouter.of(context).go('/${AppRoutes.inventoryScreen}');
+        break;
+      case 2:
+        GoRouter.of(context).go('/${AppRoutes.movementScreen}');
+        break;
+      default:
+    }
+  }
+
+  int _onTapCurrentIndex(BuildContext context) {
+    final String location = GoRouterState.of(context).uri.path;
+    switch (location) {
+      case '/${AppRoutes.inventoryScreen}':
+        return 1;
+      case '/${AppRoutes.movementScreen}':
+        return 2;
+
+      default:
+        // Default to HomeScreen
+        return 0;
+    }
   }
 }

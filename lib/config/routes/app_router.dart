@@ -14,8 +14,12 @@ import 'package:customer_app_mob/core/presentation/screens/auth/sign_in.dart';
 import 'package:customer_app_mob/core/presentation/screens/auth/sign_up.dart';
 import 'package:customer_app_mob/core/presentation/screens/auth/forgot.dart';
 
+final GlobalKey<NavigatorState> _rootNavigatorKey =
+    GlobalKey<NavigatorState>(debugLabel: 'rootNavKey');
+
 class AppRouter {
   static final GoRouter _router = GoRouter(
+    navigatorKey: _rootNavigatorKey,
     debugLogDiagnostics: true,
     initialLocation: AppRoutes.rootPathScreen,
     routes: [
@@ -32,25 +36,22 @@ class AppRouter {
           GoRoute(
               path: AppRoutes.forgotPathScreen,
               builder: (context, state) => const ForgotScreen()),
-          StatefulShellRoute.indexedStack(
-            builder: (context, state, navigationShell) =>
-                MDScaffoldNavbar(navigationShell: navigationShell),
-            branches: [
-              StatefulShellBranch(routes: <RouteBase>[
-                GoRoute(
-                    path: AppRoutes.homeScreen,
-                    builder: (context, state) => const HomeScreen()),
-              ]),
-              StatefulShellBranch(routes: <RouteBase>[
-                GoRoute(
-                    path: AppRoutes.inventoryScreen,
-                    builder: (context, state) => const InventoryScreen()),
-              ]),
-              StatefulShellBranch(routes: <RouteBase>[
-                GoRoute(
-                    path: AppRoutes.movementScreen,
-                    builder: (context, state) => const MovementScreen()),
-              ]),
+          ShellRoute(
+            parentNavigatorKey: _rootNavigatorKey,
+            builder: (context, state, Widget child) =>
+                MDScaffoldNavbar(child: child),
+            routes: [
+              GoRoute(
+                  path: AppRoutes.homeScreen,
+                  builder: (context, state) => const HomeScreen()),
+              GoRoute(
+                  path: AppRoutes.inventoryScreen,
+                  builder: (context, state) =>
+                      InventoryScreen(key: state.pageKey)),
+              GoRoute(
+                  path: AppRoutes.movementScreen,
+                  builder: (context, state) =>
+                      MovementScreen(key: state.pageKey)),
             ],
           ),
         ],
