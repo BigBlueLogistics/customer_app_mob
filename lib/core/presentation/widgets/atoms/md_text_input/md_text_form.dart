@@ -20,6 +20,9 @@ class MDTextFormField extends StatelessWidget {
     this.filledColor,
     this.borderColor = Colors.grey,
     this.onChanged,
+    this.focusNode,
+    this.isDense,
+    this.textCapitalization = TextCapitalization.none,
   }) : assert(
             borderType != TextFormBorderType.filled ||
                 (filled != null && filledColor != null),
@@ -41,6 +44,9 @@ class MDTextFormField extends StatelessWidget {
   final bool? filled;
   final Color? filledColor;
   final ValueChanged<String>? onChanged;
+  final FocusNode? focusNode;
+  final bool? isDense;
+  final TextCapitalization textCapitalization;
 
   InputBorder? enableBorder() {
     if (borderType case TextFormBorderType.outline) {
@@ -104,13 +110,16 @@ class MDTextFormField extends StatelessWidget {
     return TextFormField(
       autovalidateMode: AutovalidateMode.onUserInteraction,
       controller: textController,
+      focusNode: focusNode,
       keyboardType: keyboardType,
       autocorrect: autocorrect,
       enableSuggestions: enableSuggestions,
       obscureText: obscureText,
       style: style,
       onChanged: onChanged,
+      textCapitalization: textCapitalization,
       decoration: InputDecoration(
+        isDense: isDense,
         prefixIconConstraints: const BoxConstraints(),
         suffixIconConstraints: const BoxConstraints(),
         contentPadding: contentPadding,

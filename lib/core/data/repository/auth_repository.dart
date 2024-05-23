@@ -7,15 +7,15 @@ import 'package:customer_app_mob/core/domain/repository/auth_repository.dart';
 import 'package:customer_app_mob/core/utils/data_state.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
-  final AuthApi authApi;
+  final AuthApi _authApi;
 
-  const AuthRepositoryImpl(this.authApi);
+  const AuthRepositoryImpl(this._authApi);
 
   @override
   Future<DataState<UserModel>> signIn(
       {required String email, required String password}) async {
     try {
-      final resp = await authApi.signIn(email, password);
+      final resp = await _authApi.signIn(email, password);
 
       if (resp.response.statusCode == HttpStatus.ok) {
         return DataSuccess(resp.data);
@@ -36,7 +36,7 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<DataState<UserModel>> resetPassword(String email) async {
     try {
-      final resp = await authApi.resetPassword(email);
+      final resp = await _authApi.resetPassword(email);
 
       if (resp.response.statusCode == HttpStatus.ok) {
         return DataSuccess(resp.data);

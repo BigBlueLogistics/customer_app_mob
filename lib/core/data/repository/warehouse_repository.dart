@@ -8,14 +8,14 @@ import 'package:customer_app_mob/core/utils/data_state.dart';
 import 'package:dio/dio.dart';
 
 class WarehouseImpl implements WarehouseRepository {
-  final WarehouseApi warehouseApi;
+  final WarehouseApi _warehouseApi;
 
-  WarehouseImpl(this.warehouseApi);
+  WarehouseImpl(this._warehouseApi);
 
   @override
   Future<DataState<WarehouseModel>> getWarehouse() async {
     try {
-      final resp = await warehouseApi.getWarehouse();
+      final resp = await _warehouseApi.getWarehouse();
 
       if (resp.response.statusCode == HttpStatus.ok) {
         return DataSuccess(resp.data);

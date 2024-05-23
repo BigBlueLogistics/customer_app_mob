@@ -34,7 +34,7 @@ class MDFilter extends StatelessWidget {
         IconButton(
           onPressed: onFilter,
           icon: const Icon(
-            Icons.filter_alt_rounded,
+            Icons.tune_rounded,
             size: 22.0,
             color: Colors.black87,
           ),

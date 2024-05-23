@@ -8,15 +8,15 @@ import 'package:customer_app_mob/core/utils/data_state.dart';
 import 'package:dio/dio.dart';
 
 class InventoryImpl implements InventoryRepository {
-  final InventoryApi inventoryApi;
+  final InventoryApi _inventoryApi;
 
-  InventoryImpl(this.inventoryApi);
+  InventoryImpl(this._inventoryApi);
 
   @override
-  Future<DataState<InventoryModel>> inventory(
-      {required String customerCode, required String warehouse}) async {
+  Future<DataState<InventoryModel>> inventory(InventoryParams params) async {
     try {
-      final resp = await inventoryApi.getInventory(customerCode, warehouse);
+      final resp = await _inventoryApi.getInventory(
+          params.customerCode, params.warehouse);
 
       if (resp.response.statusCode == HttpStatus.ok) {
         return DataSuccess(resp.data);

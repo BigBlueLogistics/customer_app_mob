@@ -1,108 +1,40 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:customer_app_mob/core/presentation/widgets/templates/widgets/modal_filter_content.dart';
+import 'package:customer_app_mob/core/presentation/widgets/templates/inventory/notifier.dart';
+import 'package:customer_app_mob/core/presentation/widgets/templates/inventory/modal_filter_content.dart';
 import 'package:customer_app_mob/core/presentation/bloc/auth/auth_bloc.dart';
 import 'package:customer_app_mob/core/presentation/widgets/molecules/md_search/md_search.dart';
 import 'package:customer_app_mob/core/presentation/widgets/molecules/md_filter/md_filter.dart';
 import 'package:customer_app_mob/core/presentation/widgets/organisms/md_scaffold/md_scaffold.dart';
 import 'package:customer_app_mob/core/presentation/widgets/organisms/md_datatable/md_datatable.dart';
-import 'package:customer_app_mob/core/presentation/widgets/organisms/md_download/md_download_progress.dart';
-import 'package:customer_app_mob/core/utils/log.dart';
 
-class InventoryTemplate extends StatefulWidget {
+class InventoryTemplate extends StatelessWidget {
   const InventoryTemplate({
     super.key,
     required this.data,
     required this.warehouseList,
     required this.searchText,
+    required this.filteringData,
+    required this.generateData,
     required this.onSearch,
     required this.onClearData,
-    required this.generateData,
+    required this.onFilterData,
+    required this.onExportFile,
+    required this.onSelectCustomer,
+    required this.onSelectWarehouse,
   });
 
   final List<Map<String, dynamic>> data;
   final List<String> warehouseList;
   final TextEditingController searchText;
   final ValueChanged<String> onSearch;
+  final ValueNotifier<FilterValueNotifier> filteringData;
+  final VoidCallback generateData;
   final VoidCallback onClearData;
-  final void Function({required String customerCode, required String warehouse})
-      generateData;
-
-  @override
-  State<InventoryTemplate> createState() => _InventoryTemplateState();
-}
-
-class _InventoryTemplateState extends State<InventoryTemplate> {
-  String _selectedCustomer = '';
-  String _selectedWarehouse = '';
-
-  void onSelectCustomer(String customerCode, StateSetter setState) {
-    setState(() {
-      _selectedCustomer = customerCode;
-    });
-  }
-
-  void onSelectWarehouse(String warehouse, StateSetter setState) {
-    setState(() {
-      _selectedWarehouse = warehouse;
-    });
-  }
-
-  void onClearFilter(StateSetter setState) {
-    setState(() {
-      _selectedCustomer = '';
-      _selectedWarehouse = '';
-    });
-    widget.onClearData();
-  }
-
-  void onFilterData() {
-    Navigator.of(context).pop();
-    widget.generateData(
-        customerCode: _selectedCustomer, warehouse: _selectedWarehouse);
-  }
-
-  Future<bool> permissionRequest() async {
-    PermissionStatus result;
-    result = await Permission.manageExternalStorage.request();
-    if (result.isGranted) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  void downloadFile(String format) async {
-    if (_selectedCustomer.isEmpty || _selectedWarehouse.isEmpty) {
-      return;
-    }
-
-    bool result = await permissionRequest();
-    if (!result) {
-      log('No permission to read and write.');
-    }
-
-    if (!mounted) {
-      return;
-    }
-    showDialog(
-        context: context,
-        builder: (dialogcontext) {
-          String filename =
-              'INVENTORY-$_selectedCustomer-$_selectedWarehouse.$format';
-          final queryParameters = {
-            'customer_code': _selectedCustomer,
-            'warehouse': _selectedWarehouse,
-            'format': format
-          };
-
-          return MDDownloadProgress(
-              filename: filename,
-              url: '/inventory/export-excel',
-              queryParameters: queryParameters);
-        });
-  }
+  final ValueChanged<String> onSelectCustomer;
+  final ValueChanged<String> onSelectWarehouse;
+  final ValueChanged<String> onExportFile;
+  final VoidCallback onFilterData;
 
   MDFilter Filter(BuildContext context, Size mediaSize) {
     final authState = context.watch<AuthBloc>().state;
@@ -110,38 +42,33 @@ class _InventoryTemplateState extends State<InventoryTemplate> {
         List<String>.from(authState.user.data!['user']['companies']).toList();
 
     return MDFilter(
-      selectedCustomer: _selectedCustomer,
+      selectedCustomer: filteringData.value.customerCode,
       onFilter: () {
         showModalBottomSheet<void>(
             isDismissible: true,
             showDragHandle: true,
             context: context,
             builder: (BuildContext context) {
-              return StatefulBuilder(
-                builder: (context, setState) {
-                  return ModalFilterContent(
-                    customerList: customerList,
-                    warehouseList: widget.warehouseList,
-                    selectedCustomer: _selectedCustomer,
-                    selectedWarehouse: _selectedWarehouse,
-                    onFilterData: onFilterData,
-                    onSelectCustomer: (String customer) =>
-                        onSelectCustomer(customer, setState),
-                    onSelectWarehouse: (String warehouse) =>
-                        onSelectWarehouse(warehouse, setState),
-                    onClearFilter: () => onClearFilter(setState),
-                  );
-                },
+              return ModalFilterContent(
+                customerList: customerList,
+                warehouseList: warehouseList,
+                filteringData: filteringData,
+                onFilterData: onFilterData,
+                onSelectCustomer: (String customer) =>
+                    onSelectCustomer(customer),
+                onSelectWarehouse: (String warehouse) =>
+                    onSelectWarehouse(warehouse),
+                onClearFilter: onClearData,
               );
             });
       },
       menuList: [
         MenuItemButton(
-          onPressed: () => downloadFile('xlsx'),
+          onPressed: () => onExportFile('xlsx'),
           child: const Text('Export excel'),
         ),
         MenuItemButton(
-          onPressed: () => downloadFile('csv'),
+          onPressed: () => onExportFile('csv'),
           child: const Text('Export csv'),
         ),
       ],
@@ -155,9 +82,9 @@ class _InventoryTemplateState extends State<InventoryTemplate> {
         Padding(
           padding: EdgeInsets.only(top: mediaSize.height * 0.05, bottom: 12.0),
           child: MDSearch(
-            textController: widget.searchText,
-            onInputChanged: widget.onSearch,
-            onClear: widget.onClearData,
+            textController: searchText,
+            onInputChanged: onSearch,
+            onClear: onClearData,
           ),
         ),
         Padding(
@@ -165,13 +92,9 @@ class _InventoryTemplateState extends State<InventoryTemplate> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                'Material Details',
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.w500,
-                      letterSpacing: -0.6,
-                    ),
-              ),
+              Text('Material Details',
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.w500, letterSpacing: -0.6)),
               SizedBox(
                 width: 28.0,
                 height: 28.0,
@@ -180,9 +103,7 @@ class _InventoryTemplateState extends State<InventoryTemplate> {
                   padding: EdgeInsets.zero,
                   iconSize: 20.0,
                   icon: const Icon(Icons.refresh_rounded),
-                  onPressed: () => widget.generateData(
-                      customerCode: _selectedCustomer,
-                      warehouse: _selectedWarehouse),
+                  onPressed: generateData,
                 ),
               )
             ],
@@ -190,7 +111,7 @@ class _InventoryTemplateState extends State<InventoryTemplate> {
         ),
         MDDataTable(
           rowsPerPage: 5,
-          dataSource: widget.data,
+          dataSource: data,
           columns: const <MDDataTableColumns>[
             MDDataTableColumns(title: 'WAREHOUSE', accessorKey: 'warehouse'),
             MDDataTableColumns(
@@ -213,7 +134,7 @@ class _InventoryTemplateState extends State<InventoryTemplate> {
 
   @override
   Widget build(BuildContext context) {
-    final mediaSize = MediaQuery.of(context).size;
+    final mediaSize = MediaQuery.sizeOf(context);
 
     return MDScaffold(
       appBarTitle: 'Inventory',

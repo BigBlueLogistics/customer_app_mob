@@ -2,13 +2,17 @@ import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:customer_app_mob/config/dio/auth_interceptor.dart';
+import 'package:customer_app_mob/config/constants/url.dart';
+import 'package:customer_app_mob/core/data/data_sources/api/movement/movement_api.dart';
+import 'package:customer_app_mob/core/data/repository/movement_repository.dart';
+import 'package:customer_app_mob/core/usecases/movement/get_material.dart';
+import 'package:customer_app_mob/core/usecases/movement/get_movement.dart';
 import 'package:customer_app_mob/core/data/data_sources/api/warehouse/warehouse_api.dart';
 import 'package:customer_app_mob/core/data/repository/warehouse_repository.dart';
 import 'package:customer_app_mob/core/usecases/warehouse/get_warehouse.dart';
 import 'package:customer_app_mob/core/data/data_sources/api/inventory/inventory_api.dart';
 import 'package:customer_app_mob/core/data/repository/inventory_repository.dart';
 import 'package:customer_app_mob/core/usecases/inventory/get_inventory.dart';
-import 'package:customer_app_mob/config/constants/url.dart';
 import 'package:customer_app_mob/core/data/data_sources/api/auth/auth_api.dart';
 import 'package:customer_app_mob/core/data/repository/auth_repository.dart';
 import 'package:customer_app_mob/core/usecases/auth/sign_in.dart';
@@ -47,16 +51,21 @@ Future<void> initializeDependencies() async {
   getIt.registerSingleton<AuthApi>(AuthApi(getIt()));
   getIt.registerSingleton<InventoryApi>(InventoryApi(getIt()));
   getIt.registerSingleton<WarehouseApi>(WarehouseApi(getIt()));
+  getIt.registerSingleton<MovementApi>(MovementApi(getIt()));
 
   // Repositories
   getIt.registerSingleton<AuthRepositoryImpl>(AuthRepositoryImpl(getIt()));
   getIt.registerSingleton<InventoryImpl>(InventoryImpl(getIt()));
   getIt.registerSingleton<WarehouseImpl>(WarehouseImpl(getIt()));
+  getIt.registerSingleton<MovementImpl>(MovementImpl(getIt()));
 
   // Use cases
   getIt.registerSingleton<SignInUseCase>(SignInUseCase(getIt()));
   getIt.registerSingleton<InventoryUseCase>(InventoryUseCase(getIt()));
   getIt.registerSingleton<WarehouseUseCase>(WarehouseUseCase(getIt()));
+  getIt.registerSingleton<MovementUseCase>(MovementUseCase(getIt()));
+  getIt.registerSingleton<MovementMaterialUseCase>(
+      MovementMaterialUseCase(getIt()));
 
   // Bloc
   getIt.registerFactory<AuthBloc>(() => AuthBloc(getIt()));
