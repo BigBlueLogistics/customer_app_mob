@@ -1,24 +1,20 @@
+import 'package:customer_app_mob/core/presentation/widgets/atoms/md_button/md_filled.dart';
 import 'package:flutter/material.dart';
 
 class FilterButton extends StatelessWidget {
   const FilterButton({
     super.key,
-    required this.mediaSize,
-    required this.buttonBorderShape,
     this.onPressed,
   });
 
   final VoidCallback? onPressed;
-  final Size mediaSize;
-  final RoundedRectangleBorder buttonBorderShape;
 
   @override
   Widget build(BuildContext context) {
-    return FilledButton(
+    return MDFilledButton(
+      text: 'Filter',
+      height: 40,
       onPressed: onPressed,
-      style: FilledButton.styleFrom(
-          minimumSize: Size(mediaSize.width, 35), shape: buttonBorderShape),
-      child: const Text('Filter'),
     );
   }
 }

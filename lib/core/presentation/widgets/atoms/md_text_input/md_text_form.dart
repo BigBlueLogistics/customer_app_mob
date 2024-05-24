@@ -23,6 +23,8 @@ class MDTextFormField extends StatelessWidget {
     this.focusNode,
     this.isDense,
     this.textCapitalization = TextCapitalization.none,
+    this.onTapOutside,
+    this.onTap,
   }) : assert(
             borderType != TextFormBorderType.filled ||
                 (filled != null && filledColor != null),
@@ -47,6 +49,8 @@ class MDTextFormField extends StatelessWidget {
   final FocusNode? focusNode;
   final bool? isDense;
   final TextCapitalization textCapitalization;
+  final TapRegionCallback? onTapOutside;
+  final GestureTapCallback? onTap;
 
   InputBorder? enableBorder() {
     if (borderType case TextFormBorderType.outline) {
@@ -118,6 +122,8 @@ class MDTextFormField extends StatelessWidget {
       style: style,
       onChanged: onChanged,
       textCapitalization: textCapitalization,
+      onTap: onTap,
+      onTapOutside: onTapOutside,
       decoration: InputDecoration(
         isDense: isDense,
         prefixIconConstraints: const BoxConstraints(),

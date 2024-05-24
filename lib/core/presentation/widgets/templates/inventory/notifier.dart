@@ -1,11 +1,11 @@
 class FilterValueNotifier {
-  FilterValueNotifier({
+  const FilterValueNotifier({
     this.customerCode,
     this.warehouse,
   });
 
-  String? customerCode;
-  String? warehouse;
+  final String? customerCode;
+  final String? warehouse;
 
   FilterValueNotifier copyWith({
     String? customerCode,
@@ -15,4 +15,6 @@ class FilterValueNotifier {
         customerCode: customerCode ?? this.customerCode,
         warehouse: warehouse ?? this.warehouse);
   }
+
+  static const empty = FilterValueNotifier();
 }

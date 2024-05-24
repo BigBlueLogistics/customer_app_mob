@@ -22,7 +22,7 @@ class InventoryScreen extends StatefulWidget {
 class _InventoryScreenState extends State<InventoryScreen> {
   final TextEditingController searchText = TextEditingController();
   final ValueNotifier<FilterValueNotifier> _filteringData =
-      ValueNotifier(FilterValueNotifier());
+      ValueNotifier(FilterValueNotifier.empty);
 
   List<Map<String, dynamic>> _inventoryCacheData = [];
   List<Map<String, dynamic>> _inventoryFilterData = [];
@@ -69,7 +69,11 @@ class _InventoryScreenState extends State<InventoryScreen> {
   }
 
   void onFilterData() {
-    Navigator.of(context).pop();
+    // Close filtering modal
+    if (_filteringData.value.customerCode != null &&
+        _filteringData.value.warehouse != null) {
+      Navigator.of(context).pop();
+    }
     generateData();
   }
 
@@ -117,7 +121,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
 
   void onClearData() {
     searchText.clear();
-    _filteringData.value = FilterValueNotifier();
+    _filteringData.value = FilterValueNotifier.empty;
 
     setState(() {
       _inventoryFilterData = [];

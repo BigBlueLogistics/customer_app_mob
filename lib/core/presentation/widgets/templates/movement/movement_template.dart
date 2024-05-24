@@ -6,7 +6,6 @@ import 'package:customer_app_mob/core/presentation/widgets/molecules/md_filter/m
 import 'package:customer_app_mob/core/presentation/widgets/organisms/md_scaffold/md_scaffold.dart';
 import 'package:customer_app_mob/core/presentation/widgets/organisms/md_datatable/md_datatable.dart';
 import 'package:customer_app_mob/core/presentation/widgets/templates/movement/modal_filter_content.dart';
-import 'package:customer_app_mob/core/utils/log.dart';
 import 'notifier.dart';
 
 class MovementTemplate extends StatelessWidget {
@@ -26,6 +25,7 @@ class MovementTemplate extends StatelessWidget {
     required this.onSelectMovementType,
     required this.onExportFile,
     required this.onSelectMaterial,
+    required this.onSelectCoverageDate,
   });
 
   final List<Map<String, dynamic>> data;
@@ -41,6 +41,7 @@ class MovementTemplate extends StatelessWidget {
   final ValueChanged<String> onSelectMovementType;
   final ValueChanged<String> onExportFile;
   final ValueChanged<String> onSelectMaterial;
+  final ValueChanged<DateTimeRange> onSelectCoverageDate;
   final VoidCallback onFilterData;
 
   MDFilter Filter(BuildContext context, Size mediaSize) {
@@ -56,6 +57,7 @@ class MovementTemplate extends StatelessWidget {
             showDragHandle: true,
             context: context,
             useSafeArea: true,
+            isScrollControlled: true,
             scrollControlDisabledMaxHeightRatio: 1,
             builder: (BuildContext context) {
               return ModalFilterContent(
@@ -71,6 +73,7 @@ class MovementTemplate extends StatelessWidget {
                     onSelectWarehouse(warehouse),
                 onSelectMovementType: (String movementType) =>
                     onSelectMovementType(movementType),
+                onSelectCoverageDate: onSelectCoverageDate,
                 onClearFilter: onClearData,
               );
             });

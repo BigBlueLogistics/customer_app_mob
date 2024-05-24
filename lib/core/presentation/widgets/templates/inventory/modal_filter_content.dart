@@ -45,7 +45,7 @@ class ModalFilterContent extends StatelessWidget {
           child: ValueListenableBuilder(
             valueListenable: filteringData,
             builder: (context, value, child) {
-              return Column(
+              var column = Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text('Customer:'),
@@ -78,15 +78,19 @@ class ModalFilterContent extends StatelessWidget {
                       onPressed:
                           customerList.isNotEmpty && warehouseList.isNotEmpty
                               ? onFilterData
-                              : null,
-                      mediaSize: mediaSize,
-                      buttonBorderShape: buttonBorderShape),
+                              : null),
                   ClearButton(
                       onTap: customerList.isNotEmpty && warehouseList.isNotEmpty
                           ? onClearFilter
                           : null,
                       mediaSize: mediaSize)
                 ],
+              );
+
+              return Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 8.0, vertical: 12.0),
+                child: column,
               );
             },
           ),

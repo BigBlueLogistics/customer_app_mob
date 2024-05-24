@@ -11,6 +11,7 @@ import 'package:customer_app_mob/core/presentation/widgets/templates/movement/mo
 import 'package:customer_app_mob/core/presentation/widgets/organisms/md_download/md_download_progress.dart';
 import 'package:customer_app_mob/core/presentation/widgets/organisms/md_loading/md_loading.dart';
 import 'package:customer_app_mob/core/presentation/widgets/templates/movement/notifier.dart';
+import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class MovementScreen extends StatefulWidget {
@@ -23,7 +24,7 @@ class MovementScreen extends StatefulWidget {
 class _MovementScreenState extends State<MovementScreen> {
   final TextEditingController searchText = TextEditingController();
   final ValueNotifier<FilterValueNotifier> _filteringData =
-      ValueNotifier(FilterValueNotifier());
+      ValueNotifier(FilterValueNotifier.empty);
 
   List<Map<String, dynamic>> _movementCacheData = [];
   List<Map<String, dynamic>> _movementFilterData = [];
@@ -36,11 +37,6 @@ class _MovementScreenState extends State<MovementScreen> {
   @override
   void initState() {
     super.initState();
-
-    _filteringData.value = _filteringData.value.copyWith(
-      movementType: 'all',
-      coverageDate: ['2024-04-30T16:00:00.000Z', '2024-05-01T16:00:00.000Z'],
-    );
 
     getWarehouseList();
   }
@@ -82,7 +78,14 @@ class _MovementScreenState extends State<MovementScreen> {
   }
 
   void onFilterData() {
-    Navigator.of(context).pop();
+    // Close filtering modal
+    if (_filteringData.value.customerCode != null &&
+        _filteringData.value.warehouse != null &&
+        _filteringData.value.materialCode != null &&
+        _filteringData.value.movementType != null &&
+        _filteringData.value.coverageDate != null) {
+      Navigator.of(context).pop();
+    }
     generateData();
   }
 
@@ -140,6 +143,14 @@ class _MovementScreenState extends State<MovementScreen> {
         _filteringData.value.copyWith(materialCode: material);
   }
 
+  void onSelectCoverageDate(DateTimeRange date) {
+    final start = DateFormat('MM/dd/y').format(date.start);
+    final end = DateFormat('MM/dd/y').format(date.end);
+
+    _filteringData.value =
+        _filteringData.value.copyWith(coverageDate: [start, end]);
+  }
+
   void onSearch(String searchValue) {
     if (_movementCacheData.isNotEmpty) {
       final filterData = _movementCacheData.where((elem) {
@@ -160,7 +171,7 @@ class _MovementScreenState extends State<MovementScreen> {
 
   void onClearData() {
     searchText.clear();
-    _filteringData.value = FilterValueNotifier();
+    _filteringData.value = FilterValueNotifier.empty;
 
     setState(() {
       _movementFilterData = [];
@@ -239,6 +250,7 @@ class _MovementScreenState extends State<MovementScreen> {
           onSelectWarehouse: onSelectWarehouse,
           onSelectMovementType: onSelectMovementType,
           onSelectMaterial: onSelectMaterial,
+          onSelectCoverageDate: onSelectCoverageDate,
           onExportFile: onExportFile,
         ),
         MDLoadingFullScreen(

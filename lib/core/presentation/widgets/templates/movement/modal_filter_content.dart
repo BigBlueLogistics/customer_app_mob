@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:customer_app_mob/core/utils/log.dart';
 import 'package:customer_app_mob/core/presentation/widgets/atoms/md_text_input/md_text_form.dart';
 import 'package:customer_app_mob/core/shared/enums/text_border_type.dart';
 import 'package:customer_app_mob/core/presentation/widgets/organisms/md_filtering/clear_button.dart';
@@ -19,6 +20,7 @@ class ModalFilterContent extends StatelessWidget {
     required this.onFilterData,
     required this.onClearFilter,
     required this.onSelectMaterial,
+    required this.onSelectCoverageDate,
   });
 
   final List<String> customerList;
@@ -30,6 +32,7 @@ class ModalFilterContent extends StatelessWidget {
   final VoidCallback onFilterData;
   final VoidCallback onClearFilter;
   final ValueChanged<String> onSelectMaterial;
+  final ValueChanged<DateTimeRange> onSelectCoverageDate;
   final ValueNotifier<FilterValueNotifier> filteringData;
 
   @override
@@ -50,7 +53,7 @@ class ModalFilterContent extends StatelessWidget {
         child: ValueListenableBuilder<FilterValueNotifier>(
           valueListenable: filteringData,
           builder: (context, value, child) {
-            return Column(
+            var column = Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Text('Customer:'),
@@ -151,16 +154,53 @@ class ModalFilterContent extends StatelessWidget {
                   onSelected: (selected) =>
                       onSelectMaterial(selected['material']),
                 ),
+                const SizedBox(height: 10),
+                const Text('Coverage Date:'),
+                MDTextFormField(
+                  textController: TextEditingController(
+                      text: value.coverageDate != null
+                          ? value.coverageDate!.join(' - ')
+                          : ''),
+                  borderType: TextFormBorderType.outline,
+                  borderColor: Colors.grey.shade300,
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 10.0),
+                  onTapOutside: (event) {
+                    FocusScope.of(context).unfocus();
+                  },
+                  suffixIcon: IconButton(
+                    onPressed: () async {
+                      final DateTimeRange? coverageDate =
+                          await showDateRangePicker(
+                              context: context,
+                              currentDate: DateTime.now(),
+                              initialDateRange: null,
+                              firstDate: DateTime(DateTime.now().year - 1),
+                              lastDate: DateTime(DateTime.now().year + 1));
+                      if (coverageDate != null) {
+                        onSelectCoverageDate(coverageDate);
+                      }
+                    },
+                    icon: Icon(
+                      Icons.calendar_month_rounded,
+                      color: Colors.grey.shade400,
+                    ),
+                  ),
+                ),
                 const SizedBox(height: 15),
                 FilterButton(
-                    onPressed: customerList.isNotEmpty ? onFilterData : null,
-                    mediaSize: mediaSize,
-                    buttonBorderShape: buttonBorderShape),
+                    onPressed: customerList.isNotEmpty ? onFilterData : null),
                 ClearButton(
                     onTap: customerList.isNotEmpty ? onClearFilter : null,
                     mediaSize: mediaSize)
               ],
             );
+
+            return SingleChildScrollView(
+                child: Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 8.0, vertical: 12.0),
+              child: column,
+            ));
           },
         ),
       ),

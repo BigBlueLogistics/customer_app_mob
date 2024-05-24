@@ -1,5 +1,5 @@
 class FilterValueNotifier {
-  FilterValueNotifier({
+  const FilterValueNotifier({
     this.customerCode,
     this.materialCode,
     this.warehouse,
@@ -8,12 +8,12 @@ class FilterValueNotifier {
     this.materialList,
   });
 
-  String? customerCode;
-  String? materialCode;
-  String? warehouse;
-  String? movementType;
-  List<String>? coverageDate;
-  List<Map<String, dynamic>>? materialList;
+  final String? customerCode;
+  final String? materialCode;
+  final String? warehouse;
+  final String? movementType;
+  final List<String>? coverageDate;
+  final List<Map<String, dynamic>>? materialList;
 
   FilterValueNotifier copyWith(
       {String? customerCode,
@@ -31,4 +31,6 @@ class FilterValueNotifier {
       movementType: movementType ?? this.movementType,
     );
   }
+
+  static const empty = FilterValueNotifier();
 }

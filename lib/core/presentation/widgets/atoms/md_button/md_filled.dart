@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class MDFilledButton extends StatelessWidget {
   const MDFilledButton(
       {super.key,
-      required this.onPressed,
+      this.onPressed,
       this.text = 'button',
       this.autoResize = true,
       this.horizontalAlignment = MainAxisAlignment.center,
@@ -11,7 +11,7 @@ class MDFilledButton extends StatelessWidget {
       this.loading = false,
       this.height = 50});
 
-  final GestureTapCallback onPressed;
+  final VoidCallback? onPressed;
   final MainAxisAlignment horizontalAlignment;
   final double height;
   final String text;
