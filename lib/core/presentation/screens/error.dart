@@ -16,7 +16,8 @@ class ErrorScreen extends StatelessWidget {
             children: <Widget>[
               SelectableText(error.toString()),
               TextButton(
-                onPressed: () => context.go(AppRoutes.signInPathScreen),
+                onPressed: () =>
+                    context.go(AppRoutes.signInPathScreen.fullPath),
                 child: const Text('Home'),
               ),
             ],

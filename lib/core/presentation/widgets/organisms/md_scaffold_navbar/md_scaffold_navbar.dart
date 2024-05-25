@@ -48,13 +48,13 @@ class MDScaffoldNavbar extends StatelessWidget {
     log(GoRouterState.of(context).uri.path);
     switch (index) {
       case 0:
-        GoRouter.of(context).go('/${AppRoutes.homeScreen}');
+        GoRouter.of(context).go(AppRoutes.homeScreen.fullPath);
         break;
       case 1:
-        GoRouter.of(context).go('/${AppRoutes.inventoryScreen}');
+        GoRouter.of(context).go(AppRoutes.inventoryScreen.fullPath);
         break;
       case 2:
-        GoRouter.of(context).go('/${AppRoutes.movementScreen}');
+        GoRouter.of(context).go(AppRoutes.movementScreen.fullPath);
         break;
       default:
     }
@@ -62,15 +62,11 @@ class MDScaffoldNavbar extends StatelessWidget {
 
   int _onTapCurrentIndex(BuildContext context) {
     final String location = GoRouterState.of(context).uri.path;
-    switch (location) {
-      case '/${AppRoutes.inventoryScreen}':
-        return 1;
-      case '/${AppRoutes.movementScreen}':
-        return 2;
 
-      default:
-        // Default to HomeScreen
-        return 0;
-    }
+    if (location == AppRoutes.inventoryScreen.fullPath) return 1;
+    if (location == AppRoutes.movementScreen.fullPath) return 2;
+
+    // Default to HomeScreen
+    return 0;
   }
 }

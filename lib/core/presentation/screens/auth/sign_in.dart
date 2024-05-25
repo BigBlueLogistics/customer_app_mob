@@ -1,7 +1,7 @@
-import 'package:customer_app_mob/core/shared/enums/loading_status.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:customer_app_mob/core/shared/enums/loading_status.dart';
 import 'package:customer_app_mob/config/routes/app_routes.dart';
 import 'package:customer_app_mob/core/presentation/widgets/atoms/md_text_input/md_text_form.dart';
 import 'package:customer_app_mob/core/presentation/widgets/atoms/md_button/md_filled.dart';
@@ -194,7 +194,7 @@ class _SignInScreenState extends State<SignInScreen> {
         ),
         TextButton(
           onPressed: () {
-            context.push(AppRoutes.signUpPathScreen);
+            context.push(AppRoutes.signUpPathScreen.fullPath);
           },
           child: Text(
             'Sign up',
@@ -213,7 +213,7 @@ class _SignInScreenState extends State<SignInScreen> {
         padding: const EdgeInsetsDirectional.only(top: 32),
         child: TextButton(
           onPressed: () {
-            context.push(AppRoutes.forgotPathScreen);
+            context.push(AppRoutes.forgotPathScreen.fullPath);
           },
           child: Text(
             'Forgot your password?',

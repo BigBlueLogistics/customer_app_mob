@@ -28,13 +28,13 @@ class AppRouter {
         builder: (context, state) => const WelcomeScreen(),
         routes: <RouteBase>[
           GoRoute(
-              path: AppRoutes.signInPathScreen,
+              path: AppRoutes.signInPathScreen.path,
               builder: (context, state) => const SignInScreen()),
           GoRoute(
-              path: AppRoutes.signUpPathScreen,
+              path: AppRoutes.signUpPathScreen.path,
               builder: (context, state) => const SignUpScreen()),
           GoRoute(
-              path: AppRoutes.forgotPathScreen,
+              path: AppRoutes.forgotPathScreen.path,
               builder: (context, state) => const ForgotScreen()),
           ShellRoute(
             parentNavigatorKey: _rootNavigatorKey,
@@ -42,14 +42,14 @@ class AppRouter {
                 MDScaffoldNavbar(child: child),
             routes: [
               GoRoute(
-                  path: AppRoutes.homeScreen,
+                  path: AppRoutes.homeScreen.path,
                   builder: (context, state) => const HomeScreen()),
               GoRoute(
-                  path: AppRoutes.inventoryScreen,
+                  path: AppRoutes.inventoryScreen.path,
                   builder: (context, state) =>
                       InventoryScreen(key: state.pageKey)),
               GoRoute(
-                  path: AppRoutes.movementScreen,
+                  path: AppRoutes.movementScreen.path,
                   builder: (context, state) =>
                       MovementScreen(key: state.pageKey)),
             ],
@@ -63,19 +63,19 @@ class AppRouter {
           final isAuthenticated =
               authState.auth.name == AuthStatus.authenticated.name;
           final isSignInScreen =
-              state.fullPath == '/${AppRoutes.signInPathScreen}';
+              state.fullPath == AppRoutes.signInPathScreen.fullPath;
           final isRootScreen = state.fullPath == AppRoutes.rootPathScreen;
 
           if (isFromWelcomeScreen) {
             // Go to /sign-in if user is not authenticated
             if (!isAuthenticated) {
-              return '/${AppRoutes.signInPathScreen}';
+              return AppRoutes.signInPathScreen.fullPath;
             }
 
             // Go to /home if user is authenticated and still in the /sign-in
             if (isAuthenticated && isRootScreen ||
                 isAuthenticated && isSignInScreen) {
-              return '/${AppRoutes.homeScreen}';
+              return AppRoutes.homeScreen.fullPath;
             }
           }
 

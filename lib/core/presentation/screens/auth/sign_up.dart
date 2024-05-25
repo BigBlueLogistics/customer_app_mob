@@ -223,7 +223,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         ),
         TextButton(
           onPressed: () {
-            context.push(AppRoutes.signInPathScreen);
+            context.push(AppRoutes.signInPathScreen.fullPath);
           },
           child: Text(
             'Sign in',

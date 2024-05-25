@@ -22,7 +22,7 @@ class AuthInterceptor extends Interceptor {
     if (err.response?.statusCode == 401) {
       await HydratedBloc.storage.clear();
 
-      AppRouter.router.go(AppRoutes.signInPathScreen);
+      AppRouter.router.go(AppRoutes.signInPathScreen.fullPath);
     }
 
     return super.onError(err, handler);
