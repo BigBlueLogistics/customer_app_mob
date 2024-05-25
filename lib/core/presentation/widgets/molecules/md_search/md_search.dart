@@ -20,6 +20,7 @@ class MDSearch extends StatelessWidget {
     return MDTextFormField(
       textController: textController,
       onChanged: onInputChanged,
+      onTapOutside: (event) => FocusScope.of(context).unfocus(),
       contentPadding:
           const EdgeInsets.symmetric(vertical: 1.0, horizontal: 10.0),
       hintText: 'Search...',

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:customer_app_mob/core/utils/log.dart';
 import 'package:customer_app_mob/core/presentation/widgets/atoms/md_text_input/md_text_form.dart';
 import 'package:customer_app_mob/core/shared/enums/text_border_type.dart';
 import 'package:customer_app_mob/core/presentation/widgets/organisms/md_filtering/clear_button.dart';
