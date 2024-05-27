@@ -90,16 +90,18 @@ class _MovementScreenState extends State<MovementScreen> {
   }
 
   void getWarehouseList() async {
-    setState(() => _warehouseStatus = LoadingStatus.loading);
-    final warehouse = await getIt<WarehouseUseCase>().call(null);
+    if (mounted) {
+      setState(() => _warehouseStatus = LoadingStatus.loading);
+      final warehouse = await getIt<WarehouseUseCase>().call(null);
 
-    if (warehouse is DataSuccess) {
-      setState(() {
-        _warehouseStatus = LoadingStatus.success;
-        _warehouseList = warehouse.resp!.toList();
-      });
-    } else {
-      setState(() => _warehouseStatus = LoadingStatus.failed);
+      if (warehouse is DataSuccess) {
+        setState(() {
+          _warehouseStatus = LoadingStatus.success;
+          _warehouseList = warehouse.resp!.toList();
+        });
+      } else {
+        setState(() => _warehouseStatus = LoadingStatus.failed);
+      }
     }
   }
 

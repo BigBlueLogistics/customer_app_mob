@@ -78,17 +78,19 @@ class _InventoryScreenState extends State<InventoryScreen> {
   }
 
   void getWarehouseList() async {
-    setState(() => _warehouseStatus = LoadingStatus.loading);
-    final warehouse = await getIt<WarehouseUseCase>().call(null);
+    if (mounted) {
+      setState(() => _warehouseStatus = LoadingStatus.loading);
+      final warehouse = await getIt<WarehouseUseCase>().call(null);
 
-    if (warehouse is DataSuccess) {
-      setState(() {
-        _warehouseList = warehouse.resp!;
+      if (warehouse is DataSuccess) {
+        setState(() {
+          _warehouseList = warehouse.resp!;
 
-        _warehouseStatus = LoadingStatus.success;
-      });
-    } else {
-      setState(() => _warehouseStatus = LoadingStatus.failed);
+          _warehouseStatus = LoadingStatus.success;
+        });
+      } else {
+        setState(() => _warehouseStatus = LoadingStatus.failed);
+      }
     }
   }
 
