@@ -26,15 +26,15 @@ class MDSearch extends StatelessWidget {
       hintText: 'Search...',
       suffixIcon: IconButton(
         style: const ButtonStyle(
-          padding: MaterialStatePropertyAll(
+          padding: WidgetStatePropertyAll(
               EdgeInsets.symmetric(vertical: 6.0, horizontal: 6.0)),
-          shape: MaterialStatePropertyAll(
+          shape: WidgetStatePropertyAll(
             RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(5.0)),
             ),
           ),
-          maximumSize: MaterialStatePropertyAll(Size(40.0, 40.0)),
-          minimumSize: MaterialStatePropertyAll(Size(30.0, 30.0)),
+          maximumSize: WidgetStatePropertyAll(Size(40.0, 40.0)),
+          minimumSize: WidgetStatePropertyAll(Size(30.0, 30.0)),
         ),
         icon: Icon(
           textController.text.isNotEmpty ? Icons.clear : Icons.search_outlined,
@@ -42,10 +42,10 @@ class MDSearch extends StatelessWidget {
         ),
         onPressed: textController.text.isNotEmpty ? onClear : null,
       ),
-      borderType: TextFormBorderType.filled,
-      borderColor: Theme.of(context).primaryColor,
+      borderType: TextFormBorderType.outline,
+      borderColor: Colors.grey.shade200,
       filled: true,
-      filledColor: const Color.fromARGB(255, 255, 255, 255),
+      filledColor: Colors.white,
     );
   }
 }

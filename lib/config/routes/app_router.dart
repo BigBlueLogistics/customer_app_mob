@@ -43,7 +43,7 @@ class AppRouter {
             routes: [
               GoRoute(
                   path: AppRoutes.homeScreen.path,
-                  builder: (context, state) => const HomeScreen()),
+                  builder: (context, state) => HomeScreen()),
               GoRoute(
                   path: AppRoutes.inventoryScreen.path,
                   builder: (context, state) =>

@@ -6,10 +6,11 @@ ThemeData lightMode = ThemeData(
   primaryColor: const Color.fromRGBO(26, 115, 232, 1),
   primaryColorLight: const Color.fromARGB(255, 53, 140, 253),
   colorScheme: const ColorScheme.light(
-    background: Color.fromRGBO(240, 242, 245, 1),
+    // surface: Color.fromRGBO(240, 242, 245, 1),
     primary: Color.fromRGBO(26, 115, 232, 1),
     secondary: Color(0x007b809a),
   ),
+  scaffoldBackgroundColor: Color.fromRGBO(239, 246, 255, 1),
   textTheme: const TextTheme(
     headlineSmall: TextStyle(
       color: Color.fromARGB(255, 6, 25, 51),

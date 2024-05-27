@@ -4,17 +4,16 @@ class MDScaffold extends StatelessWidget {
   const MDScaffold({
     super.key,
     this.child,
+    this.onGoBack,
     this.appBarTitle = '',
     this.showFloatingActionButton = false,
     this.floatingActionButtonLoc = FloatingActionButtonLocation.endFloat,
   });
 
   final Widget? child;
-
+  final VoidCallback? onGoBack;
   final String appBarTitle;
-
   final bool showFloatingActionButton;
-
   final FloatingActionButtonLocation floatingActionButtonLoc;
 
   FloatingActionButton? floatingActionButton(BuildContext context) {
@@ -38,10 +37,12 @@ class MDScaffold extends StatelessWidget {
             color: Colors.white, fontSize: 18.0, fontWeight: FontWeight.w600),
       ),
       centerTitle: true,
-      leading: BackButton(
-        color: Colors.white,
-        onPressed: () {},
-      ),
+      leading: onGoBack != null
+          ? BackButton(
+              color: Colors.white,
+              onPressed: onGoBack,
+            )
+          : null,
       actions: [
         IconButton(
           onPressed: () => {},
