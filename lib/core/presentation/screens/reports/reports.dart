@@ -160,8 +160,8 @@ class _ReportsScreenState extends State<ReportsScreen> {
     // If one of the filtering value is empty, it can't export file.
     if (_filteringData.value.customerCode == null ||
         _filteringData.value.warehouse == null ||
-        _filteringData.value.groupType == null ||
-        _filteringData.value.reportType == null) {
+        _filteringData.value.groupType == SegmentedValueMap.empty ||
+        _filteringData.value.reportType == SegmentedValueMap.empty) {
       return;
     }
 
@@ -178,9 +178,10 @@ class _ReportsScreenState extends State<ReportsScreen> {
         builder: (dialogcontext) {
           final customer = _filteringData.value.customerCode;
           final warehouse = _filteringData.value.warehouse;
-          final groupType = _filteringData.value.groupType;
-          final reportType = _filteringData.value.reportType;
-          String filename = 'REPORTS-$customer-$warehouse.$format';
+          final groupType = _filteringData.value.groupType.value;
+          final reportType = _filteringData.value.reportType.value;
+          String filename =
+              '$reportType-$customer-$groupType-$warehouse.$format';
           final queryParameters = {
             'customer_code': customer,
             'group_type': groupType,

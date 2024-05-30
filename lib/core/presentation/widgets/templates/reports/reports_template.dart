@@ -1,5 +1,3 @@
-import 'package:customer_app_mob/core/presentation/widgets/organisms/md_filtering/button_segmented.dart';
-import 'package:customer_app_mob/core/utils/log.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:customer_app_mob/core/presentation/bloc/auth/auth_bloc.dart';
@@ -7,6 +5,7 @@ import 'package:customer_app_mob/core/presentation/widgets/molecules/md_search/m
 import 'package:customer_app_mob/core/presentation/widgets/molecules/md_filter/md_filter.dart';
 import 'package:customer_app_mob/core/presentation/widgets/organisms/md_scaffold/md_scaffold.dart';
 import 'package:customer_app_mob/core/presentation/widgets/organisms/md_datatable/md_datatable.dart';
+import 'package:customer_app_mob/core/presentation/widgets/organisms/md_filtering/button_segmented.dart';
 import 'package:customer_app_mob/core/presentation/widgets/templates/reports/modal_filter_content.dart';
 import './notifier.dart';
 
@@ -99,9 +98,6 @@ class ReportsTemplate extends StatelessWidget {
 
   Padding TableMovement(BuildContext context, Size mediaSize) {
     final filter = filteringData.value;
-
-    log('filter.groupType ${filter.groupType.value}');
-    log('filter.reportType ${filter.reportType.value}');
 
     return Padding(
       padding: const EdgeInsetsDirectional.symmetric(horizontal: 10),
