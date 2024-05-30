@@ -1,6 +1,25 @@
 import 'package:flutter/material.dart';
 
-class ButtonSegmented extends StatelessWidget {
+abstract class SegmentedValue {
+  const SegmentedValue();
+}
+
+class SegmentedValueMap extends SegmentedValue {
+  const SegmentedValueMap({this.label, this.value});
+
+  final String? value;
+  final String? label;
+
+  static const empty = SegmentedValueMap();
+}
+
+class SegmentedValueString extends SegmentedValue {
+  const SegmentedValueString(this.value);
+
+  final String value;
+}
+
+class ButtonSegmented<T> extends StatelessWidget {
   const ButtonSegmented({
     super.key,
     required this.segmentButtonStyles,
@@ -10,9 +29,9 @@ class ButtonSegmented extends StatelessWidget {
   });
 
   final ButtonStyle segmentButtonStyles;
-  final List<String> dataList;
-  final String selectedValue;
-  final void Function(Set<String> newSelection) onSelectedChanged;
+  final List<T> dataList;
+  final T selectedValue;
+  final void Function(Set<T> newSelection) onSelectedChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -23,11 +42,12 @@ class ButtonSegmented extends StatelessWidget {
           .map(
             (e) => ButtonSegment(
               value: e,
-              label: Text(e),
+              label: Text(
+                  e is SegmentedValueMap ? e.label.toString() : e.toString()),
             ),
           )
           .toList(),
-      selected: <String>{selectedValue},
+      selected: <T>{selectedValue},
       onSelectionChanged: onSelectedChanged,
     );
   }

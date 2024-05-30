@@ -9,13 +9,15 @@ class _DataSource extends DataTableSource {
 
   _DataSource({required this.data, required this.rowsKey});
 
-  static DataCell cellFor(Object data) {
-    String value;
-    if (data is DateTime) {
-      value =
-          '${data.year}-${data.month.toString().padLeft(2, '0')}-${data.day.toString().padLeft(2, '0')}';
-    } else {
-      value = data.toString();
+  static DataCell cellFor(dynamic data) {
+    String value = '';
+    if (data != null) {
+      if (data is DateTime) {
+        value =
+            '${data.year}-${data.month.toString().padLeft(2, '0')}-${data.day.toString().padLeft(2, '0')}';
+      } else {
+        value = data.toString();
+      }
     }
     return DataCell(Text(value));
   }

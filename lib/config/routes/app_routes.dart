@@ -18,4 +18,6 @@ final class AppRoutes {
   static const movementScreen =
       _RoutePath(path: 'movement', fullPath: '/movement');
   static const homeScreen = _RoutePath(path: 'home', fullPath: '/home');
+  static const reportsScreen =
+      _RoutePath(path: 'reports', fullPath: '/reports');
 }

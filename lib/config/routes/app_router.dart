@@ -1,3 +1,4 @@
+import 'package:customer_app_mob/core/presentation/screens/reports/reports.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -52,6 +53,10 @@ class AppRouter {
                   path: AppRoutes.movementScreen.path,
                   builder: (context, state) =>
                       MovementScreen(key: state.pageKey)),
+              GoRoute(
+                  path: AppRoutes.reportsScreen.path,
+                  builder: (context, state) =>
+                      ReportsScreen(key: state.pageKey)),
             ],
           ),
         ],

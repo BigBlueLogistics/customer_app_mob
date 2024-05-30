@@ -17,6 +17,9 @@ import 'package:customer_app_mob/core/data/data_sources/api/auth/auth_api.dart';
 import 'package:customer_app_mob/core/data/repository/auth_repository.dart';
 import 'package:customer_app_mob/core/usecases/auth/sign_in.dart';
 import 'package:customer_app_mob/core/presentation/bloc/auth/auth_bloc.dart';
+import 'package:customer_app_mob/core/data/data_sources/api/reports/reports_api.dart';
+import 'package:customer_app_mob/core/data/repository/reports_repository.dart';
+import 'package:customer_app_mob/core/usecases/reports/get_reports.dart';
 
 final GetIt getIt = GetIt.instance;
 
@@ -52,12 +55,14 @@ Future<void> initializeDependencies() async {
   getIt.registerSingleton<InventoryApi>(InventoryApi(getIt()));
   getIt.registerSingleton<WarehouseApi>(WarehouseApi(getIt()));
   getIt.registerSingleton<MovementApi>(MovementApi(getIt()));
+  getIt.registerSingleton<ReportsApi>(ReportsApi(getIt()));
 
   // Repositories
   getIt.registerSingleton<AuthRepositoryImpl>(AuthRepositoryImpl(getIt()));
   getIt.registerSingleton<InventoryImpl>(InventoryImpl(getIt()));
   getIt.registerSingleton<WarehouseImpl>(WarehouseImpl(getIt()));
   getIt.registerSingleton<MovementImpl>(MovementImpl(getIt()));
+  getIt.registerSingleton<ReportsImpl>(ReportsImpl(getIt()));
 
   // Use cases
   getIt.registerSingleton<SignInUseCase>(SignInUseCase(getIt()));
@@ -66,6 +71,7 @@ Future<void> initializeDependencies() async {
   getIt.registerSingleton<MovementUseCase>(MovementUseCase(getIt()));
   getIt.registerSingleton<MovementMaterialUseCase>(
       MovementMaterialUseCase(getIt()));
+  getIt.registerSingleton<ReportsUseCase>(ReportsUseCase(getIt()));
 
   // Bloc
   getIt.registerFactory<AuthBloc>(() => AuthBloc(getIt()));
