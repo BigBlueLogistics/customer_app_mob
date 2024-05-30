@@ -54,10 +54,8 @@ class InventoryTemplate extends StatelessWidget {
                 warehouseList: warehouseList,
                 filteringData: filteringData,
                 onFilterData: onFilterData,
-                onSelectCustomer: (String customer) =>
-                    onSelectCustomer(customer),
-                onSelectWarehouse: (String warehouse) =>
-                    onSelectWarehouse(warehouse),
+                onSelectCustomer: onSelectCustomer,
+                onSelectWarehouse: onSelectWarehouse,
                 onClearFilter: onClearData,
               );
             });

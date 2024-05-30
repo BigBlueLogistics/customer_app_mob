@@ -67,12 +67,9 @@ class MovementTemplate extends StatelessWidget {
                 filteringData: filteringData,
                 onFilterData: onFilterData,
                 onSelectMaterial: onSelectMaterial,
-                onSelectCustomer: (String customer) =>
-                    onSelectCustomer(customer),
-                onSelectWarehouse: (String warehouse) =>
-                    onSelectWarehouse(warehouse),
-                onSelectMovementType: (String movementType) =>
-                    onSelectMovementType(movementType),
+                onSelectCustomer: onSelectCustomer,
+                onSelectWarehouse: onSelectWarehouse,
+                onSelectMovementType: onSelectMovementType,
                 onSelectCoverageDate: onSelectCoverageDate,
                 onClearFilter: onClearData,
               );

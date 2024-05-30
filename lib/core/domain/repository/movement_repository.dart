@@ -9,12 +9,13 @@ abstract class MovementRepository {
 }
 
 class MovementParams {
-  MovementParams(
-      {required this.customerCode,
-      required this.warehouse,
-      required this.materialCode,
-      required this.movementType,
-      required this.coverageDate});
+  MovementParams({
+    required this.customerCode,
+    required this.warehouse,
+    required this.materialCode,
+    required this.movementType,
+    required this.coverageDate,
+  });
 
   String customerCode;
   String warehouse;

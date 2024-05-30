@@ -21,7 +21,7 @@ class HomeScreen extends StatelessWidget {
     },
     {
       'title': 'Reports',
-      'route': null,
+      'route': AppRoutes.reportsScreen.fullPath,
       'icon': const Icon(Icons.summarize_rounded,
           color: Color.fromARGB(255, 22, 121, 171))
     },

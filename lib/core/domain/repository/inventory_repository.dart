@@ -6,8 +6,8 @@ abstract class InventoryRepository {
 }
 
 class InventoryParams {
+  InventoryParams({required this.customerCode, required this.warehouse});
+
   String customerCode;
   String warehouse;
-
-  InventoryParams({required this.customerCode, required this.warehouse});
 }

@@ -71,7 +71,7 @@ class ModalFilterContent extends StatelessWidget {
                 const Text('Warehouse:'),
                 warehouseList.isNotEmpty
                     ? ButtonSegmented(
-                        onSelectedChanged: (Set<String> newSelection) {
+                        onSelectedChanged: (newSelection) {
                           onSelectWarehouse(newSelection.first);
                         },
                         dataList: warehouseList,
@@ -84,7 +84,7 @@ class ModalFilterContent extends StatelessWidget {
                 const Text('Movement Type:'),
                 movementTypeList.isNotEmpty
                     ? ButtonSegmented(
-                        onSelectedChanged: (Set<String> newSelection) {
+                        onSelectedChanged: (newSelection) {
                           onSelectMovementType(newSelection.first);
                         },
                         dataList: movementTypeList

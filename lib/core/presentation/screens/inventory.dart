@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:customer_app_mob/core/utils/log.dart';
 import 'package:customer_app_mob/core/domain/repository/inventory_repository.dart';
 import 'package:customer_app_mob/core/usecases/warehouse/get_warehouse.dart';
@@ -10,7 +11,6 @@ import 'package:customer_app_mob/core/presentation/widgets/organisms/md_download
 import 'package:customer_app_mob/core/presentation/widgets/organisms/md_loading/md_loading.dart';
 import 'package:customer_app_mob/core/presentation/widgets/templates/inventory/notifier.dart';
 import 'package:customer_app_mob/core/presentation/widgets/templates/inventory/inventory_template.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 class InventoryScreen extends StatefulWidget {
   const InventoryScreen({super.key});
