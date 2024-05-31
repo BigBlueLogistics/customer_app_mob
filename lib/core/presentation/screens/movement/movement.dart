@@ -12,7 +12,7 @@ import 'package:customer_app_mob/core/utils/log.dart';
 import 'package:customer_app_mob/core/presentation/widgets/templates/movement/movement_template.dart';
 import 'package:customer_app_mob/core/presentation/widgets/organisms/md_download/md_download_progress.dart';
 import 'package:customer_app_mob/core/presentation/widgets/organisms/md_loading/md_loading.dart';
-import 'package:customer_app_mob/core/presentation/widgets/templates/movement/notifier.dart';
+import 'data/data.dart';
 
 class MovementScreen extends StatefulWidget {
   const MovementScreen({super.key});
@@ -29,7 +29,6 @@ class _MovementScreenState extends State<MovementScreen> {
   List<Map<String, dynamic>> _movementCacheData = [];
   List<Map<String, dynamic>> _movementFilterData = [];
   List<String> _warehouseList = [];
-  final List<String> _movementTypeList = ['all', 'inbound', 'outbound'];
   LoadingStatus _warehouseStatus = LoadingStatus.idle;
   LoadingStatus _materialStatus = LoadingStatus.idle;
   LoadingStatus _movementStatus = LoadingStatus.idle;
@@ -243,7 +242,7 @@ class _MovementScreenState extends State<MovementScreen> {
           searchText: searchText,
           filteringData: _filteringData,
           warehouseList: _warehouseList,
-          movementTypeList: _movementTypeList,
+          movementTypeList: movementTypeList,
           generateData: generateData,
           onSearch: onSearch,
           onClearData: onClearData,

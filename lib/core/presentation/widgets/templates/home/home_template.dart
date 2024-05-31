@@ -1,5 +1,5 @@
-import 'package:customer_app_mob/config/routes/app_router.dart';
 import 'package:flutter/material.dart';
+import 'package:customer_app_mob/config/routes/app_router.dart';
 import 'package:customer_app_mob/core/presentation/widgets/organisms/md_scaffold/md_scaffold.dart';
 import 'package:customer_app_mob/core/presentation/widgets/templates/home/menu_card.dart';
 

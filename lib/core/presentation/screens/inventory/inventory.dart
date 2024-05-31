@@ -9,8 +9,8 @@ import 'package:customer_app_mob/core/shared/enums/loading_status.dart';
 import 'package:customer_app_mob/core/dependencies.dart';
 import 'package:customer_app_mob/core/presentation/widgets/organisms/md_download/md_download_progress.dart';
 import 'package:customer_app_mob/core/presentation/widgets/organisms/md_loading/md_loading.dart';
-import 'package:customer_app_mob/core/presentation/widgets/templates/inventory/notifier.dart';
 import 'package:customer_app_mob/core/presentation/widgets/templates/inventory/inventory_template.dart';
+import 'data/data.dart';
 
 class InventoryScreen extends StatefulWidget {
   const InventoryScreen({super.key});

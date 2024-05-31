@@ -6,7 +6,7 @@ import 'package:customer_app_mob/core/presentation/widgets/molecules/md_filter/m
 import 'package:customer_app_mob/core/presentation/widgets/organisms/md_scaffold/md_scaffold.dart';
 import 'package:customer_app_mob/core/presentation/widgets/organisms/md_datatable/md_datatable.dart';
 import 'package:customer_app_mob/core/presentation/widgets/templates/movement/modal_filter_content.dart';
-import 'notifier.dart';
+import 'package:customer_app_mob/core/presentation/screens/movement/data/data.dart';
 
 class MovementTemplate extends StatelessWidget {
   const MovementTemplate({

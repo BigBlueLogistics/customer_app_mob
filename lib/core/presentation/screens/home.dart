@@ -1,5 +1,5 @@
-import 'package:customer_app_mob/config/routes/app_routes.dart';
 import 'package:flutter/material.dart';
+import 'package:customer_app_mob/config/routes/app_routes.dart';
 import 'package:customer_app_mob/core/presentation/widgets/templates/home/home_template.dart';
 
 class HomeScreen extends StatelessWidget {

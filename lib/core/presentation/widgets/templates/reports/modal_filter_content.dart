@@ -1,9 +1,8 @@
-import 'package:customer_app_mob/core/utils/log.dart';
 import 'package:flutter/material.dart';
 import 'package:customer_app_mob/core/presentation/widgets/organisms/md_filtering/clear_button.dart';
 import 'package:customer_app_mob/core/presentation/widgets/organisms/md_filtering/filter_button.dart';
 import 'package:customer_app_mob/core/presentation/widgets/organisms/md_filtering/button_segmented.dart';
-import 'notifier.dart';
+import 'package:customer_app_mob/core/presentation/screens/reports/data/data.dart';
 
 class ModalFilterContent extends StatelessWidget {
   const ModalFilterContent({

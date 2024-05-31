@@ -9,10 +9,9 @@ import 'package:customer_app_mob/core/presentation/widgets/organisms/md_filterin
 import 'package:customer_app_mob/core/presentation/widgets/organisms/md_download/md_download_progress.dart';
 import 'package:customer_app_mob/core/presentation/widgets/organisms/md_loading/md_loading.dart';
 import 'package:customer_app_mob/core/presentation/widgets/templates/reports/reports_template.dart';
-import 'package:customer_app_mob/core/presentation/widgets/templates/reports/notifier.dart';
 import 'package:customer_app_mob/core/utils/data_state.dart';
 import 'package:customer_app_mob/core/utils/log.dart';
-import './data/data.dart';
+import 'data/data.dart';
 
 class ReportsScreen extends StatefulWidget {
   const ReportsScreen({super.key});
