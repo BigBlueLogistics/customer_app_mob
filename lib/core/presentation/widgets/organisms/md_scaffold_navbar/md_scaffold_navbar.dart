@@ -1,3 +1,4 @@
+import 'package:customer_app_mob/config/routes/app_router.dart';
 import 'package:customer_app_mob/config/routes/app_routes.dart';
 import 'package:customer_app_mob/core/utils/log.dart';
 import 'package:flutter/material.dart';
@@ -34,7 +35,7 @@ class MDScaffoldNavbar extends StatelessWidget {
           BottomNavigationBarItem(
               icon: Icon(Icons.multiline_chart_rounded), label: 'Movement'),
           BottomNavigationBarItem(
-              icon: Icon(Icons.person_2_rounded), label: 'Profile'),
+              icon: Icon(Icons.summarize_rounded), label: 'Reports'),
         ],
         currentIndex: _onTapCurrentIndex(context),
         onTap: (int index) => _onTap(index, context),
@@ -45,16 +46,18 @@ class MDScaffoldNavbar extends StatelessWidget {
   /// Navigate to the current location of the branch at the provided index when
   /// tapping an item in the BottomNavigationBar.
   void _onTap(int index, BuildContext context) {
-    log(GoRouterState.of(context).uri.path);
     switch (index) {
       case 0:
-        GoRouter.of(context).go(AppRoutes.homeScreen.fullPath);
+        AppRouter.router.go(AppRoutes.homeScreen.fullPath);
         break;
       case 1:
-        GoRouter.of(context).go(AppRoutes.inventoryScreen.fullPath);
+        AppRouter.router.go(AppRoutes.inventoryScreen.fullPath);
         break;
       case 2:
-        GoRouter.of(context).go(AppRoutes.movementScreen.fullPath);
+        AppRouter.router.go(AppRoutes.movementScreen.fullPath);
+        break;
+      case 3:
+        AppRouter.router.go(AppRoutes.reportsScreen.fullPath);
         break;
       default:
     }
@@ -65,6 +68,7 @@ class MDScaffoldNavbar extends StatelessWidget {
 
     if (location == AppRoutes.inventoryScreen.fullPath) return 1;
     if (location == AppRoutes.movementScreen.fullPath) return 2;
+    if (location == AppRoutes.reportsScreen.fullPath) return 3;
 
     // Default to HomeScreen
     return 0;

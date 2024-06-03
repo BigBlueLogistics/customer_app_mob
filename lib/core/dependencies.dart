@@ -20,6 +20,10 @@ import 'package:customer_app_mob/core/presentation/bloc/auth/auth_bloc.dart';
 import 'package:customer_app_mob/core/data/data_sources/api/reports/reports_api.dart';
 import 'package:customer_app_mob/core/data/repository/reports_repository.dart';
 import 'package:customer_app_mob/core/usecases/reports/get_reports.dart';
+import 'package:customer_app_mob/core/data/data_sources/api/trucks_vans/trucks_vans_api.dart';
+import 'package:customer_app_mob/core/data/repository/trucks_vans_repository.dart';
+import 'package:customer_app_mob/core/usecases/trucks_vans/get_schedule_today.dart';
+import 'package:customer_app_mob/core/usecases/trucks_vans/get_trucks_vans_status.dart';
 
 final GetIt getIt = GetIt.instance;
 
@@ -56,6 +60,7 @@ Future<void> initializeDependencies() async {
   getIt.registerSingleton<WarehouseApi>(WarehouseApi(getIt()));
   getIt.registerSingleton<MovementApi>(MovementApi(getIt()));
   getIt.registerSingleton<ReportsApi>(ReportsApi(getIt()));
+  getIt.registerSingleton<TrucksVansApi>(TrucksVansApi(getIt()));
 
   // Repositories
   getIt.registerSingleton<AuthRepositoryImpl>(AuthRepositoryImpl(getIt()));
@@ -63,6 +68,7 @@ Future<void> initializeDependencies() async {
   getIt.registerSingleton<WarehouseImpl>(WarehouseImpl(getIt()));
   getIt.registerSingleton<MovementImpl>(MovementImpl(getIt()));
   getIt.registerSingleton<ReportsImpl>(ReportsImpl(getIt()));
+  getIt.registerSingleton<TrucksVansImpl>(TrucksVansImpl(getIt()));
 
   // Use cases
   getIt.registerSingleton<SignInUseCase>(SignInUseCase(getIt()));
@@ -72,6 +78,10 @@ Future<void> initializeDependencies() async {
   getIt.registerSingleton<MovementMaterialUseCase>(
       MovementMaterialUseCase(getIt()));
   getIt.registerSingleton<ReportsUseCase>(ReportsUseCase(getIt()));
+  getIt.registerSingleton<GetScheduleTodayUseCase>(
+      GetScheduleTodayUseCase(getIt()));
+  getIt.registerSingleton<GetTrucksVansStatusUseCase>(
+      GetTrucksVansStatusUseCase(getIt()));
 
   // Bloc
   getIt.registerFactory<AuthBloc>(() => AuthBloc(getIt()));

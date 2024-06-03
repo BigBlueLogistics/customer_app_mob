@@ -1,3 +1,4 @@
+import 'package:customer_app_mob/core/presentation/screens/trucks_vans/trucks_vans.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -37,14 +38,18 @@ class AppRouter {
           GoRoute(
               path: AppRoutes.forgotPathScreen.path,
               builder: (context, state) => const ForgotScreen()),
+          GoRoute(
+              path: AppRoutes.homeScreen.path,
+              builder: (context, state) => HomeScreen()),
+          GoRoute(
+              path: AppRoutes.trucksVansScreen.path,
+              builder: (context, state) =>
+                  TrucksVansScreen(key: state.pageKey)),
           ShellRoute(
             parentNavigatorKey: _rootNavigatorKey,
             builder: (context, state, Widget child) =>
                 MDScaffoldNavbar(child: child),
             routes: [
-              GoRoute(
-                  path: AppRoutes.homeScreen.path,
-                  builder: (context, state) => HomeScreen()),
               GoRoute(
                   path: AppRoutes.inventoryScreen.path,
                   builder: (context, state) =>

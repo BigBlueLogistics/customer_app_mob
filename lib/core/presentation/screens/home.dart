@@ -33,7 +33,7 @@ class HomeScreen extends StatelessWidget {
     },
     {
       'title': 'Trucks & Vans',
-      'route': null,
+      'route': AppRoutes.trucksVansScreen.fullPath,
       'icon': const Icon(Icons.local_shipping_rounded,
           color: Color.fromARGB(255, 22, 121, 171))
     },
