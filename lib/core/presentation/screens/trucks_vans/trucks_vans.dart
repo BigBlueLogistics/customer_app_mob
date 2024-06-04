@@ -1,4 +1,5 @@
 import 'package:customer_app_mob/core/dependencies.dart';
+import 'package:customer_app_mob/core/domain/entities/trucks_vans.dart';
 import 'package:customer_app_mob/core/domain/repository/trucks_vans_repository.dart';
 import 'package:customer_app_mob/core/presentation/bloc/auth/auth_bloc.dart';
 import 'package:customer_app_mob/core/presentation/screens/trucks_vans/data/data.dart';
@@ -29,6 +30,7 @@ class _TrucksVansScreenState extends State<TrucksVansScreen> {
   List<Map<String, dynamic>> _trucksVansStatusList = [];
   LoadingStatus _isLoadingSchedule = LoadingStatus.idle;
   LoadingStatus _isLoadingTrucksVans = LoadingStatus.idle;
+  bool _isOnRefresh = false;
   int _currentTabIndex = 0;
 
   @override
@@ -36,7 +38,7 @@ class _TrucksVansScreenState extends State<TrucksVansScreen> {
     super.initState();
   }
 
-  void getScheduleToday() async {
+  Future<DataState<TrucksVansEntity>> getScheduleToday() async {
     setState(() => _isLoadingSchedule = LoadingStatus.loading);
     final res = await getIt<GetScheduleTodayUseCase>().call(TrucksVansParams(
         customerCode: _filteringData.value.customerCode.toString()));
@@ -51,9 +53,10 @@ class _TrucksVansScreenState extends State<TrucksVansScreen> {
         _isLoadingSchedule = LoadingStatus.failed;
       });
     }
+    return res;
   }
 
-  void getTrucksVansStatus() async {
+  Future<DataState<TrucksVansEntity>> getTrucksVansStatus() async {
     setState(() => _isLoadingTrucksVans = LoadingStatus.loading);
     final res = await getIt<GetTrucksVansStatusUseCase>().call(TrucksVansParams(
         customerCode: _filteringData.value.customerCode.toString()));
@@ -68,6 +71,7 @@ class _TrucksVansScreenState extends State<TrucksVansScreen> {
         _isLoadingTrucksVans = LoadingStatus.failed;
       });
     }
+    return res;
   }
 
   void onSelectCustomer(String customerCode) {
@@ -84,17 +88,21 @@ class _TrucksVansScreenState extends State<TrucksVansScreen> {
     });
   }
 
+  Future<DataState<TrucksVansEntity>> generateData() {
+    switch (_currentTabIndex) {
+      case 1:
+        return getTrucksVansStatus();
+      default:
+        return getScheduleToday();
+    }
+  }
+
   void onFilterData() {
-    // Close filtering modal
     if (_filteringData.value.customerCode != null) {
+      // Close filtering modal
       Navigator.of(context).pop();
 
-      if (_currentTabIndex == 0) {
-        getScheduleToday();
-      }
-      if (_currentTabIndex == 1) {
-        getTrucksVansStatus();
-      }
+      generateData();
     }
   }
 
@@ -105,7 +113,11 @@ class _TrucksVansScreenState extends State<TrucksVansScreen> {
   }
 
   Future<void> onRefresh() async {
-    onFilterData();
+    if (_filteringData.value.customerCode != null) {
+      setState(() => _isOnRefresh = true);
+      await generateData();
+      setState(() => _isOnRefresh = false);
+    }
   }
 
   @override
@@ -129,8 +141,9 @@ class _TrucksVansScreenState extends State<TrucksVansScreen> {
           onClearData: onClearData,
         ),
         MDLoadingFullScreen(
-          isLoading: _isLoadingSchedule == LoadingStatus.loading ||
-              _isLoadingTrucksVans == LoadingStatus.loading,
+          isLoading: (_isLoadingSchedule == LoadingStatus.loading ||
+                  _isLoadingTrucksVans == LoadingStatus.loading) &&
+              _isOnRefresh == false,
         )
       ],
     );
