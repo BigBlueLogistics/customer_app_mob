@@ -131,6 +131,7 @@ class _TrucksVansScreenState extends State<TrucksVansScreen> {
         TrucksVansTemplate(
           customerList: customerList,
           scheduleList: _scheduleTodayList,
+          trucksVansStatusList: _trucksVansStatusList,
           searchText: _searchText,
           filteringData: _filteringData,
           currentTabIndex: _currentTabIndex,
