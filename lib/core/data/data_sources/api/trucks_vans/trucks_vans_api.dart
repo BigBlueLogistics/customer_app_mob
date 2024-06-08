@@ -12,8 +12,16 @@ abstract class TrucksVansApi {
   Future<HttpResponse<TrucksVansModel>> getScheduleToday(
     @Query('customerCode') String customerCode,
   );
+
   @GET('/trucks-vans/status')
   Future<HttpResponse<TrucksVansModel>> getTrucksVansStatus(
     @Query('customerCode') String customerCode,
+  );
+
+  @GET('/trucks-vans/status-details')
+  Future<HttpResponse<TrucksVansStatusDetailsModel>> getStatusDetails(
+    @Query('customerCode') String customerCode,
+    @Query('vanMonitorNo') String vanMonitorNo,
+    @Query('action') String action,
   );
 }

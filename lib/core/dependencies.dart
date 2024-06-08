@@ -1,3 +1,4 @@
+import 'package:customer_app_mob/core/usecases/trucks_vans/get_status_details.dart';
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
@@ -47,7 +48,7 @@ Future<void> initializeDependencies() async {
         requestHeader: true,
         requestBody: true,
         responseHeader: true,
-        responseBody: false,
+        responseBody: true,
       ),
     ]);
 
@@ -82,6 +83,8 @@ Future<void> initializeDependencies() async {
       GetScheduleTodayUseCase(getIt()));
   getIt.registerSingleton<GetTrucksVansStatusUseCase>(
       GetTrucksVansStatusUseCase(getIt()));
+  getIt.registerSingleton<GetStatusDetailsUseCase>(
+      GetStatusDetailsUseCase(getIt()));
 
   // Bloc
   getIt.registerFactory<AuthBloc>(() => AuthBloc(getIt()));

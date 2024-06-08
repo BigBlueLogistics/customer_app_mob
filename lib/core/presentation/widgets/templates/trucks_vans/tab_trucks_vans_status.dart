@@ -1,23 +1,23 @@
-import 'dart:math';
+import 'dart:math' hide log;
 
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:customer_app_mob/core/utils/utils.dart';
+import 'package:customer_app_mob/core/presentation/screens/error.dart';
+import 'package:customer_app_mob/core/utils/log.dart';
+import 'package:customer_app_mob/core/domain/entities/trucks_vans.dart';
+import 'package:customer_app_mob/core/presentation/widgets/templates/trucks_vans/modal_status_details/modal_status_detail.dart';
 
 class TabTrucksVansStatus extends StatelessWidget {
-  const TabTrucksVansStatus({
-    super.key,
-    required this.onRefresh,
-    required this.data,
-  });
+  const TabTrucksVansStatus(
+      {super.key,
+      required this.onRefresh,
+      required this.data,
+      required this.getStatusDetails});
 
   final Future<void> Function() onRefresh;
   final List<Map<String, dynamic>> data;
-
-  String formatArrivalDate(String date) {
-    DateTime formattedDate = DateTime.parse(date).toLocal();
-
-    return DateFormat.yMMMd().format(formattedDate);
-  }
+  final Future<DataState<TrucksVansStatusDetailsEntity>> Function(
+      String vanMonitorNo) getStatusDetails;
 
   String whLocation(String location) {
     if (location.isNotEmpty) {
@@ -69,10 +69,7 @@ class TabTrucksVansStatus extends StatelessWidget {
         angle: 45 * pi / 180,
         child: const Padding(
           padding: EdgeInsets.all(8.0),
-          child: Icon(
-            Icons.power_rounded,
-            color: Colors.green,
-          ),
+          child: Icon(Icons.power_rounded, color: Colors.green, size: 28),
         ),
       );
     }
@@ -80,9 +77,7 @@ class TabTrucksVansStatus extends StatelessWidget {
     if (plugStatus != null && plugStatus == 'PLUGGED-OUT') {
       return const Padding(
         padding: EdgeInsets.all(8.0),
-        child: Icon(
-          Icons.power_off_rounded,
-        ),
+        child: Icon(Icons.power_off_rounded, size: 28),
       );
     }
 
@@ -133,7 +128,7 @@ class TabTrucksVansStatus extends StatelessWidget {
                           rowLabel(
                               label: 'Arrival: ',
                               value:
-                                  '${formatArrivalDate(statusData['arrivaldate'])} (${arrivalAgeByDay(statusData['arrivaldate'])} day\'s)'),
+                                  '${formatDate(statusData['arrivaldate'])} (${arrivalAgeByDay(statusData['arrivaldate'])} day\'s)'),
                           rowLabel(
                               label: 'Status: ',
                               value: status(
@@ -147,10 +142,43 @@ class TabTrucksVansStatus extends StatelessWidget {
                         children: [
                           plugIcon(statusData['pluggedstatus']),
                           IconButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                showModalBottomSheet(
+                                    context: context,
+                                    isDismissible: true,
+                                    showDragHandle: false,
+                                    enableDrag: false,
+                                    useSafeArea: true,
+                                    isScrollControlled: true,
+                                    scrollControlDisabledMaxHeightRatio: 1,
+                                    builder: (context) {
+                                      return FutureBuilder(
+                                        future: getStatusDetails(
+                                            statusData['vmrno']),
+                                        builder: (context, snapshot) {
+                                          if (snapshot.hasError ||
+                                              snapshot.data is DataFailed) {
+                                            return ErrorScreen(Exception(
+                                                snapshot.data?.error?.response
+                                                        ?.statusMessage ??
+                                                    snapshot
+                                                        .data?.error?.type));
+                                          } else {
+                                            return ModalStatusDetails(
+                                                connectionState:
+                                                    snapshot.connectionState,
+                                                dataDetails:
+                                                    snapshot.data?.resp!.data ??
+                                                        {});
+                                          }
+                                        },
+                                      );
+                                    });
+                              },
                               icon: Icon(
                                 Icons.visibility_rounded,
                                 color: Theme.of(context).primaryColorLight,
+                                size: 28,
                               ))
                         ],
                       ),

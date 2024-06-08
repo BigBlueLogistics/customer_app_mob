@@ -9,4 +9,13 @@ extension Validation on String {
         RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\><*~]).{8,}');
     return passwordPatten.hasMatch(this);
   }
+
+  bool get isValidDateString {
+    try {
+      final DateTime parsedDate = DateTime.parse(this);
+      return parsedDate.toIso8601String().isNotEmpty;
+    } catch (e) {
+      return false;
+    }
+  }
 }

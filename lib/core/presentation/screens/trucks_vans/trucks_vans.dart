@@ -6,6 +6,7 @@ import 'package:customer_app_mob/core/presentation/screens/trucks_vans/data/data
 import 'package:customer_app_mob/core/presentation/widgets/organisms/md_loading/md_loading.dart';
 import 'package:customer_app_mob/core/shared/enums/loading_status.dart';
 import 'package:customer_app_mob/core/usecases/trucks_vans/get_schedule_today.dart';
+import 'package:customer_app_mob/core/usecases/trucks_vans/get_status_details.dart';
 import 'package:customer_app_mob/core/usecases/trucks_vans/get_trucks_vans_status.dart';
 import 'package:customer_app_mob/core/utils/data_state.dart';
 import 'package:flutter/material.dart';
@@ -28,8 +29,10 @@ class _TrucksVansScreenState extends State<TrucksVansScreen> {
 
   List<Map<String, dynamic>> _scheduleTodayList = [];
   List<Map<String, dynamic>> _trucksVansStatusList = [];
+  List<Map<String, dynamic>> _statusDetails = [];
   LoadingStatus _isLoadingSchedule = LoadingStatus.idle;
   LoadingStatus _isLoadingTrucksVans = LoadingStatus.idle;
+  LoadingStatus _isLoadingStatusDetails = LoadingStatus.idle;
   bool _isOnRefresh = false;
   int _currentTabIndex = 0;
 
@@ -74,6 +77,15 @@ class _TrucksVansScreenState extends State<TrucksVansScreen> {
     return res;
   }
 
+  Future<DataState<TrucksVansStatusDetailsEntity>> getStatusDetails(
+      String vanMonitorNo) async {
+    return getIt<GetStatusDetailsUseCase>().call(TrucksVansStatusDetailsParams(
+      customerCode: _filteringData.value.customerCode.toString(),
+      action: 'view',
+      vanMonitorNo: vanMonitorNo,
+    ));
+  }
+
   void onSelectCustomer(String customerCode) {
     _filteringData.value =
         _filteringData.value.copyWith(customerCode: customerCode);
@@ -88,8 +100,8 @@ class _TrucksVansScreenState extends State<TrucksVansScreen> {
     });
   }
 
-  Future<DataState<TrucksVansEntity>> generateData() {
-    switch (_currentTabIndex) {
+  Future<DataState<TrucksVansEntity>> generateData(int tabIndex) {
+    switch (tabIndex) {
       case 1:
         return getTrucksVansStatus();
       default:
@@ -102,7 +114,7 @@ class _TrucksVansScreenState extends State<TrucksVansScreen> {
       // Close filtering modal
       Navigator.of(context).pop();
 
-      generateData();
+      generateData(_currentTabIndex);
     }
   }
 
@@ -110,12 +122,17 @@ class _TrucksVansScreenState extends State<TrucksVansScreen> {
     setState(() {
       _currentTabIndex = tabIndex;
     });
+
+    // Load data
+    if (_filteringData.value.customerCode != null) {
+      generateData(tabIndex);
+    }
   }
 
   Future<void> onRefresh() async {
     if (_filteringData.value.customerCode != null) {
       setState(() => _isOnRefresh = true);
-      await generateData();
+      await generateData(_currentTabIndex);
       setState(() => _isOnRefresh = false);
     }
   }
@@ -135,6 +152,7 @@ class _TrucksVansScreenState extends State<TrucksVansScreen> {
           searchText: _searchText,
           filteringData: _filteringData,
           currentTabIndex: _currentTabIndex,
+          getStatusDetails: getStatusDetails,
           onTapCurrentTab: onTapCurrentTab,
           onRefresh: onRefresh,
           onSelectCustomer: onSelectCustomer,

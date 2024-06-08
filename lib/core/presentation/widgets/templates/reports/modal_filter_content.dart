@@ -46,7 +46,7 @@ class ModalFilterContent extends StatelessWidget {
     );
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+      padding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 12.0),
       child: SizedBox(
         child: ValueListenableBuilder<FilterValueNotifier>(
           valueListenable: filteringData,
@@ -110,12 +110,7 @@ class ModalFilterContent extends StatelessWidget {
               ],
             );
 
-            return SingleChildScrollView(
-                child: Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 8.0, vertical: 12.0),
-              child: column,
-            ));
+            return SingleChildScrollView(child: column);
           },
         ),
       ),

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:customer_app_mob/core/domain/entities/trucks_vans.dart';
+import 'package:customer_app_mob/core/utils/data_state.dart';
 import 'package:customer_app_mob/core/presentation/screens/trucks_vans/data/data.dart';
 import 'package:customer_app_mob/core/presentation/widgets/organisms/md_scaffold/md_scaffold.dart';
 import 'package:customer_app_mob/core/presentation/widgets/templates/trucks_vans/tab_trucks_vans_status.dart';
@@ -15,6 +17,7 @@ class TrucksVansTemplate extends StatelessWidget {
     required this.searchText,
     required this.onRefresh,
     required this.filteringData,
+    required this.getStatusDetails,
     required this.onSelectCustomer,
     required this.onTapCurrentTab,
     required this.onFilterData,
@@ -28,6 +31,8 @@ class TrucksVansTemplate extends StatelessWidget {
   final TextEditingController searchText;
   final Future<void> Function() onRefresh;
   final ValueNotifier<FilterValueNotifier> filteringData;
+  final Future<DataState<TrucksVansStatusDetailsEntity>> Function(
+      String vanMonitorNo) getStatusDetails;
   final ValueChanged<String> onSelectCustomer;
   final ValueChanged<int> onTapCurrentTab;
   final VoidCallback onFilterData;
@@ -83,7 +88,10 @@ class TrucksVansTemplate extends StatelessWidget {
         ],
         child: TabBarView(children: [
           TabScheduleToday(onRefresh: onRefresh, data: scheduleList),
-          TabTrucksVansStatus(onRefresh: onRefresh, data: trucksVansStatusList)
+          TabTrucksVansStatus(
+              onRefresh: onRefresh,
+              data: trucksVansStatusList,
+              getStatusDetails: getStatusDetails)
         ]),
       ),
     );

@@ -16,3 +16,18 @@ class TrucksVansModel extends TrucksVansEntity {
 
   static const empty = TrucksVansModel();
 }
+
+class TrucksVansStatusDetailsModel extends TrucksVansStatusDetailsEntity {
+  const TrucksVansStatusDetailsModel({super.data, super.message, super.status});
+
+  factory TrucksVansStatusDetailsModel.fromJson(Map<String, dynamic> json) {
+    return TrucksVansStatusDetailsModel(
+        data: json['data'], message: json['message'], status: json['status']);
+  }
+
+  Map<String, dynamic> toJson() {
+    return {'data': data, 'message': message, 'status': status};
+  }
+
+  static const empty = TrucksVansStatusDetailsModel();
+}
