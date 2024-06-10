@@ -1,19 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:customer_app_mob/config/routes/app_router.dart';
 import 'package:customer_app_mob/core/presentation/widgets/organisms/md_scaffold/md_scaffold.dart';
 import 'package:customer_app_mob/core/presentation/widgets/templates/home/menu_card.dart';
 
 class HomeTemplate extends StatelessWidget {
-  const HomeTemplate({
-    super.key,
-    required this.username,
-    required this.searchText,
-    required this.menuList,
-  });
+  const HomeTemplate(
+      {super.key,
+      required this.username,
+      required this.searchText,
+      required this.menuList,
+      required this.onTapMenu,
+      required this.isMenuTapped,
+      required this.currentRouteName});
 
   final String username;
   final TextEditingController searchText;
   final List<Map<String, dynamic>> menuList;
+  final ValueChanged<String> onTapMenu;
+  final bool isMenuTapped;
+  final String currentRouteName;
 
   @override
   Widget build(BuildContext context) {
@@ -50,12 +54,18 @@ class HomeTemplate extends StatelessWidget {
                 itemCount: menuList.length,
                 itemBuilder: (context, index) {
                   return InkWell(
+                    key: key,
                     onTap: menuList[index]['route'] != null
-                        ? () => AppRouter.router.go(menuList[index]['route'])
+                        ? () {
+                            onTapMenu(menuList[index]['route']);
+                          }
                         : null,
                     child: MenuCard(
+                      key: key,
                       menuList: menuList,
                       index: index,
+                      isMenuTapped: isMenuTapped &&
+                          menuList[index]['route'] == currentRouteName,
                     ),
                   );
                 },

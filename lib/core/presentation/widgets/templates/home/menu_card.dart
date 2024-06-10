@@ -5,15 +5,19 @@ class MenuCard extends StatelessWidget {
     super.key,
     required this.menuList,
     required this.index,
+    required this.isMenuTapped,
   });
 
   final List<Map<String, dynamic>> menuList;
   final int index;
+  final bool isMenuTapped;
 
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: Colors.blue,
+      color: isMenuTapped
+          ? Theme.of(context).primaryColorLight.withOpacity(0.3)
+          : Theme.of(context).primaryColorLight,
       child: Padding(
         padding: const EdgeInsets.only(left: 20.0, top: 20.0, bottom: 5.0),
         child: Column(
