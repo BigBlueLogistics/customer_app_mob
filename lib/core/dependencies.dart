@@ -1,4 +1,3 @@
-import 'package:customer_app_mob/core/usecases/trucks_vans/get_status_details.dart';
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
@@ -6,21 +5,22 @@ import 'package:customer_app_mob/config/dio/auth_interceptor.dart';
 import 'package:customer_app_mob/config/constants/url.dart';
 import 'package:customer_app_mob/core/data/data_sources/api/movement/movement_api.dart';
 import 'package:customer_app_mob/core/data/repository/movement_repository.dart';
-import 'package:customer_app_mob/core/usecases/movement/get_material.dart';
 import 'package:customer_app_mob/core/usecases/movement/get_movement.dart';
+import 'package:customer_app_mob/core/usecases/trucks_vans/get_status_details.dart';
+import 'package:customer_app_mob/core/usecases/warehouse/get_warehouse.dart';
+import 'package:customer_app_mob/core/usecases/movement/get_material.dart';
+import 'package:customer_app_mob/core/usecases/inventory/get_inventory.dart';
+import 'package:customer_app_mob/core/usecases/reports/get_reports.dart';
+import 'package:customer_app_mob/core/usecases/auth/sign_in.dart';
 import 'package:customer_app_mob/core/data/data_sources/api/warehouse/warehouse_api.dart';
 import 'package:customer_app_mob/core/data/repository/warehouse_repository.dart';
-import 'package:customer_app_mob/core/usecases/warehouse/get_warehouse.dart';
 import 'package:customer_app_mob/core/data/data_sources/api/inventory/inventory_api.dart';
 import 'package:customer_app_mob/core/data/repository/inventory_repository.dart';
-import 'package:customer_app_mob/core/usecases/inventory/get_inventory.dart';
 import 'package:customer_app_mob/core/data/data_sources/api/auth/auth_api.dart';
 import 'package:customer_app_mob/core/data/repository/auth_repository.dart';
-import 'package:customer_app_mob/core/usecases/auth/sign_in.dart';
 import 'package:customer_app_mob/core/presentation/bloc/auth/auth_bloc.dart';
 import 'package:customer_app_mob/core/data/data_sources/api/reports/reports_api.dart';
 import 'package:customer_app_mob/core/data/repository/reports_repository.dart';
-import 'package:customer_app_mob/core/usecases/reports/get_reports.dart';
 import 'package:customer_app_mob/core/data/data_sources/api/trucks_vans/trucks_vans_api.dart';
 import 'package:customer_app_mob/core/data/repository/trucks_vans_repository.dart';
 import 'package:customer_app_mob/core/usecases/trucks_vans/get_schedule_today.dart';
@@ -48,7 +48,7 @@ Future<void> initializeDependencies() async {
         requestHeader: true,
         requestBody: true,
         responseHeader: true,
-        responseBody: true,
+        responseBody: false,
       ),
     ]);
 

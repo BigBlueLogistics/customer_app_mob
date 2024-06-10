@@ -18,7 +18,7 @@ class MDLoadingFullScreen extends StatelessWidget {
       alignment: Alignment.center,
       children: [
         Opacity(
-          opacity: 0.8,
+          opacity: 0.2,
           child: ModalBarrier(dismissible: false, color: Colors.black54),
         ),
         Center(

@@ -22,23 +22,42 @@ class TrucksVansScreen extends StatefulWidget {
   State<TrucksVansScreen> createState() => _TrucksVansScreenState();
 }
 
-class _TrucksVansScreenState extends State<TrucksVansScreen> {
+class _TrucksVansScreenState extends State<TrucksVansScreen>
+    with SingleTickerProviderStateMixin {
   final TextEditingController _searchText = TextEditingController();
-  final ValueNotifier<FilterValueNotifier> _filteringData =
-      ValueNotifier(FilterValueNotifier.empty);
+  late TabController tabControllerStatus;
+  late ValueNotifier<FilterValueNotifier> _filteringData;
 
   List<Map<String, dynamic>> _scheduleTodayList = [];
   List<Map<String, dynamic>> _trucksVansStatusList = [];
-  List<Map<String, dynamic>> _statusDetails = [];
   LoadingStatus _isLoadingSchedule = LoadingStatus.idle;
   LoadingStatus _isLoadingTrucksVans = LoadingStatus.idle;
-  LoadingStatus _isLoadingStatusDetails = LoadingStatus.idle;
   bool _isOnRefresh = false;
-  int _currentTabIndex = 0;
 
   @override
   void initState() {
     super.initState();
+    _filteringData = ValueNotifier(FilterValueNotifier.empty);
+
+    tabControllerStatus =
+        TabController(length: tabsStatus.length, vsync: this, initialIndex: 0);
+    tabControllerStatus.addListener(handleTabChanging);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+
+    tabControllerStatus.dispose();
+    tabControllerStatus.removeListener(handleTabChanging);
+  }
+
+  void handleTabChanging() {
+    if (!tabControllerStatus.indexIsChanging &&
+        _filteringData.value.customerCode != null) {
+      log('handleTabChangingzz');
+      generateData(tabControllerStatus.index);
+    }
   }
 
   Future<DataState<TrucksVansEntity>> getScheduleToday() async {
@@ -114,25 +133,14 @@ class _TrucksVansScreenState extends State<TrucksVansScreen> {
       // Close filtering modal
       Navigator.of(context).pop();
 
-      generateData(_currentTabIndex);
-    }
-  }
-
-  void onTapCurrentTab(int tabIndex) {
-    setState(() {
-      _currentTabIndex = tabIndex;
-    });
-
-    // Load data
-    if (_filteringData.value.customerCode != null) {
-      generateData(tabIndex);
+      generateData(tabControllerStatus.index);
     }
   }
 
   Future<void> onRefresh() async {
     if (_filteringData.value.customerCode != null) {
       setState(() => _isOnRefresh = true);
-      await generateData(_currentTabIndex);
+      await generateData(tabControllerStatus.index);
       setState(() => _isOnRefresh = false);
     }
   }
@@ -151,9 +159,9 @@ class _TrucksVansScreenState extends State<TrucksVansScreen> {
           trucksVansStatusList: _trucksVansStatusList,
           searchText: _searchText,
           filteringData: _filteringData,
-          currentTabIndex: _currentTabIndex,
+          tabsStatus: tabsStatus,
+          tabControllerStatus: tabControllerStatus,
           getStatusDetails: getStatusDetails,
-          onTapCurrentTab: onTapCurrentTab,
           onRefresh: onRefresh,
           onSelectCustomer: onSelectCustomer,
           onFilterData: onFilterData,

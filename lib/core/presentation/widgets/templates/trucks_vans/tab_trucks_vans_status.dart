@@ -100,7 +100,7 @@ class TabTrucksVansStatus extends StatelessWidget {
                   return Card(
                     key: ValueKey(index.toString()),
                     margin: const EdgeInsets.symmetric(vertical: 6),
-                    elevation: 4,
+                    elevation: 1,
                     shape: const RoundedRectangleBorder(
                         borderRadius:
                             BorderRadius.all(Radius.elliptical(5, 5))),
@@ -115,73 +115,62 @@ class TabTrucksVansStatus extends StatelessWidget {
                             text: '(VMR ${statusData['vmrno']})',
                             style: const TextStyle(fontSize: 13.0)),
                       ])),
-                      subtitle: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          rowLabel(
-                              label: 'Location: ',
-                              value: whLocation(statusData['location'])),
-                          rowLabel(
-                              label: 'Type / Size: ',
-                              value:
-                                  '${statusData['type']} / ${statusData['size']}'),
-                          rowLabel(
-                              label: 'Arrival: ',
-                              value:
-                                  '${formatDate(statusData['arrivaldate'])} (${arrivalAgeByDay(statusData['arrivaldate'])} day\'s)'),
-                          rowLabel(
-                              label: 'Status: ',
-                              value: status(
-                                  whdate: statusData['whdate'],
-                                  currentstatus: statusData['currentstatus'],
-                                  arrivalstatus: statusData['arrivalstatus'],
-                                  whschedule: statusData['whschedule']))
-                        ],
+                      subtitle: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            rowLabel(
+                                label: 'Location: ',
+                                value: whLocation(statusData['location'])),
+                            rowLabel(
+                                label: 'Type / Size: ',
+                                value:
+                                    '${statusData['type']} / ${statusData['size']}'),
+                            rowLabel(
+                                label: 'Arrival: ',
+                                value:
+                                    '${formatDate(statusData['arrivaldate'])} (${arrivalAgeByDay(statusData['arrivaldate'])} day\'s)'),
+                            rowLabel(
+                                label: 'Status: ',
+                                value: status(
+                                    whdate: statusData['whdate'],
+                                    currentstatus: statusData['currentstatus'],
+                                    arrivalstatus: statusData['arrivalstatus'],
+                                    whschedule: statusData['whschedule']))
+                          ],
+                        ),
                       ),
-                      trailing: Wrap(
-                        children: [
-                          plugIcon(statusData['pluggedstatus']),
-                          IconButton(
-                              onPressed: () {
-                                showModalBottomSheet(
-                                    context: context,
-                                    isDismissible: true,
-                                    showDragHandle: false,
-                                    enableDrag: false,
-                                    useSafeArea: true,
-                                    isScrollControlled: true,
-                                    scrollControlDisabledMaxHeightRatio: 1,
-                                    builder: (context) {
-                                      return FutureBuilder(
-                                        future: getStatusDetails(
-                                            statusData['vmrno']),
-                                        builder: (context, snapshot) {
-                                          if (snapshot.hasError ||
-                                              snapshot.data is DataFailed) {
-                                            return ErrorScreen(Exception(
-                                                snapshot.data?.error?.response
-                                                        ?.statusMessage ??
-                                                    snapshot
-                                                        .data?.error?.type));
-                                          } else {
-                                            return ModalStatusDetails(
-                                                connectionState:
-                                                    snapshot.connectionState,
-                                                dataDetails:
-                                                    snapshot.data?.resp!.data ??
-                                                        {});
-                                          }
-                                        },
-                                      );
-                                    });
-                              },
-                              icon: Icon(
-                                Icons.visibility_rounded,
-                                color: Theme.of(context).primaryColorLight,
-                                size: 28,
-                              ))
-                        ],
-                      ),
+                      onTap: () {
+                        showModalBottomSheet(
+                            context: context,
+                            isDismissible: true,
+                            showDragHandle: false,
+                            enableDrag: false,
+                            useSafeArea: true,
+                            isScrollControlled: true,
+                            scrollControlDisabledMaxHeightRatio: 1,
+                            builder: (context) {
+                              return FutureBuilder(
+                                future: getStatusDetails(statusData['vmrno']),
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasError ||
+                                      snapshot.data is DataFailed) {
+                                    return ErrorScreen(Exception(snapshot.data
+                                            ?.error?.response?.statusMessage ??
+                                        snapshot.data?.error?.type));
+                                  } else {
+                                    return ModalStatusDetails(
+                                        connectionState:
+                                            snapshot.connectionState,
+                                        dataDetails:
+                                            snapshot.data?.resp!.data ?? {});
+                                  }
+                                },
+                              );
+                            });
+                      },
+                      trailing: plugIcon(statusData['pluggedstatus']),
                       contentPadding: const EdgeInsets.symmetric(
                           horizontal: 16.0, vertical: 4.0),
                     ),

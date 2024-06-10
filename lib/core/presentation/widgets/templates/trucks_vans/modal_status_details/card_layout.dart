@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 
 class CardLayout extends StatelessWidget {
   const CardLayout({
@@ -15,7 +14,6 @@ class CardLayout extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: double.infinity,
-      // height: 150,
       child: Card.outlined(
         shape: RoundedRectangleBorder(
             side: BorderSide(color: Colors.grey.shade200),
