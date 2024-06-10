@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:customer_app_mob/config/constants/url.dart';
 import 'package:customer_app_mob/core/utils/utils.dart';
-import './card_layout.dart';
+import 'card_layout.dart';
 
 class ModalStatusDetails extends StatelessWidget {
   const ModalStatusDetails(
@@ -62,7 +63,7 @@ class ModalStatusDetails extends StatelessWidget {
     return const Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text('No data available.'),
+        Text(AppConstant.noDataAvailable),
       ],
     );
   }
@@ -73,7 +74,7 @@ class ModalStatusDetails extends StatelessWidget {
       child: remarks != null && remarks.toString().trim().isNotEmpty
           ? Text(remarks)
           : const Text(
-              'No data available.',
+              AppConstant.noDataAvailable,
               textAlign: TextAlign.center,
             ),
     );
@@ -186,8 +187,8 @@ class ModalStatusDetails extends StatelessWidget {
         ConnectionState.active ||
         ConnectionState.waiting =>
           const Center(heightFactor: 4, child: CircularProgressIndicator()),
-        ConnectionState.none =>
-          const Center(heightFactor: 4, child: Text('No data available')),
+        ConnectionState.none => const Center(
+            heightFactor: 4, child: Text(AppConstant.noDataAvailable)),
         ConnectionState.done => cardDetails(context),
       },
     );

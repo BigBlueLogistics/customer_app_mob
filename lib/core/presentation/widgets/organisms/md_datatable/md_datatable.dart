@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:customer_app_mob/config/constants/url.dart';
 
 /// A reusable widget [PaginatedDataTable].
 
@@ -91,7 +92,7 @@ class MDDataTable extends StatelessWidget {
               borderRadius: BorderRadius.all(Radius.elliptical(3, 3))),
           child: Center(
             child: Text(
-              'No data available.',
+              AppConstant.noDataAvailable,
               style: Theme.of(context).textTheme.bodySmall,
             ),
           ),

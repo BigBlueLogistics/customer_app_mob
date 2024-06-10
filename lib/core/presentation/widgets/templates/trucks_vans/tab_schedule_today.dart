@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:customer_app_mob/config/constants/url.dart';
 
 class TabScheduleToday extends StatelessWidget {
   const TabScheduleToday({
@@ -45,7 +46,7 @@ class TabScheduleToday extends StatelessWidget {
                   return Card(
                     key: ValueKey(index.toString()),
                     margin: const EdgeInsets.symmetric(vertical: 6),
-                    elevation: 4,
+                    elevation: 1,
                     shape: const RoundedRectangleBorder(
                         borderRadius:
                             BorderRadius.all(Radius.elliptical(5, 5))),
@@ -71,7 +72,7 @@ class TabScheduleToday extends StatelessWidget {
                   );
                 },
               )
-            : const Center(child: Text('No data available.')),
+            : const Center(child: Text(AppConstant.noDataAvailable)),
       ),
     );
   }

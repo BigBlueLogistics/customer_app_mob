@@ -1,9 +1,9 @@
 import 'dart:math' hide log;
 
 import 'package:flutter/material.dart';
+import 'package:customer_app_mob/config/constants/url.dart';
 import 'package:customer_app_mob/core/utils/utils.dart';
 import 'package:customer_app_mob/core/presentation/screens/error.dart';
-import 'package:customer_app_mob/core/utils/log.dart';
 import 'package:customer_app_mob/core/domain/entities/trucks_vans.dart';
 import 'package:customer_app_mob/core/presentation/widgets/templates/trucks_vans/modal_status_details/modal_status_detail.dart';
 
@@ -177,7 +177,7 @@ class TabTrucksVansStatus extends StatelessWidget {
                   );
                 },
               )
-            : const Center(child: Text('No data available.')),
+            : const Center(child: Text(AppConstant.noDataAvailable)),
       ),
     );
   }
