@@ -1,4 +1,3 @@
-import 'package:customer_app_mob/core/presentation/screens/trucks_vans/trucks_vans.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -13,6 +12,8 @@ import 'package:customer_app_mob/core/presentation/screens/movement/movement.dar
 import 'package:customer_app_mob/core/presentation/screens/inventory/inventory.dart';
 import 'package:customer_app_mob/core/presentation/screens/reports/reports.dart';
 import 'package:customer_app_mob/core/presentation/screens/auth/sign_in.dart';
+import 'package:customer_app_mob/core/presentation/screens/trucks_vans/trucks_vans.dart';
+import 'package:customer_app_mob/core/presentation/screens/indicators/indicators.dart';
 import 'package:customer_app_mob/core/presentation/screens/auth/sign_up.dart';
 import 'package:customer_app_mob/core/presentation/screens/auth/forgot.dart';
 
@@ -40,11 +41,13 @@ class AppRouter {
               builder: (context, state) => const ForgotScreen()),
           GoRoute(
               path: AppRoutes.homeScreen.path,
-              builder: (context, state) => HomeScreen()),
+              builder: (context, state) => const HomeScreen()),
           GoRoute(
               path: AppRoutes.trucksVansScreen.path,
-              builder: (context, state) =>
-                  TrucksVansScreen(key: state.pageKey)),
+              builder: (context, state) => const TrucksVansScreen()),
+          GoRoute(
+              path: AppRoutes.indicatorsScreen.path,
+              builder: (context, state) => const IndicatorsScreen()),
           ShellRoute(
             parentNavigatorKey: _rootNavigatorKey,
             builder: (context, state, Widget child) =>

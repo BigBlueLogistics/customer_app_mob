@@ -25,6 +25,10 @@ import 'package:customer_app_mob/core/data/data_sources/api/trucks_vans/trucks_v
 import 'package:customer_app_mob/core/data/repository/trucks_vans_repository.dart';
 import 'package:customer_app_mob/core/usecases/trucks_vans/get_schedule_today.dart';
 import 'package:customer_app_mob/core/usecases/trucks_vans/get_trucks_vans_status.dart';
+import 'package:customer_app_mob/core/data/data_sources/api/indicators/indicators_api.dart';
+import 'package:customer_app_mob/core/data/repository/indicators_repository.dart';
+import 'package:customer_app_mob/core/usecases/indicators/get_active_sku.dart';
+import 'package:customer_app_mob/core/usecases/indicators/get_inout_bound.dart';
 
 final GetIt getIt = GetIt.instance;
 
@@ -62,6 +66,7 @@ Future<void> initializeDependencies() async {
   getIt.registerSingleton<MovementApi>(MovementApi(getIt()));
   getIt.registerSingleton<ReportsApi>(ReportsApi(getIt()));
   getIt.registerSingleton<TrucksVansApi>(TrucksVansApi(getIt()));
+  getIt.registerSingleton<IndicatorsApi>(IndicatorsApi(getIt()));
 
   // Repositories
   getIt.registerSingleton<AuthRepositoryImpl>(AuthRepositoryImpl(getIt()));
@@ -70,6 +75,7 @@ Future<void> initializeDependencies() async {
   getIt.registerSingleton<MovementImpl>(MovementImpl(getIt()));
   getIt.registerSingleton<ReportsImpl>(ReportsImpl(getIt()));
   getIt.registerSingleton<TrucksVansImpl>(TrucksVansImpl(getIt()));
+  getIt.registerSingleton<IndicatorsImpl>(IndicatorsImpl(getIt()));
 
   // Use cases
   getIt.registerSingleton<SignInUseCase>(SignInUseCase(getIt()));
@@ -85,6 +91,8 @@ Future<void> initializeDependencies() async {
       GetTrucksVansStatusUseCase(getIt()));
   getIt.registerSingleton<GetStatusDetailsUseCase>(
       GetStatusDetailsUseCase(getIt()));
+  getIt.registerSingleton<GetActiveSkuUseCase>(GetActiveSkuUseCase(getIt()));
+  getIt.registerSingleton<GetInOutboundUseCase>(GetInOutboundUseCase(getIt()));
 
   // Bloc
   getIt.registerFactory<AuthBloc>(() => AuthBloc(getIt()));

@@ -22,4 +22,6 @@ final class AppRoutes {
       _RoutePath(path: 'reports', fullPath: '/reports');
   static const trucksVansScreen =
       _RoutePath(path: 'trucks-vans', fullPath: '/trucks-vans');
+  static const indicatorsScreen =
+      _RoutePath(path: 'indicators', fullPath: '/indicators');
 }

@@ -10,7 +10,7 @@ ThemeData lightMode = ThemeData(
     primary: Color.fromRGBO(26, 115, 232, 1),
     secondary: Color(0x007b809a),
   ),
-  scaffoldBackgroundColor: Color.fromRGBO(239, 246, 255, 1),
+  scaffoldBackgroundColor: const Color.fromRGBO(239, 246, 255, 1),
   textTheme: const TextTheme(
     headlineSmall: TextStyle(
       color: Color.fromARGB(255, 6, 25, 51),
@@ -19,7 +19,7 @@ ThemeData lightMode = ThemeData(
   dataTableTheme: DataTableThemeData(
     headingTextStyle:
         const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-    headingRowColor: MaterialStateProperty.resolveWith(
+    headingRowColor: WidgetStateProperty.resolveWith(
       (states) => lightMode.primaryColor,
     ),
   ),

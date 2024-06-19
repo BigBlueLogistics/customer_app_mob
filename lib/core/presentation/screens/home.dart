@@ -37,7 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
     },
     {
       'title': 'Indicators',
-      'route': null,
+      'route': AppRoutes.indicatorsScreen.fullPath,
       'icon': const Icon(Icons.move_down_rounded,
           color: Color.fromARGB(255, 22, 121, 171))
     },
