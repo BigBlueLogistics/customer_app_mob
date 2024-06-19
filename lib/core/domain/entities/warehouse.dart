@@ -1,5 +1,5 @@
-import './response.dart';
+import 'response.dart';
 
-class WarehouseEntity extends ResponseEntity {
+class WarehouseEntity extends ResponseEntity<List<TResponseData>> {
   const WarehouseEntity({super.data, super.message, super.status});
 }

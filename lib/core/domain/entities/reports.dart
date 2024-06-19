@@ -1,5 +1,5 @@
-import 'package:customer_app_mob/core/domain/entities/response.dart';
+import 'response.dart';
 
-class ReportsEntity extends ResponseEntity {
+class ReportsEntity extends ResponseEntity<List<TResponseData>> {
   const ReportsEntity({super.data, super.message, super.status});
 }
