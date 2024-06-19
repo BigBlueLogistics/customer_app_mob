@@ -14,14 +14,19 @@ class MDLoadingFullScreen extends StatelessWidget {
       return const SizedBox();
     }
 
-    return const Stack(
-      alignment: Alignment.center,
+    const loadingIconPos =
+        kToolbarHeight + kBottomNavigationBarHeight + kTextTabBarHeight;
+
+    return Stack(
+      alignment: Alignment.topCenter,
       children: [
         Opacity(
           opacity: 0.2,
           child: ModalBarrier(dismissible: false, color: Colors.black54),
         ),
-        Center(
+        Positioned.directional(
+          top: loadingIconPos,
+          textDirection: TextDirection.ltr,
           child: Card(
               shape: CircleBorder(),
               child: Padding(
