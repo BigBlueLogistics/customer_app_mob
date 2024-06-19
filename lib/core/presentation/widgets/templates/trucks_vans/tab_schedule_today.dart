@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:customer_app_mob/config/constants/url.dart';
+import 'package:customer_app_mob/config/constants/text.dart';
 
 class TabScheduleToday extends StatelessWidget {
   const TabScheduleToday({
@@ -72,7 +72,7 @@ class TabScheduleToday extends StatelessWidget {
                   );
                 },
               )
-            : const Center(child: Text(AppConstant.noDataAvailable)),
+            : const Center(child: Text(AppConstantText.noDataAvailable)),
       ),
     );
   }

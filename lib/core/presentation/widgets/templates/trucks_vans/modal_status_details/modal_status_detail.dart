@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:customer_app_mob/config/constants/url.dart';
+import 'package:customer_app_mob/config/constants/text.dart';
 import 'package:customer_app_mob/core/utils/utils.dart';
 import 'card_layout.dart';
 
@@ -63,7 +63,7 @@ class ModalStatusDetails extends StatelessWidget {
     return const Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text(AppConstant.noDataAvailable),
+        Text(AppConstantText.noDataAvailable),
       ],
     );
   }
@@ -74,7 +74,7 @@ class ModalStatusDetails extends StatelessWidget {
       child: remarks != null && remarks.toString().trim().isNotEmpty
           ? Text(remarks)
           : const Text(
-              AppConstant.noDataAvailable,
+              AppConstantText.noDataAvailable,
               textAlign: TextAlign.center,
             ),
     );
@@ -188,7 +188,7 @@ class ModalStatusDetails extends StatelessWidget {
         ConnectionState.waiting =>
           const Center(heightFactor: 4, child: CircularProgressIndicator()),
         ConnectionState.none => const Center(
-            heightFactor: 4, child: Text(AppConstant.noDataAvailable)),
+            heightFactor: 4, child: Text(AppConstantText.noDataAvailable)),
         ConnectionState.done => cardDetails(context),
       },
     );

@@ -4,8 +4,8 @@ import 'package:customer_app_mob/core/utils/data_state.dart';
 import 'package:customer_app_mob/core/presentation/screens/trucks_vans/data/data.dart';
 import 'package:customer_app_mob/core/presentation/widgets/organisms/md_scaffold/md_scaffold.dart';
 import 'package:customer_app_mob/core/presentation/widgets/templates/trucks_vans/tab_trucks_vans_status.dart';
-import 'package:customer_app_mob/core/presentation/widgets/templates/trucks_vans/modal_filter_content.dart';
 import 'package:customer_app_mob/core/presentation/widgets/templates/trucks_vans/tab_schedule_today.dart';
+import 'modal_filter_content.dart';
 
 class TrucksVansTemplate extends StatelessWidget {
   const TrucksVansTemplate({

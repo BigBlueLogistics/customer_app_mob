@@ -33,7 +33,7 @@ Future<void> initializeDependencies() async {
     ..options = BaseOptions(
       contentType: 'application/json',
       connectTimeout: const Duration(minutes: 1),
-      baseUrl: AppConstant.apiUrl,
+      baseUrl: AppConstantUrl.api,
       headers: {
         'Accept': 'application/json',
       },

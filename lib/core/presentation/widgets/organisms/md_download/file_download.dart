@@ -20,7 +20,7 @@ class FileDownload {
   void startDownloading(BuildContext context, Function okCallback,
       Function? completeCallback) async {
     String path = await getFilePath(filename);
-    dio.options = BaseOptions(baseUrl: AppConstant.apiUrl);
+    dio.options = BaseOptions(baseUrl: AppConstantUrl.api);
     dio.interceptors.addAll([
       AuthInterceptor(),
       PrettyDioLogger(

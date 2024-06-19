@@ -1,7 +1,7 @@
 import 'dart:math' hide log;
 
 import 'package:flutter/material.dart';
-import 'package:customer_app_mob/config/constants/url.dart';
+import 'package:customer_app_mob/config/constants/text.dart';
 import 'package:customer_app_mob/core/utils/utils.dart';
 import 'package:customer_app_mob/core/presentation/screens/error.dart';
 import 'package:customer_app_mob/core/domain/entities/trucks_vans.dart';
@@ -177,7 +177,7 @@ class TabTrucksVansStatus extends StatelessWidget {
                   );
                 },
               )
-            : const Center(child: Text(AppConstant.noDataAvailable)),
+            : const Center(child: Text(AppConstantText.noDataAvailable)),
       ),
     );
   }

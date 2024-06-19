@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:customer_app_mob/core/dependencies.dart';
 import 'package:customer_app_mob/core/domain/entities/trucks_vans.dart';
 import 'package:customer_app_mob/core/domain/repository/trucks_vans_repository.dart';
@@ -9,9 +10,6 @@ import 'package:customer_app_mob/core/usecases/trucks_vans/get_schedule_today.da
 import 'package:customer_app_mob/core/usecases/trucks_vans/get_status_details.dart';
 import 'package:customer_app_mob/core/usecases/trucks_vans/get_trucks_vans_status.dart';
 import 'package:customer_app_mob/core/utils/data_state.dart';
-import 'package:flutter/material.dart';
-import 'package:customer_app_mob/core/utils/log.dart';
-import 'package:customer_app_mob/config/routes/app_routes.dart';
 import 'package:customer_app_mob/core/presentation/widgets/templates/trucks_vans/trucks_vans_template.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -55,7 +53,6 @@ class _TrucksVansScreenState extends State<TrucksVansScreen>
   void handleTabChanging() {
     if (!tabControllerStatus.indexIsChanging &&
         _filteringData.value.customerCode != null) {
-      log('handleTabChangingzz');
       generateData(tabControllerStatus.index);
     }
   }

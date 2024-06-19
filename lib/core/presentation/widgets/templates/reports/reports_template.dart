@@ -6,8 +6,8 @@ import 'package:customer_app_mob/core/presentation/widgets/molecules/md_filter/m
 import 'package:customer_app_mob/core/presentation/widgets/organisms/md_scaffold/md_scaffold.dart';
 import 'package:customer_app_mob/core/presentation/widgets/organisms/md_datatable/md_datatable.dart';
 import 'package:customer_app_mob/core/presentation/widgets/organisms/md_filtering/button_segmented.dart';
-import 'package:customer_app_mob/core/presentation/widgets/templates/reports/modal_filter_content.dart';
 import 'package:customer_app_mob/core/presentation/screens/reports/data/data.dart';
+import 'modal_filter_content.dart';
 
 class ReportsTemplate extends StatelessWidget {
   const ReportsTemplate({
