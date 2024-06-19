@@ -56,7 +56,7 @@ class _SignInScreenState extends State<SignInScreen> {
       child: GestureDetector(
         onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
         child: Scaffold(
-          backgroundColor: Theme.of(context).colorScheme.background,
+          backgroundColor: Theme.of(context).colorScheme.surface,
           body: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.max,
