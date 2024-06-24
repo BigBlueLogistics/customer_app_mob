@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:customer_app_mob/core/presentation/widgets/organisms/md_scaffold/md_scaffold.dart';
 import 'package:customer_app_mob/core/presentation/widgets/templates/indicators/statistics/statistics.dart';
+import 'package:customer_app_mob/core/presentation/widgets/templates/indicators/chart_inout_bound/chart_inout_bound.dart';
 import 'package:customer_app_mob/core/presentation/screens/indicators/data/data.dart';
 import 'modal_filter_content.dart';
 
@@ -8,6 +9,7 @@ class IndicatorsTemplate extends StatelessWidget {
   const IndicatorsTemplate({
     super.key,
     required this.statisticsList,
+    required this.chartList,
     required this.customerList,
     required this.filteringData,
     required this.onSelectCustomer,
@@ -18,6 +20,7 @@ class IndicatorsTemplate extends StatelessWidget {
   final List<String> customerList;
   final ValueNotifier<FilterValueNotifier> filteringData;
   final Iterable<StatisticsData> statisticsList;
+  final Iterable<ChartData> chartList;
   final ValueChanged<String> onSelectCustomer;
   final VoidCallback onFilterData;
   final Future<void> Function() onRefresh;
@@ -59,7 +62,10 @@ class IndicatorsTemplate extends StatelessWidget {
           onRefresh: onRefresh,
           child: CustomScrollView(
             clipBehavior: Clip.none,
-            slivers: <Widget>[Statistics(data: statisticsList)],
+            slivers: <Widget>[
+              Statistics(data: statisticsList),
+              ChartInoutBound(data: chartList)
+            ],
           ),
         ),
       ),

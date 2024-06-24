@@ -1,14 +1,14 @@
 import 'dart:async';
 
+import 'package:flutter/material.dart';
 import 'package:customer_app_mob/core/dependencies.dart';
-import 'package:customer_app_mob/core/domain/entities/indicators.dart';
 import 'package:customer_app_mob/core/domain/repository/indicators_repository.dart';
 import 'package:customer_app_mob/core/presentation/widgets/organisms/md_loading/md_loading.dart';
 import 'package:customer_app_mob/core/shared/enums/loading_status.dart';
 import 'package:customer_app_mob/core/usecases/indicators/get_active_sku.dart';
+import 'package:customer_app_mob/core/usecases/indicators/get_inout_bound.dart';
 import 'package:customer_app_mob/core/utils/data_state.dart';
 import 'package:customer_app_mob/core/utils/log.dart';
-import 'package:flutter/material.dart';
 import 'package:customer_app_mob/core/presentation/bloc/auth/auth_bloc.dart';
 import 'package:customer_app_mob/core/presentation/widgets/templates/indicators/indicators_template.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -26,6 +26,7 @@ class _IndicatorsScreenState extends State<IndicatorsScreen> {
   late List<String> customerList;
 
   late Iterable<StatisticsData> _statisticsList;
+  late Iterable<ChartData> _chartList;
   LoadingStatus _isLoadingStatistics = LoadingStatus.idle;
   LoadingStatus _isLoadingCharts = LoadingStatus.idle;
   bool _isOnRefresh = false;
@@ -35,6 +36,7 @@ class _IndicatorsScreenState extends State<IndicatorsScreen> {
     super.initState();
     _filteringData = ValueNotifier(FilterValueNotifier.empty);
     _statisticsList = statisticsList.values;
+    _chartList = chartList.values;
   }
 
   @override
@@ -49,11 +51,17 @@ class _IndicatorsScreenState extends State<IndicatorsScreen> {
   }
 
   Future<void> generateData() async {
-    setState(() => _isLoadingStatistics = LoadingStatus.loading);
+    setState(() {
+      _isLoadingStatistics = LoadingStatus.loading;
+      _isLoadingCharts = LoadingStatus.loading;
+    });
 
-    final activeSkuData = await getIt<GetActiveSkuUseCase>().call(
-        IndicatorsParams(
-            customerCode: _filteringData.value.customerCode.toString()));
+    final [activeSkuData, inOutboundData] = await Future.wait([
+      getIt<GetActiveSkuUseCase>().call(IndicatorsParams(
+          customerCode: _filteringData.value.customerCode.toString())),
+      getIt<GetInOutboundUseCase>().call(IndicatorsParams(
+          customerCode: _filteringData.value.customerCode.toString()))
+    ]);
 
     if (activeSkuData is DataSuccess) {
       final resp = activeSkuData.resp!.data!;
@@ -64,6 +72,17 @@ class _IndicatorsScreenState extends State<IndicatorsScreen> {
       });
     } else {
       setState(() => _isLoadingStatistics = LoadingStatus.failed);
+    }
+
+    if (inOutboundData is DataSuccess) {
+      final resp = inOutboundData.resp!.data!;
+
+      setState(() {
+        _chartList = updateChartData(resp);
+        _isLoadingCharts = LoadingStatus.success;
+      });
+    } else {
+      setState(() => _isLoadingCharts = LoadingStatus.failed);
     }
   }
 
@@ -98,6 +117,23 @@ class _IndicatorsScreenState extends State<IndicatorsScreen> {
     return statisticsList.values;
   }
 
+  Iterable<ChartData> updateChartData(Map<String, dynamic> data) {
+    final byWeight = data['byWeight'];
+    final byTransactions = data['byTransactions'];
+    chartList.update(
+      'inbound',
+      (value) =>
+          value.copyWith(dates: byWeight['dates'], values: byWeight['weight']),
+    );
+    chartList.update(
+      'outbound',
+      (value) => value.copyWith(
+          dates: byTransactions['dates'], values: byTransactions['counts']),
+    );
+
+    return chartList.values;
+  }
+
   Future<void> onRefresh() async {
     if (_filteringData.value.customerCode != null) {
       setState(() => _isOnRefresh = true);
@@ -126,6 +162,7 @@ class _IndicatorsScreenState extends State<IndicatorsScreen> {
       children: [
         IndicatorsTemplate(
           statisticsList: _statisticsList,
+          chartList: _chartList,
           filteringData: _filteringData,
           customerList: customerList,
           onRefresh: onRefresh,

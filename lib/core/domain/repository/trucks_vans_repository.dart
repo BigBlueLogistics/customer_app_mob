@@ -1,5 +1,4 @@
 import 'package:customer_app_mob/core/data/models/trucks_vans.dart';
-import 'package:customer_app_mob/core/domain/entities/trucks_vans.dart';
 import 'package:customer_app_mob/core/utils/data_state.dart';
 
 abstract class TrucksVansRepository {

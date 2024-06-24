@@ -1,6 +1,5 @@
 import 'package:customer_app_mob/config/routes/app_router.dart';
 import 'package:customer_app_mob/config/routes/app_routes.dart';
-import 'package:customer_app_mob/core/utils/log.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
