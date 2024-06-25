@@ -18,34 +18,29 @@ class _HomeScreenState extends State<HomeScreen> {
 
   final List<Map<String, dynamic>> menuList = [
     {
-      'title': 'Inventory',
+      'title': AppRoutes.inventoryScreen.title,
       'route': AppRoutes.inventoryScreen.fullPath,
-      'icon': const Icon(Icons.inventory_2_rounded,
-          color: Color.fromARGB(255, 22, 121, 171))
+      'icon': AppRoutes.inventoryScreen.icon
     },
     {
-      'title': 'Movements',
+      'title': AppRoutes.movementScreen.title,
       'route': AppRoutes.movementScreen.fullPath,
-      'icon': const Icon(Icons.trending_up_rounded,
-          color: Color.fromARGB(255, 22, 121, 171))
+      'icon': AppRoutes.movementScreen.icon
     },
     {
-      'title': 'Reports',
+      'title': AppRoutes.reportsScreen.title,
       'route': AppRoutes.reportsScreen.fullPath,
-      'icon': const Icon(Icons.summarize_rounded,
-          color: Color.fromARGB(255, 22, 121, 171))
+      'icon': AppRoutes.reportsScreen.icon
     },
     {
-      'title': 'Indicators',
+      'title': AppRoutes.indicatorsScreen.title,
       'route': AppRoutes.indicatorsScreen.fullPath,
-      'icon': const Icon(Icons.move_down_rounded,
-          color: Color.fromARGB(255, 22, 121, 171))
+      'icon': AppRoutes.indicatorsScreen.icon
     },
     {
-      'title': 'Trucks & Vans',
+      'title': AppRoutes.trucksVansScreen.title,
       'route': AppRoutes.trucksVansScreen.fullPath,
-      'icon': const Icon(Icons.local_shipping_rounded,
-          color: Color.fromARGB(255, 22, 121, 171))
+      'icon': AppRoutes.trucksVansScreen.icon
     },
   ];
 

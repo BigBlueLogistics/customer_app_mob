@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 
 class MDFilledButton extends StatelessWidget {
-  const MDFilledButton(
-      {super.key,
-      this.onPressed,
-      this.text = 'button',
-      this.autoResize = true,
-      this.horizontalAlignment = MainAxisAlignment.center,
-      this.disabled = false,
-      this.loading = false,
-      this.height = 50});
+  const MDFilledButton({
+    super.key,
+    this.onPressed,
+    this.text = 'button',
+    this.autoResize = true,
+    this.horizontalAlignment = MainAxisAlignment.center,
+    this.disabled = false,
+    this.loading = false,
+    this.height = 50,
+    this.borderRadius = const BorderRadius.all(Radius.circular(8)),
+  });
 
   final VoidCallback? onPressed;
   final MainAxisAlignment horizontalAlignment;
@@ -18,6 +20,7 @@ class MDFilledButton extends StatelessWidget {
   final bool autoResize;
   final bool disabled;
   final bool loading;
+  final BorderRadius borderRadius;
 
   @override
   Widget build(BuildContext context) {
@@ -44,12 +47,12 @@ class MDFilledButton extends StatelessWidget {
       opacity: disabled && !loading ? 0.4 : 1,
       child: Container(
         height: height,
-        decoration: const BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(8)),
+        decoration: BoxDecoration(
+          borderRadius: borderRadius,
           gradient: LinearGradient(
             begin: Alignment(-1, 1),
             end: Alignment(0, 0),
-            colors: [
+            colors: const [
               Color.fromRGBO(73, 163, 241, 1),
               Color.fromRGBO(26, 115, 232, 1),
             ],

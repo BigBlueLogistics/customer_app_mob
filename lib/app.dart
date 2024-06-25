@@ -17,6 +17,7 @@ class _AppViewState extends State<AppView> {
   Widget build(BuildContext context) {
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
+        // Refresh instance of GoRouter
         AppRouter.router.refresh();
       },
       child: MaterialApp.router(
