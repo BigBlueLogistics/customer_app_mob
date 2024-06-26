@@ -49,15 +49,7 @@ class MDFilledButton extends StatelessWidget {
         height: height,
         decoration: BoxDecoration(
           borderRadius: borderRadius,
-          gradient: LinearGradient(
-            begin: Alignment(-1, 1),
-            end: Alignment(0, 0),
-            colors: const [
-              Color.fromRGBO(73, 163, 241, 1),
-              Color.fromRGBO(26, 115, 232, 1),
-            ],
-            transform: GradientRotation(195),
-          ),
+          color: Theme.of(context).primaryColor,
         ),
         child: TextButton(
           onPressed: disabled ? null : onPressed,

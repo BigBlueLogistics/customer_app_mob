@@ -1,3 +1,4 @@
+import 'package:customer_app_mob/core/data/models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:customer_app_mob/core/presentation/bloc/auth/auth_bloc.dart';
@@ -38,8 +39,12 @@ class InventoryTemplate extends StatelessWidget {
 
   MDFilter Filter(BuildContext context, Size mediaSize) {
     final authState = context.watch<AuthBloc>().state;
-    final customerList =
-        List<String>.from(authState.user.data!['user']['companies']).toList();
+    List<String> customerList = [];
+
+    if (authState.user != UserModel.empty) {
+      customerList =
+          List<String>.from(authState.user.data!['user']['companies']).toList();
+    }
 
     return MDFilter(
       selectedCustomer: filteringData.value.customerCode,

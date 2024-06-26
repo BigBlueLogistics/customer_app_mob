@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:customer_app_mob/config/routes/app_router.dart';
-import 'package:customer_app_mob/config/routes/app_routes.dart';
-import 'package:customer_app_mob/core/presentation/widgets/atoms/md_button/md_filled.dart';
-import 'package:customer_app_mob/config/theme/colors.dart';
-import 'package:customer_app_mob/config/constants/text.dart';
-import 'package:customer_app_mob/core/utils/utils.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:customer_app_mob/core/presentation/bloc/auth/auth_bloc.dart';
+import 'drawer_scaffold.dart';
 
 class MDScaffold extends StatelessWidget {
   const MDScaffold({
@@ -25,6 +22,10 @@ class MDScaffold extends StatelessWidget {
   final String appBarTitle;
   final bool showFloatingActionButton;
   final FloatingActionButtonLocation floatingActionButtonLoc;
+
+  void signOut(BuildContext context) async {
+    context.read<AuthBloc>().add(AuthSignOut());
+  }
 
   FloatingActionButton? floatingActionButton(BuildContext context) {
     if (showFloatingActionButton) {
@@ -64,61 +65,12 @@ class MDScaffold extends StatelessWidget {
     );
   }
 
-  Drawer drawer(BuildContext context) {
-    List<ListTile> menuLists = [];
-    AppRoutes.properties.forEach((key, value) {
-      if (value.isPrivateRoute) {
-        menuLists.add(ListTile(
-          title: Text(value.title),
-          leading: value.icon,
-          onTap: () {
-            AppRouter.router.go(value.fullPath);
-          },
-        ));
-      }
-    });
-
-    return Drawer(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          SizedBox(
-            width: double.infinity,
-            child: DrawerHeader(
-                decoration: BoxDecoration(
-                  color: AppColors.dark,
-                ),
-                child: Text(
-                  AppConstantText.appName,
-                  style: Theme.of(context)
-                      .textTheme
-                      .headlineSmall!
-                      .copyWith(color: AppColors.light),
-                )),
-          ),
-          ...menuLists,
-          Expanded(
-            child: Align(
-              alignment: Alignment.bottomCenter,
-              child: MDFilledButton(
-                text: 'SIGN OUT',
-                borderRadius: BorderRadius.zero,
-                onPressed: () {
-                  log('sign-out');
-                },
-              ),
-            ),
-          )
-        ],
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: drawer(context),
+      drawer: DrawerScaffold(signOut: () {
+        signOut(context);
+      }),
       appBar: appBarTitle.isNotEmpty ? appBar(context) : null,
       floatingActionButtonLocation: floatingActionButtonLoc,
       floatingActionButton: floatingActionButton(context),

@@ -12,6 +12,7 @@ import 'package:customer_app_mob/core/usecases/movement/get_material.dart';
 import 'package:customer_app_mob/core/usecases/inventory/get_inventory.dart';
 import 'package:customer_app_mob/core/usecases/reports/get_reports.dart';
 import 'package:customer_app_mob/core/usecases/auth/sign_in.dart';
+import 'package:customer_app_mob/core/usecases/auth/sign_out.dart';
 import 'package:customer_app_mob/core/data/data_sources/api/warehouse/warehouse_api.dart';
 import 'package:customer_app_mob/core/data/repository/warehouse_repository.dart';
 import 'package:customer_app_mob/core/data/data_sources/api/inventory/inventory_api.dart';
@@ -79,6 +80,7 @@ Future<void> initializeDependencies() async {
 
   // Use cases
   getIt.registerSingleton<SignInUseCase>(SignInUseCase(getIt()));
+  getIt.registerSingleton<SignOutUseCase>(SignOutUseCase(getIt()));
   getIt.registerSingleton<InventoryUseCase>(InventoryUseCase(getIt()));
   getIt.registerSingleton<WarehouseUseCase>(WarehouseUseCase(getIt()));
   getIt.registerSingleton<MovementUseCase>(MovementUseCase(getIt()));
@@ -95,5 +97,5 @@ Future<void> initializeDependencies() async {
   getIt.registerSingleton<GetInOutboundUseCase>(GetInOutboundUseCase(getIt()));
 
   // Bloc
-  getIt.registerFactory<AuthBloc>(() => AuthBloc(getIt()));
+  getIt.registerFactory<AuthBloc>(() => AuthBloc(getIt(), getIt()));
 }

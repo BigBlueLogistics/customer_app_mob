@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:customer_app_mob/core/data/models/user.dart';
 import 'package:customer_app_mob/core/shared/enums/loading_status.dart';
 import 'package:customer_app_mob/config/routes/app_routes.dart';
 import 'package:customer_app_mob/core/presentation/widgets/atoms/md_text_input/md_text_form.dart';
@@ -114,8 +115,9 @@ class _SignInScreenState extends State<SignInScreen> {
   }
 
   Widget signInForm(BuildContext context) {
-    final isLoading =
-        context.watch<AuthBloc>().state.status == LoadingStatus.loading;
+    final authState = context.watch<AuthBloc>().state;
+    final isLoading = authState.status == LoadingStatus.loading;
+    final isLoggingIn = authState.user == UserModel.empty;
 
     return Padding(
       padding: const EdgeInsetsDirectional.only(top: 20, bottom: 10),
@@ -169,8 +171,9 @@ class _SignInScreenState extends State<SignInScreen> {
                     ));
               },
               text: 'SIGN IN',
-              loading: isLoading,
+              loading: isLoading && isLoggingIn,
               disabled: !isLoading &&
+                      isLoggingIn &&
                       _hasEmail &&
                       _hasPassword &&
                       formKey.currentState!.validate()

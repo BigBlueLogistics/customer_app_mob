@@ -34,6 +34,27 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
+  Future<DataState<UserModel>> signOut() async {
+    try {
+      final resp = await _authApi.signOut();
+
+      if (resp.response.statusCode == HttpStatus.ok) {
+        return DataSuccess(resp.data);
+      }
+
+      return DataFailed(
+        DioException(
+          requestOptions: resp.response.requestOptions,
+          response: resp.response,
+          message: resp.response.statusMessage,
+        ),
+      );
+    } on DioException catch (e) {
+      return DataFailed(e);
+    }
+  }
+
+  @override
   Future<DataState<UserModel>> resetPassword(String email) async {
     try {
       final resp = await _authApi.resetPassword(email);

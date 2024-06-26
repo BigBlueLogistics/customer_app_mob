@@ -21,12 +21,16 @@ class SharedPrefs {
   }
 
   // Get API token
-  static void setApiToken(String value) {
-    _sharedPrefs?.setString('apiToken', value);
+  static Future<bool>? setApiToken(String value) {
+    return _sharedPrefs?.setString('apiToken', value);
   }
 
   // Set API token
   static String? getApiToken() {
     return _sharedPrefs?.getString('apiToken');
+  }
+
+  static Future<bool>? removeApiToken() {
+    return _sharedPrefs?.remove('apiToken');
   }
 }

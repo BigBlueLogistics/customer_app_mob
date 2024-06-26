@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'package:customer_app_mob/core/usecases/auth/sign_out.dart';
+import 'package:customer_app_mob/core/utils/utils.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:equatable/equatable.dart';
@@ -15,31 +17,27 @@ part 'auth_state.dart';
 
 class AuthBloc extends HydratedBloc<AuthEvent, AuthState> {
   final SignInUseCase _signInUseCase;
+  final SignOutUseCase _signOutUseCase;
 
-  AuthBloc(this._signInUseCase)
+  AuthBloc(this._signInUseCase, this._signOutUseCase)
       : super(const AuthState(status: LoadingStatus.idle)) {
     on<AuthSignIn>(_authSigIn);
+    on<AuthSignOut>(_authSignOut);
     on<ResetPassword>(_resetPassword);
   }
 
   FutureOr<void> _authSigIn(AuthSignIn event, Emitter<AuthState> emit) async {
     emit(const AuthState(status: LoadingStatus.loading));
 
-    debugPrint('signin loading 1');
     final authData = await _signInUseCase(
         SignInParams(email: event.email, password: event.password));
 
     if (authData is DataSuccess && authData.resp != null) {
-      if (kDebugMode) {
-        print('AuthSuccessStatez');
-        print(authData.resp);
-      }
-
       // Cache API token
       final String token = authData.resp!.data!.containsKey('token')
           ? authData.resp!.data!['token']
           : '';
-      SharedPrefs.setApiToken(token);
+      await SharedPrefs.setApiToken(token);
 
       emit(
         AuthState(
@@ -51,17 +49,37 @@ class AuthBloc extends HydratedBloc<AuthEvent, AuthState> {
               status: authData.resp!.status),
         ),
       );
-    }
-
-    if (authData is DataFailed) {
-      if (kDebugMode) {
-        print('AuthFailedState error');
-        print(authData.error!.response);
-      }
+    } else {
       emit(
         AuthStateFailed(
             status: LoadingStatus.failed,
             error: authData.error as DioException),
+      );
+    }
+  }
+
+  FutureOr<void> _authSignOut(
+      AuthSignOut event, Emitter<AuthState> emit) async {
+    emit(const AuthState(status: LoadingStatus.loading));
+
+    final authSignOut = await _signOutUseCase(null);
+
+    if (authSignOut is DataSuccess && authSignOut.resp != null) {
+      // Remove cache API token
+      await SharedPrefs.removeApiToken();
+
+      emit(
+        AuthState(
+          status: LoadingStatus.success,
+          auth: AuthStatus.unauthenticated,
+          user: UserModel.empty,
+        ),
+      );
+    } else {
+      emit(
+        AuthStateFailed(
+            status: LoadingStatus.failed,
+            error: authSignOut.error as DioException),
       );
     }
   }

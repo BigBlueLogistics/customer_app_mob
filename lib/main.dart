@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (BuildContext context) => AuthBloc(getIt()),
+      create: (BuildContext context) => AuthBloc(getIt(), getIt()),
       child: const AppView(),
     );
   }
