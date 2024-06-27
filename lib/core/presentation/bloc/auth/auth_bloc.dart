@@ -9,8 +9,6 @@ import 'package:customer_app_mob/core/shared/enums/loading_status.dart';
 import 'package:customer_app_mob/core/data/models/user.dart';
 import 'package:customer_app_mob/core/usecases/auth/sign_in.dart';
 import 'package:customer_app_mob/core/shared/enums/auth_status.dart';
-import 'package:customer_app_mob/core/utils/data_state.dart';
-import 'package:customer_app_mob/core/utils/shared_prefs.dart';
 
 part 'auth_event.dart';
 part 'auth_state.dart';

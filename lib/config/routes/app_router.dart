@@ -1,3 +1,5 @@
+import 'package:customer_app_mob/core/data/models/user.dart';
+import 'package:customer_app_mob/core/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -66,10 +68,16 @@ class AppRouter {
       final isAuthenticated =
           authState.auth.name == AuthStatus.authenticated.name;
       final isSignInScreen =
-          state.fullPath == AppRoutes.signInPathScreen.fullPath;
+          state.matchedLocation == AppRoutes.signInPathScreen.fullPath;
+      final isSignUp =
+          state.matchedLocation == AppRoutes.signUpPathScreen.fullPath;
+      final isForgot =
+          state.matchedLocation == AppRoutes.forgotPathScreen.fullPath;
 
       // Go to /sign-in if user is not authenticated
-      if (!isAuthenticated) {
+      // and when user is logging out
+      if ((!isAuthenticated && isSignInScreen) ||
+          (!isAuthenticated && !isSignUp && !isForgot)) {
         return AppRoutes.signInPathScreen.fullPath;
       }
 
