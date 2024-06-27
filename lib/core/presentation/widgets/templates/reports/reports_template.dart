@@ -21,6 +21,7 @@ class ReportsTemplate extends StatelessWidget {
     required this.generateData,
     required this.filteringData,
     required this.warehouseList,
+    required this.customerList,
     required this.reportTypeList,
     required this.getGroupByOptions,
     required this.onFilterData,
@@ -42,6 +43,7 @@ class ReportsTemplate extends StatelessWidget {
   final VoidCallback generateData;
   final ValueNotifier<FilterValueNotifier> filteringData;
   final List<String> warehouseList;
+  final List<String> customerList;
   final List<SegmentedValueMap> reportTypeList;
   final List<SegmentedValueMap> Function(SegmentedValueMap value)
       getGroupByOptions;
@@ -53,10 +55,6 @@ class ReportsTemplate extends StatelessWidget {
   final VoidCallback onFilterData;
 
   MDFilter Filter(BuildContext context, Size mediaSize) {
-    final authState = context.watch<AuthBloc>().state;
-    final customerList =
-        List<String>.from(authState.user.data!['user']['companies']).toList();
-
     return MDFilter(
       selectedCustomer: filteringData.value.customerCode,
       onFilter: () {

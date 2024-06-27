@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:customer_app_mob/core/data/models/user.dart';
+import 'package:customer_app_mob/core/presentation/bloc/auth/auth_bloc.dart';
 import 'package:customer_app_mob/core/usecases/movement/get_material.dart';
 import 'package:customer_app_mob/core/domain/repository/movement_repository.dart';
 import 'package:customer_app_mob/core/usecases/movement/get_movement.dart';
@@ -29,6 +32,7 @@ class _MovementScreenState extends State<MovementScreen> {
   List<Map<String, dynamic>> _movementCacheData = [];
   List<Map<String, dynamic>> _movementFilterData = [];
   List<String> _warehouseList = [];
+  List<String> customerList = [];
   LoadingStatus _warehouseStatus = LoadingStatus.idle;
   LoadingStatus _materialStatus = LoadingStatus.idle;
   LoadingStatus _movementStatus = LoadingStatus.idle;
@@ -45,6 +49,20 @@ class _MovementScreenState extends State<MovementScreen> {
     super.dispose();
 
     searchText.dispose();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (mounted) {
+      final authState = context.watch<AuthBloc>().state;
+
+      if (authState.user != UserModel.empty) {
+        customerList =
+            List<String>.from(authState.user.data!['user']['companies'])
+                .toList();
+      }
+    }
   }
 
   void generateData() async {
@@ -242,6 +260,7 @@ class _MovementScreenState extends State<MovementScreen> {
           searchText: searchText,
           filteringData: _filteringData,
           warehouseList: _warehouseList,
+          customerList: customerList,
           movementTypeList: movementTypeList,
           generateData: generateData,
           onSearch: onSearch,

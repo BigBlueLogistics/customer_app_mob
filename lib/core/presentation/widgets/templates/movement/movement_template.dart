@@ -18,6 +18,7 @@ class MovementTemplate extends StatelessWidget {
     required this.generateData,
     required this.filteringData,
     required this.warehouseList,
+    required this.customerList,
     required this.movementTypeList,
     required this.onFilterData,
     required this.onSelectCustomer,
@@ -35,6 +36,7 @@ class MovementTemplate extends StatelessWidget {
   final VoidCallback generateData;
   final ValueNotifier<FilterValueNotifier> filteringData;
   final List<String> warehouseList;
+  final List<String> customerList;
   final List<String> movementTypeList;
   final ValueChanged<String> onSelectCustomer;
   final ValueChanged<String> onSelectWarehouse;
@@ -45,10 +47,6 @@ class MovementTemplate extends StatelessWidget {
   final VoidCallback onFilterData;
 
   MDFilter Filter(BuildContext context, Size mediaSize) {
-    final authState = context.watch<AuthBloc>().state;
-    final customerList =
-        List<String>.from(authState.user.data!['user']['companies']).toList();
-
     return MDFilter(
       selectedCustomer: filteringData.value.customerCode,
       onFilter: () {

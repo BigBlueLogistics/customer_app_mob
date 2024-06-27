@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:customer_app_mob/core/data/models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:customer_app_mob/core/dependencies.dart';
 import 'package:customer_app_mob/core/domain/repository/indicators_repository.dart';
@@ -44,9 +45,12 @@ class _IndicatorsScreenState extends State<IndicatorsScreen> {
     super.didChangeDependencies();
     if (mounted) {
       final authState = context.watch<AuthBloc>().state;
-      customerList =
-          List<String>.from(authState.user.data!['user']['companies']).toList();
-      log('didChangeDependencies zzzz $customerList');
+
+      if (authState.user != UserModel.empty) {
+        customerList =
+            List<String>.from(authState.user.data!['user']['companies'])
+                .toList();
+      }
     }
   }
 

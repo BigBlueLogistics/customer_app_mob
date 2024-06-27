@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:customer_app_mob/core/data/models/user.dart';
 import 'package:customer_app_mob/core/dependencies.dart';
 import 'package:customer_app_mob/core/domain/entities/trucks_vans.dart';
 import 'package:customer_app_mob/core/domain/repository/trucks_vans_repository.dart';
@@ -28,6 +29,7 @@ class _TrucksVansScreenState extends State<TrucksVansScreen>
 
   List<Map<String, dynamic>> _scheduleTodayList = [];
   List<Map<String, dynamic>> _trucksVansStatusList = [];
+  List<String> customerList = [];
   LoadingStatus _isLoadingSchedule = LoadingStatus.idle;
   LoadingStatus _isLoadingTrucksVans = LoadingStatus.idle;
   bool _isOnRefresh = false;
@@ -48,6 +50,20 @@ class _TrucksVansScreenState extends State<TrucksVansScreen>
 
     tabControllerStatus.dispose();
     tabControllerStatus.removeListener(handleTabChanging);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (mounted) {
+      final authState = context.watch<AuthBloc>().state;
+
+      if (authState.user != UserModel.empty) {
+        customerList =
+            List<String>.from(authState.user.data!['user']['companies'])
+                .toList();
+      }
+    }
   }
 
   void handleTabChanging() {
@@ -144,10 +160,6 @@ class _TrucksVansScreenState extends State<TrucksVansScreen>
 
   @override
   Widget build(BuildContext context) {
-    final authState = context.watch<AuthBloc>().state;
-    final customerList =
-        List<String>.from(authState.user.data!['user']['companies']).toList();
-
     return Stack(
       children: [
         TrucksVansTemplate(

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:customer_app_mob/core/data/models/user.dart';
+import 'package:customer_app_mob/core/presentation/bloc/auth/auth_bloc.dart';
 import 'package:customer_app_mob/core/domain/repository/reports_repository.dart';
 import 'package:customer_app_mob/core/usecases/reports/get_reports.dart';
 import 'package:customer_app_mob/core/usecases/warehouse/get_warehouse.dart';
@@ -28,6 +31,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
   List<Map<String, dynamic>> _reportCacheData = [];
   List<Map<String, dynamic>> _reportFilterData = [];
   List<String> _warehouseList = [];
+  List<String> customerList = [];
   LoadingStatus _warehouseStatus = LoadingStatus.idle;
   LoadingStatus _reportStatus = LoadingStatus.idle;
 
@@ -43,6 +47,21 @@ class _ReportsScreenState extends State<ReportsScreen> {
     super.dispose();
 
     searchText.dispose();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (mounted) {
+      final authState = context.watch<AuthBloc>().state;
+
+      if (authState.user != UserModel.empty) {
+        customerList =
+            List<String>.from(authState.user.data!['user']['companies'])
+                .toList();
+        log('didChangeDependencies $customerList');
+      }
+    }
   }
 
   void generateData() async {
@@ -205,6 +224,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
           searchText: searchText,
           filteringData: _filteringData,
           warehouseList: _warehouseList,
+          customerList: customerList,
           reportTypeList: reportTypeList,
           getGroupByOptions: getGroupByOptions,
           generateData: generateData,

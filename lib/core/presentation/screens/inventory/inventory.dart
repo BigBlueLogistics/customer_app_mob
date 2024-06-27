@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:customer_app_mob/core/utils/log.dart';
+import 'package:customer_app_mob/core/data/models/user.dart';
 import 'package:customer_app_mob/core/domain/repository/inventory_repository.dart';
 import 'package:customer_app_mob/core/usecases/warehouse/get_warehouse.dart';
 import 'package:customer_app_mob/core/usecases/inventory/get_inventory.dart';
 import 'package:customer_app_mob/core/utils/data_state.dart';
 import 'package:customer_app_mob/core/shared/enums/loading_status.dart';
 import 'package:customer_app_mob/core/dependencies.dart';
+import 'package:customer_app_mob/core/presentation/bloc/auth/auth_bloc.dart';
 import 'package:customer_app_mob/core/presentation/widgets/organisms/md_download/md_download_progress.dart';
 import 'package:customer_app_mob/core/presentation/widgets/organisms/md_loading/md_loading.dart';
 import 'package:customer_app_mob/core/presentation/widgets/templates/inventory/inventory_template.dart';
@@ -27,6 +30,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
   List<Map<String, dynamic>> _inventoryCacheData = [];
   List<Map<String, dynamic>> _inventoryFilterData = [];
   List<String> _warehouseList = [];
+  late List<String> customerList;
   LoadingStatus _warehouseStatus = LoadingStatus.idle;
   LoadingStatus _inventoryStatus = LoadingStatus.idle;
 
@@ -42,6 +46,20 @@ class _InventoryScreenState extends State<InventoryScreen> {
     super.dispose();
 
     searchText.dispose();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (mounted) {
+      final authState = context.watch<AuthBloc>().state;
+
+      if (authState.user != UserModel.empty) {
+        customerList =
+            List<String>.from(authState.user.data!['user']['companies'])
+                .toList();
+      }
+    }
   }
 
   void generateData() async {
@@ -182,6 +200,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
           data: _inventoryFilterData,
           searchText: searchText,
           warehouseList: _warehouseList,
+          customerList: customerList,
           filteringData: _filteringData,
           generateData: generateData,
           onSearch: onSearch,

@@ -14,6 +14,7 @@ class InventoryTemplate extends StatelessWidget {
     super.key,
     required this.data,
     required this.warehouseList,
+    required this.customerList,
     required this.searchText,
     required this.filteringData,
     required this.generateData,
@@ -27,6 +28,7 @@ class InventoryTemplate extends StatelessWidget {
 
   final List<Map<String, dynamic>> data;
   final List<String> warehouseList;
+  final List<String> customerList;
   final TextEditingController searchText;
   final ValueChanged<String> onSearch;
   final ValueNotifier<FilterValueNotifier> filteringData;
@@ -38,14 +40,6 @@ class InventoryTemplate extends StatelessWidget {
   final VoidCallback onFilterData;
 
   MDFilter Filter(BuildContext context, Size mediaSize) {
-    final authState = context.watch<AuthBloc>().state;
-    List<String> customerList = [];
-
-    if (authState.user != UserModel.empty) {
-      customerList =
-          List<String>.from(authState.user.data!['user']['companies']).toList();
-    }
-
     return MDFilter(
       selectedCustomer: filteringData.value.customerCode,
       onFilter: () {
